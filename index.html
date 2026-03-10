@@ -6,29 +6,17 @@
     <title>اذکار</title>
     <!-- PWA manifest -->
     <link rel="manifest" href="manifest.json">
-    <!-- آیکون‌ها برای نوار آدرس و موارد دیگر -->
+    <!-- آیکون‌ها -->
     <link rel="icon" type="image/png" sizes="512x512" href="/zikr/icon.png">
     <link rel="icon" type="image/x-icon" href="/zikr/icon.ico">
     <link rel="apple-touch-icon" href="/zikr/icon.png">
     <meta name="theme-color" content="#2c6b9e">
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Persian font for UI -->
+    <!-- فونت فارسی برای رابط کاربری -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         /* فونت‌های آپلود شده */
-        @font-face {
-            font-family: 'Compset';
-            src: url('/zikr/fonts/Compset-Bold.ttf') format('truetype');
-            font-weight: bold;
-            font-display: swap;
-        }
-        @font-face {
-            font-family: 'Traditional Arabic';
-            src: url('/zikr/fonts/TraditionalArabicBold.ttf') format('truetype');
-            font-weight: bold;
-            font-display: swap;
-        }
         @font-face {
             font-family: 'Uthman Taha';
             src: url('/zikr/fonts/UthmanTahaNaskhBold.ttf') format('truetype');
@@ -38,6 +26,18 @@
         @font-face {
             font-family: 'Lotus';
             src: url('/zikr/fonts/lotus-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Compset';
+            src: url('/zikr/fonts/Compset-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Traditional Arabic';
+            src: url('/zikr/fonts/TraditionalArabicBold.ttf') format('truetype');
             font-weight: bold;
             font-display: swap;
         }
@@ -57,7 +57,8 @@
             --switch-bg: #c2d6e8;
             --scrollbar-thumb: #9fb8d0;
             --scrollbar-track: #e2ecf5;
-            --selected-font: 'Compset', 'Traditional Arabic', 'Amiri', serif;
+            /* ترتیب فونت: عثمان طه، لوتوس، کامپوست، عربی سنتی */
+            --selected-font: 'Uthman Taha', 'Lotus', 'Compset', 'Traditional Arabic', 'Amiri', serif;
             --selected-font-size: 1.6rem;
             --player-bg: #ffffff;
             --player-btn-bg: #2c6b9e;
@@ -312,7 +313,7 @@
             flex-direction: column;
             gap: 1.2rem;
             margin-top: 1rem;
-            max-width: 400px; /* برای دسکتاپ عرض کمتر */
+            max-width: 400px;
             margin-left: auto;
             margin-right: auto;
             width: 100%;
@@ -347,7 +348,7 @@
             opacity: 0.9;
         }
 
-        /* صفحه جزئیات */
+        /* صفحه جزئیات (مشترک برای اذکار متنی و صوتی) */
         .detail-view {
             display: none;
             flex: 1;
@@ -389,12 +390,11 @@
             line-height: 1.3;
         }
 
-        /* پلیر صوتی */
+        /* پلیرهای صوتی (مدرن) */
         .audio-player-container {
             padding: 0.8rem 1rem;
             background: var(--player-bg);
             border-bottom: 1px solid var(--card-border);
-            display: none;
         }
         .custom-audio-player {
             display: flex;
@@ -405,6 +405,10 @@
             padding: 0.4rem 1rem;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             direction: ltr;
+            margin-bottom: 0.5rem;
+        }
+        .custom-audio-player:last-child {
+            margin-bottom: 0;
         }
         .play-btn {
             width: 36px;
@@ -455,11 +459,11 @@
             border-radius: 10px;
             transition: width 0.1s linear;
         }
-        #audioPlayer {
+        audio {
             display: none;
         }
 
-        /* لیست اذکار */
+        /* لیست اذکار متنی */
         .dhikr-list {
             flex: 1;
             overflow-y: auto;
@@ -547,6 +551,33 @@
             margin-right: 0;
         }
 
+        /* صفحه اذکار صوتی */
+        .audio-detail {
+            padding: 1rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .audio-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 1.2rem;
+            border: 1px solid var(--card-border);
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+        }
+        .audio-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .audio-title i {
+            color: var(--icon-color);
+        }
+
         /* فوتر */
         .footer {
             text-align: center;
@@ -599,10 +630,10 @@
                     <span class="setting-label"><i class="fas fa-font"></i> فونت</span>
                     <div class="font-select-wrapper">
                         <select class="font-select" id="fontSelect">
-                            <option value="Compset">کامپوست</option>
-                            <option value="Traditional">عربی سنتی</option>
                             <option value="Uthman">عثمان طه</option>
                             <option value="Lotus">لوتوس</option>
+                            <option value="Compset">کامپوست</option>
+                            <option value="Traditional">عربی سنتی</option>
                         </select>
                     </div>
                 </div>
@@ -624,7 +655,7 @@
                 <h1>اذکار</h1>
             </div>
 
-            <!-- منوی اصلی -->
+            <!-- منوی اصلی (اکنون ۴ گزینه) -->
             <div id="mainMenu" class="main-menu">
                 <div class="menu-grid">
                     <div class="menu-card" data-category="morning">
@@ -639,34 +670,64 @@
                         <div class="menu-icon"><i class="fas fa-bed"></i></div>
                         <div class="menu-info"><h2>اذکار خواب</h2></div>
                     </div>
+                    <div class="menu-card" data-category="audio">
+                        <div class="menu-icon"><i class="fas fa-headphones"></i></div>
+                        <div class="menu-info"><h2>اذکار صوتی</h2></div>
+                    </div>
                 </div>
             </div>
 
-            <!-- صفحه جزئیات -->
+            <!-- صفحه جزئیات (برای اذکار متنی) -->
             <div id="detailView" class="detail-view">
                 <div class="detail-header">
                     <button class="back-btn" id="backBtn"><i class="fas fa-arrow-right"></i></button>
                     <span class="detail-title" id="detailCategoryTitle"></span>
                 </div>
-                <!-- پلیر صوتی -->
-                <div class="audio-player-container" id="audioPlayerContainer">
-                    <div class="custom-audio-player">
-                        <button class="play-btn" id="playPauseBtn">
-                            <i class="fas fa-play" id="playIcon"></i>
-                        </button>
-                        <div class="progress-area">
-                            <span class="time" id="currentTime">00:00</span>
-                            <div class="progress-bar" id="progressBar">
-                                <div class="progress-fill" id="progressFill"></div>
+                <!-- این قسمت برای اذکار متنی (صبح، شام، خواب) پر می‌شود -->
+                <div id="detailList" class="dhikr-list"></div>
+            </div>
+
+            <!-- صفحه اذکار صوتی (جداگانه) -->
+            <div id="audioDetailView" class="detail-view">
+                <div class="detail-header">
+                    <button class="back-btn" id="backFromAudioBtn"><i class="fas fa-arrow-right"></i></button>
+                    <span class="detail-title">اذکار صوتی</span>
+                </div>
+                <div class="audio-detail">
+                    <div class="audio-card">
+                        <div class="audio-title"><i class="fas fa-sun"></i> اذکار صبح</div>
+                        <div class="custom-audio-player" data-audio="morning">
+                            <button class="play-btn" data-id="morning">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="progress-area">
+                                <span class="time" data-current="morning">00:00</span>
+                                <div class="progress-bar" data-progress="morning">
+                                    <div class="progress-fill" data-fill="morning"></div>
+                                </div>
+                                <span class="time" data-duration="morning">00:00</span>
                             </div>
-                            <span class="time" id="durationTime">00:00</span>
                         </div>
                     </div>
-                    <audio id="audioPlayer" preload="none">
-                        <source src="" type="audio/mpeg">
-                    </audio>
+                    <div class="audio-card">
+                        <div class="audio-title"><i class="fas fa-moon"></i> اذکار شام</div>
+                        <div class="custom-audio-player" data-audio="evening">
+                            <button class="play-btn" data-id="evening">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <div class="progress-area">
+                                <span class="time" data-current="evening">00:00</span>
+                                <div class="progress-bar" data-progress="evening">
+                                    <div class="progress-fill" data-fill="evening"></div>
+                                </div>
+                                <span class="time" data-duration="evening">00:00</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="detailList" class="dhikr-list"></div>
+                <!-- المنت‌های صوتی مخفی -->
+                <audio id="audioMorning" preload="none" src="https://raw.githubusercontent.com/ysrbkht/zikr/main/morning.mp3"></audio>
+                <audio id="audioEvening" preload="none" src="https://raw.githubusercontent.com/ysrbkht/zikr/main/evening.mp3"></audio>
             </div>
 
             <!-- فوتر -->
@@ -688,19 +749,21 @@
             evening: 'https://raw.githubusercontent.com/ysrbkht/zikr/main/evening.mp3'
         };
         const FONT_URLS = [
-            '/zikr/fonts/Compset-Bold.ttf',
-            '/zikr/fonts/TraditionalArabicBold.ttf',
             '/zikr/fonts/UthmanTahaNaskhBold.ttf',
-            '/zikr/fonts/lotus-Bold.ttf'
+            '/zikr/fonts/lotus-Bold.ttf',
+            '/zikr/fonts/Compset-Bold.ttf',
+            '/zikr/fonts/TraditionalArabicBold.ttf'
         ];
 
         let azkarData = null;
         const appContainer = document.getElementById('appContainer');
         const mainMenu = document.getElementById('mainMenu');
         const detailView = document.getElementById('detailView');
+        const audioDetailView = document.getElementById('audioDetailView');
         const detailList = document.getElementById('detailList');
         const detailCategoryTitle = document.getElementById('detailCategoryTitle');
         const backBtn = document.getElementById('backBtn');
+        const backFromAudioBtn = document.getElementById('backFromAudioBtn');
         const header = document.getElementById('header');
         const footer = document.getElementById('footer');
         const mainContent = document.getElementById('mainContent');
@@ -719,27 +782,41 @@
         const fontSizeValue = document.getElementById('fontSizeValue');
         const fontSelect = document.getElementById('fontSelect');
 
-        // پلیر صوتی
-        const audioPlayerContainer = document.getElementById('audioPlayerContainer');
-        const audioPlayer = document.getElementById('audioPlayer');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const playIcon = document.getElementById('playIcon');
-        const currentTimeSpan = document.getElementById('currentTime');
-        const durationTimeSpan = document.getElementById('durationTime');
-        const progressBar = document.getElementById('progressBar');
-        const progressFill = document.getElementById('progressFill');
-
         // دکمه نصب و دانلود
         const installBtn = document.getElementById('installBtn');
         const installContainer = document.getElementById('installButtonContainer');
         const downloadBtn = document.getElementById('downloadBtn');
         const downloadContainer = document.getElementById('downloadButtonContainer');
 
-        let deferredPrompt;
+        // متغیرهای پلیر (برای صفحه اذکار صوتی)
+        const audioMorning = document.getElementById('audioMorning');
+        const audioEvening = document.getElementById('audioEvening');
+        const playBtns = document.querySelectorAll('.custom-audio-player .play-btn');
+        const progressBars = document.querySelectorAll('.progress-bar');
+        const currentTimes = {
+            morning: document.querySelector('[data-current="morning"]'),
+            evening: document.querySelector('[data-current="evening"]')
+        };
+        const durationTimes = {
+            morning: document.querySelector('[data-duration="morning"]'),
+            evening: document.querySelector('[data-duration="evening"]')
+        };
+        const progressFills = {
+            morning: document.querySelector('[data-fill="morning"]'),
+            evening: document.querySelector('[data-fill="evening"]')
+        };
+
         let currentFontSize = 1.6;
-        let currentFont = 'Compset';
-        let isPlaying = false;
-        let progressInterval;
+        let currentFont = 'Uthman'; // پیش‌فرض عثمان طه
+        let isPlaying = {
+            morning: false,
+            evening: false
+        };
+        let progressIntervals = {
+            morning: null,
+            evening: null
+        };
+        let deferredPrompt;
 
         // ======== توابع کمکی ========
         function applyFontSize(size) {
@@ -750,20 +827,20 @@
         function applyFontFamily(fontKey) {
             let fontStack = '';
             switch (fontKey) {
-                case 'Compset':
-                    fontStack = "'Compset', 'Traditional Arabic', 'Amiri', serif";
-                    break;
-                case 'Traditional':
-                    fontStack = "'Traditional Arabic', 'Amiri', serif";
-                    break;
                 case 'Uthman':
-                    fontStack = "'Uthman Taha', 'Traditional Arabic', 'Amiri', serif";
+                    fontStack = "'Uthman Taha', 'Lotus', 'Compset', 'Traditional Arabic', 'Amiri', serif";
                     break;
                 case 'Lotus':
-                    fontStack = "'Lotus', 'Traditional Arabic', 'Amiri', serif";
+                    fontStack = "'Lotus', 'Uthman Taha', 'Compset', 'Traditional Arabic', 'Amiri', serif";
+                    break;
+                case 'Compset':
+                    fontStack = "'Compset', 'Uthman Taha', 'Lotus', 'Traditional Arabic', 'Amiri', serif";
+                    break;
+                case 'Traditional':
+                    fontStack = "'Traditional Arabic', 'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif";
                     break;
                 default:
-                    fontStack = "'Compset', 'Traditional Arabic', 'Amiri', serif";
+                    fontStack = "'Uthman Taha', 'Lotus', 'Compset', 'Traditional Arabic', 'Amiri', serif";
             }
             document.documentElement.style.setProperty('--selected-font', fontStack);
         }
@@ -822,17 +899,17 @@
                 applyFontSize(1.6);
             }
             const savedFont = localStorage.getItem('fontFamily');
-            if (savedFont && ['Compset', 'Traditional', 'Uthman', 'Lotus'].includes(savedFont)) {
+            if (savedFont && ['Uthman', 'Lotus', 'Compset', 'Traditional'].includes(savedFont)) {
                 currentFont = savedFont;
                 fontSelect.value = savedFont;
                 applyFontFamily(savedFont);
             } else {
-                fontSelect.value = 'Compset';
-                applyFontFamily('Compset');
+                fontSelect.value = 'Uthman';
+                applyFontFamily('Uthman');
             }
         }
 
-        // ======== توابع پلیر ========
+        // ======== توابع پلیر برای صفحه اذکار صوتی ========
         function formatTime(seconds) {
             if (isNaN(seconds)) return '00:00';
             const mins = Math.floor(seconds / 60);
@@ -840,71 +917,88 @@
             return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
-        function updateProgress() {
-            const current = audioPlayer.currentTime;
-            const duration = audioPlayer.duration;
+        function updateProgress(audioId) {
+            const audio = audioId === 'morning' ? audioMorning : audioEvening;
+            const current = audio.currentTime;
+            const duration = audio.duration;
             if (duration > 0) {
                 const percent = (current / duration) * 100;
-                progressFill.style.width = percent + '%';
-                currentTimeSpan.textContent = formatTime(current);
+                progressFills[audioId].style.width = percent + '%';
+                currentTimes[audioId].textContent = formatTime(current);
             }
         }
 
-        function resetPlayer() {
-            clearInterval(progressInterval);
-            isPlaying = false;
-            playIcon.className = 'fas fa-play';
-            audioPlayer.pause();
-            audioPlayer.currentTime = 0;
-            progressFill.style.width = '0%';
-            currentTimeSpan.textContent = '00:00';
-            durationTimeSpan.textContent = '00:00';
+        function resetPlayer(audioId) {
+            if (progressIntervals[audioId]) {
+                clearInterval(progressIntervals[audioId]);
+                progressIntervals[audioId] = null;
+            }
+            isPlaying[audioId] = false;
+            const btn = document.querySelector(`[data-id="${audioId}"] i`);
+            btn.className = 'fas fa-play';
+            const audio = audioId === 'morning' ? audioMorning : audioEvening;
+            audio.pause();
+            audio.currentTime = 0;
+            progressFills[audioId].style.width = '0%';
+            currentTimes[audioId].textContent = '00:00';
+            durationTimes[audioId].textContent = '00:00';
         }
 
-        playPauseBtn.addEventListener('click', () => {
-            if (audioPlayer.src) {
-                if (isPlaying) {
-                    audioPlayer.pause();
-                    playIcon.className = 'fas fa-play';
-                    clearInterval(progressInterval);
+        // رویدادهای پلیر
+        playBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const audioId = btn.dataset.id;
+                const audio = audioId === 'morning' ? audioMorning : audioEvening;
+                const icon = btn.querySelector('i');
+                if (isPlaying[audioId]) {
+                    audio.pause();
+                    icon.className = 'fas fa-play';
+                    clearInterval(progressIntervals[audioId]);
                 } else {
-                    audioPlayer.play().catch(e => console.log(e));
-                    playIcon.className = 'fas fa-pause';
-                    progressInterval = setInterval(updateProgress, 100);
+                    // توقف پلیر دیگر اگر در حال پخش است
+                    if (audioId === 'morning' && isPlaying.evening) {
+                        resetPlayer('evening');
+                    } else if (audioId === 'evening' && isPlaying.morning) {
+                        resetPlayer('morning');
+                    }
+                    audio.play().catch(e => console.log(e));
+                    icon.className = 'fas fa-pause';
+                    progressIntervals[audioId] = setInterval(() => updateProgress(audioId), 100);
                 }
-                isPlaying = !isPlaying;
-            }
+                isPlaying[audioId] = !isPlaying[audioId];
+            });
         });
 
-        audioPlayer.addEventListener('loadedmetadata', () => {
-            durationTimeSpan.textContent = formatTime(audioPlayer.duration);
+        audioMorning.addEventListener('loadedmetadata', () => {
+            durationTimes.morning.textContent = formatTime(audioMorning.duration);
+        });
+        audioEvening.addEventListener('loadedmetadata', () => {
+            durationTimes.evening.textContent = formatTime(audioEvening.duration);
         });
 
-        audioPlayer.addEventListener('ended', () => {
-            playIcon.className = 'fas fa-play';
-            isPlaying = false;
-            clearInterval(progressInterval);
-            progressFill.style.width = '0%';
-            currentTimeSpan.textContent = '00:00';
-        });
+        audioMorning.addEventListener('ended', () => resetPlayer('morning'));
+        audioEvening.addEventListener('ended', () => resetPlayer('evening'));
 
-        progressBar.addEventListener('click', (e) => {
-            if (audioPlayer.duration) {
-                const rect = progressBar.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const width = rect.width;
-                const percent = clickX / width;
-                audioPlayer.currentTime = percent * audioPlayer.duration;
-                updateProgress();
-            }
+        progressBars.forEach(bar => {
+            bar.addEventListener('click', (e) => {
+                const audioId = bar.dataset.progress;
+                const audio = audioId === 'morning' ? audioMorning : audioEvening;
+                if (audio.duration) {
+                    const rect = bar.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const width = rect.width;
+                    const percent = clickX / width;
+                    audio.currentTime = percent * audio.duration;
+                    updateProgress(audioId);
+                }
+            });
         });
 
         // ======== نصب PWA ========
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            // نمایش دکمه نصب اگر قبلاً نصب نشده باشد
-            if (!localStorage.getItem('appInstalled')) {
+            if (!localStorage.getItem('appInstalled') && !window.matchMedia('(display-mode: standalone)').matches) {
                 installContainer.classList.remove('hidden-btn');
             }
         });
@@ -920,28 +1014,29 @@
             deferredPrompt = null;
         });
 
-        // اگر قبلاً نصب شده، دکمه نصب را مخفی کن
-        if (localStorage.getItem('appInstalled')) {
+        // اگر قبلاً نصب شده یا در حالت standalone است، دکمه نصب را مخفی کن
+        if (localStorage.getItem('appInstalled') || window.matchMedia('(display-mode: standalone)').matches) {
             installContainer.classList.add('hidden-btn');
         }
 
-        // ======== دانلود برای آفلاین (کش دستی) ========
+        // رویداد نصب موفق
+        window.addEventListener('appinstalled', () => {
+            localStorage.setItem('appInstalled', 'true');
+            installContainer.classList.add('hidden-btn');
+        });
+
+        // ======== دانلود برای آفلاین ========
         async function downloadForOffline() {
             try {
-                // کش کردن فایل JSON
                 await fetch(JSON_URL);
-                // کش کردن فایل‌های صوتی
                 for (let key in AUDIO_URLS) {
                     await fetch(AUDIO_URLS[key]);
                 }
-                // کش کردن فونت‌ها
                 for (let url of FONT_URLS) {
                     await fetch(url);
                 }
-                // کش کردن آیکون‌ها
                 await fetch('/zikr/icon.png');
                 await fetch('/zikr/icon.ico');
-                // پس از دانلود، دکمه را مخفی کن
                 localStorage.setItem('offlineDownloaded', 'true');
                 downloadContainer.classList.add('hidden-btn');
                 alert('همه فایل‌ها با موفقیت برای استفاده آفلاین ذخیره شدند.');
@@ -952,39 +1047,44 @@
         }
 
         downloadBtn.addEventListener('click', downloadForOffline);
-
-        // اگر قبلاً دانلود شده، دکمه را مخفی کن
         if (localStorage.getItem('offlineDownloaded')) {
             downloadContainer.classList.add('hidden-btn');
         }
 
         // ======== نمایش منو و جزئیات ========
         function showMainMenu() {
-            resetPlayer();
-            audioPlayerContainer.style.display = 'none';
+            // ریست پلیرها
+            resetPlayer('morning');
+            resetPlayer('evening');
             mainMenu.style.display = 'block';
             detailView.classList.remove('active');
+            audioDetailView.classList.remove('active');
             header.classList.remove('hidden');
             footer.classList.remove('hidden');
             appContainer.classList.remove('detail-active');
         }
 
         function showCategory(category) {
+            if (category === 'audio') {
+                // نمایش صفحه اذکار صوتی
+                resetPlayer('morning');
+                resetPlayer('evening');
+                mainMenu.style.display = 'none';
+                audioDetailView.classList.add('active');
+                header.classList.add('hidden');
+                footer.classList.add('hidden');
+                appContainer.classList.add('detail-active');
+                return;
+            }
+
             if (!azkarData || !azkarData[category]) {
                 detailList.innerHTML = `<div style="text-align:center; padding:2rem;">داده‌ای یافت نشد.</div>`;
                 return;
             }
 
-            resetPlayer();
+            resetPlayer('morning');
+            resetPlayer('evening');
             detailCategoryTitle.textContent = categoryNames[category] || category;
-
-            if (category === 'morning' || category === 'evening') {
-                audioPlayer.src = AUDIO_URLS[category];
-                audioPlayer.load();
-                audioPlayerContainer.style.display = 'block';
-            } else {
-                audioPlayerContainer.style.display = 'none';
-            }
 
             const items = azkarData[category];
             let html = '';
@@ -1017,6 +1117,7 @@
         });
 
         backBtn.addEventListener('click', showMainMenu);
+        backFromAudioBtn.addEventListener('click', showMainMenu);
 
         async function loadAzkar() {
             try {
