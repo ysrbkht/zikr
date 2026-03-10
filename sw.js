@@ -1,9 +1,11 @@
-const CACHE_NAME = 'azkar-cache-v2';
+const CACHE_NAME = 'azkar-cache-v3';
 const urlsToCache = [
-  'index.html',
-  'https://raw.githubusercontent.com/YBakhtiar/zikr/main/azkar.json',
-  'https://raw.githubusercontent.com/YBakhtiar/zikr/main/icon.png',
-  'https://raw.githubusercontent.com/YBakhtiar/zikr/main/icon.ico',
+  '/zikr/',
+  '/zikr/index.html',
+  '/zikr/manifest.json',
+  '/zikr/icon.png',
+  '/zikr/icon.ico',
+  'https://raw.githubusercontent.com/ysrbkht/zikr/main/azkar.json',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css',
   'https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap'
 ];
