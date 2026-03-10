@@ -1,11 +1,11 @@
 {
-  "name": "اذکار روزانه",
+  "name": "اذکار",
   "short_name": "اذکار",
   "description": "برنامه اذکار صبح، شام و خواب",
   "start_url": "/zikr/index.html",
   "display": "standalone",
-  "background_color": "#f1f5f9",
-  "theme_color": "#1e3a8a",
+  "background_color": "#f0f7ff",
+  "theme_color": "#2c6b9e",
   "icons": [
     {
       "src": "/zikr/icon.png",
