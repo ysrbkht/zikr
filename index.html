@@ -12,7 +12,7 @@
     <!-- Persian font for UI -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* فونت‌های آپلود شده */
+        /* فونت‌های آپلود شده با نام دقیق فایل‌ها */
         @font-face {
             font-family: 'Compset';
             src: url('/zikr/fonts/Compset-Bold.ttf') format('truetype');
@@ -38,7 +38,7 @@
             font-display: swap;
         }
 
-        /* متغیرهای پیش‌فرض */
+        /* متغیرهای رنگی */
         :root {
             --bg-color: #f0f7ff;
             --container-bg: #ffffff;
@@ -55,6 +55,12 @@
             --scrollbar-track: #e2ecf5;
             --selected-font: 'Compset', 'Traditional Arabic', 'Amiri', serif;
             --selected-font-size: 1.6rem;
+            --player-bg: #ffffff;
+            --player-btn-bg: #2c6b9e;
+            --player-btn-color: white;
+            --player-progress-bg: #d0e2f2;
+            --player-progress-fill: #2c6b9e;
+            --player-time-color: #1e3a5f;
         }
 
         body.dark {
@@ -71,6 +77,12 @@
             --switch-bg: #475569;
             --scrollbar-thumb: #475569;
             --scrollbar-track: #1e293b;
+            --player-bg: #1e293b;
+            --player-btn-bg: #3b82f6;
+            --player-btn-color: white;
+            --player-progress-bg: #334155;
+            --player-progress-fill: #60a5fa;
+            --player-time-color: #e2e8f0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -103,7 +115,7 @@
             padding: 0;
         }
 
-        /* هدر اصلی (فقط در منو) */
+        /* هدر اصلی */
         .header {
             text-align: center;
             margin-bottom: 2rem;
@@ -136,7 +148,7 @@
             transform: rotate(90deg);
         }
 
-        /* پنل تنظیمات حرفه‌ای */
+        /* پنل تنظیمات */
         .settings-panel {
             position: absolute;
             top: 3.5rem;
@@ -233,7 +245,7 @@
             font-weight: 500;
         }
 
-        /* dropdown انتخاب فونت (حرفه‌ای) */
+        /* dropdown انتخاب فونت */
         .font-select-wrapper {
             position: relative;
             width: 150px;
@@ -345,25 +357,76 @@
             line-height: 1.3;
         }
 
-        /* پلیر صوتی (فقط برای صفحات صبح و شام) */
+        /* پلیر صوتی مدرن با جهت درست برای RTL */
         .audio-player-container {
-            padding: 0.5rem 1rem;
-            background: var(--meta-bg);
+            padding: 0.8rem 1rem;
+            background: var(--player-bg);
             border-bottom: 1px solid var(--card-border);
-            display: none; /* initially hidden */
+            display: none;
         }
-        .audio-player {
-            width: 100%;
-            height: 40px;
-            border-radius: 30px;
-            background: var(--card-bg);
-        }
-        /* استایل native audio در مرورگرها متفاوت است، اینجا فقط یک تنظیم کلی */
-        audio {
-            outline: none;
-        }
-        audio::-webkit-media-controls-panel {
+        .custom-audio-player {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             background: var(--meta-bg);
+            border-radius: 40px;
+            padding: 0.4rem 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            direction: ltr; /* برای ثابت ماندن دکمه در سمت راست */
+        }
+        .play-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--player-btn-bg);
+            border: none;
+            color: var(--player-btn-color);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+            flex-shrink: 0;
+        }
+        .play-btn:hover {
+            transform: scale(1.05);
+        }
+        .play-btn i {
+            font-size: 1rem;
+        }
+        .progress-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            direction: rtl; /* چیدمان زمان‌ها به صورت راست‌چین */
+        }
+        .time {
+            font-size: 0.8rem;
+            color: var(--player-time-color);
+            min-width: 45px;
+            font-feature-settings: 'tnum';
+            text-align: center;
+        }
+        .progress-bar {
+            flex: 1;
+            height: 5px;
+            background: var(--player-progress-bg);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            transform: scaleX(-1); /* معکوس کردن جهت نوار */
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--player-progress-fill);
+            border-radius: 10px;
+            transition: width 0.1s linear;
+        }
+        #audioPlayer {
+            display: none;
         }
 
         /* لیست اذکار */
@@ -405,13 +468,12 @@
             border: 1px solid var(--card-border);
             box-shadow: 0 4px 8px rgba(0,0,0,0.02);
             margin-bottom: 1rem;
-            transition: padding 0.2s;
         }
         .dhikr-text {
             font-family: var(--selected-font);
             font-weight: bold;
             font-size: var(--selected-font-size);
-            line-height: 1.8;  /* relative to font-size, prevents overlapping */
+            line-height: 1.8;
             margin-bottom: 0.6rem;
             color: var(--text-color);
             text-align: center;
@@ -455,7 +517,7 @@
             margin-right: 0;
         }
 
-        /* فوتر (فقط در منوی اصلی) */
+        /* فوتر */
         .footer {
             text-align: center;
             color: var(--footer-text);
@@ -487,16 +549,14 @@
 </head>
 <body>
     <div class="app-container" id="appContainer">
-        <!-- تنظیمات (چرخ‌دنده) با پنل بازشو -->
+        <!-- تنظیمات -->
         <div class="settings-wrapper">
             <i class="fas fa-cog settings-icon" id="settingsIcon"></i>
             <div class="settings-panel" id="settingsPanel">
-                <!-- حالت شب/روز -->
                 <div class="setting-item">
                     <span class="setting-label"><i class="fas fa-moon"></i> حالت شب</span>
                     <div class="inner-switch" id="themeSwitchInner"></div>
                 </div>
-                <!-- اندازه فونت -->
                 <div class="setting-item">
                     <span class="setting-label"><i class="fas fa-text-height"></i> اندازه متن</span>
                     <div class="font-size-control">
@@ -505,7 +565,6 @@
                         <span class="font-size-btn" id="increaseFont">+</span>
                     </div>
                 </div>
-                <!-- انتخاب فونت (با عنوان "فونت" و dropdown زیبا) -->
                 <div class="setting-item">
                     <span class="setting-label"><i class="fas fa-font"></i> فونت</span>
                     <div class="font-select-wrapper">
@@ -521,7 +580,6 @@
         </div>
 
         <div class="main-content" id="mainContent">
-            <!-- هدر اصلی (بدون عبارت هر زمان) -->
             <div class="header" id="header">
                 <h1>اذکار صحیح روزانه</h1>
             </div>
@@ -544,22 +602,34 @@
                 </div>
             </div>
 
-            <!-- صفحه جزئیات (مخفی در ابتدا) -->
+            <!-- صفحه جزئیات -->
             <div id="detailView" class="detail-view">
                 <div class="detail-header">
                     <button class="back-btn" id="backBtn"><i class="fas fa-arrow-right"></i></button>
                     <span class="detail-title" id="detailCategoryTitle"></span>
                 </div>
-                <!-- پلیر صوتی (فقط برای صبح و شام) -->
+                <!-- پلیر صوتی با جهت درست -->
                 <div class="audio-player-container" id="audioPlayerContainer">
-                    <audio id="audioPlayer" class="audio-player" controls preload="none">
+                    <div class="custom-audio-player">
+                        <button class="play-btn" id="playPauseBtn">
+                            <i class="fas fa-play" id="playIcon"></i>
+                        </button>
+                        <div class="progress-area">
+                            <span class="time" id="currentTime">00:00</span>
+                            <div class="progress-bar" id="progressBar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <span class="time" id="durationTime">00:00</span>
+                        </div>
+                    </div>
+                    <audio id="audioPlayer" preload="none">
                         <source src="" type="audio/mpeg">
                     </audio>
                 </div>
                 <div id="detailList" class="dhikr-list"></div>
             </div>
 
-            <!-- فوتر (فقط در منوی اصلی) -->
+            <!-- فوتر -->
             <div class="footer" id="footer">
                 <a href="https://t.me/YBAKHTIAR" target="_blank" class="telegram-link">
                     <svg class="telegram-svg" viewBox="0 0 24 24">
@@ -568,8 +638,8 @@
                     نظرات و پیشنهادات
                 </a>
             </div>
-        </div> <!-- main-content -->
-    </div> <!-- app-container -->
+        </div>
+    </div>
 
     <script>
         const JSON_URL = 'https://raw.githubusercontent.com/ysrbkht/zikr/main/azkar.json';
@@ -594,7 +664,7 @@
             sleep: 'اذکار خواب'
         };
 
-        // عناصر تنظیمات و پلیر
+        // تنظیمات
         const settingsIcon = document.getElementById('settingsIcon');
         const settingsPanel = document.getElementById('settingsPanel');
         const themeSwitchInner = document.getElementById('themeSwitchInner');
@@ -602,12 +672,21 @@
         const increaseFont = document.getElementById('increaseFont');
         const fontSizeValue = document.getElementById('fontSizeValue');
         const fontSelect = document.getElementById('fontSelect');
+
+        // پلیر صوتی
         const audioPlayerContainer = document.getElementById('audioPlayerContainer');
         const audioPlayer = document.getElementById('audioPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playIcon = document.getElementById('playIcon');
+        const currentTimeSpan = document.getElementById('currentTime');
+        const durationTimeSpan = document.getElementById('durationTime');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
 
-        // متغیرهای تنظیمات
-        let currentFontSize = 1.6; // rem
+        let currentFontSize = 1.6;
         let currentFont = 'Compset';
+        let isPlaying = false;
+        let progressInterval;
 
         // ======== توابع کمکی ========
         function applyFontSize(size) {
@@ -648,7 +727,6 @@
             }
         });
 
-        // حالت شب
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'dark') {
@@ -659,11 +737,9 @@
         themeSwitchInner.addEventListener('click', () => {
             document.body.classList.toggle('dark');
             themeSwitchInner.classList.toggle('active');
-            const theme = document.body.classList.contains('dark') ? 'dark' : 'light';
-            localStorage.setItem('theme', theme);
+            localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
         });
 
-        // اندازه فونت
         decreaseFont.addEventListener('click', () => {
             currentFontSize = Math.max(1.0, currentFontSize - 0.1);
             applyFontSize(currentFontSize);
@@ -675,14 +751,12 @@
             localStorage.setItem('fontSize', currentFontSize.toFixed(1));
         });
 
-        // انتخاب فونت
         fontSelect.addEventListener('change', (e) => {
             currentFont = e.target.value;
             applyFontFamily(currentFont);
             localStorage.setItem('fontFamily', currentFont);
         });
 
-        // بارگذاری تنظیمات ذخیره شده
         function loadSettings() {
             const savedFontSize = localStorage.getItem('fontSize');
             if (savedFontSize) {
@@ -691,7 +765,6 @@
             } else {
                 applyFontSize(1.6);
             }
-
             const savedFont = localStorage.getItem('fontFamily');
             if (savedFont && ['Compset', 'Traditional', 'Uthman', 'Lotus'].includes(savedFont)) {
                 currentFont = savedFont;
@@ -703,13 +776,78 @@
             }
         }
 
-        // ======== نمایش منو و جزئیات ========
-        function showMainMenu() {
-            // توقف پخش صدا و مخفی کردن پلیر
+        // ======== توابع پلیر ========
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '00:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateProgress() {
+            const current = audioPlayer.currentTime;
+            const duration = audioPlayer.duration;
+            if (duration > 0) {
+                const percent = (current / duration) * 100;
+                progressFill.style.width = percent + '%';
+                currentTimeSpan.textContent = formatTime(current);
+            }
+        }
+
+        function resetPlayer() {
+            clearInterval(progressInterval);
+            isPlaying = false;
+            playIcon.className = 'fas fa-play';
             audioPlayer.pause();
             audioPlayer.currentTime = 0;
-            audioPlayerContainer.style.display = 'none';
+            progressFill.style.width = '0%';
+            currentTimeSpan.textContent = '00:00';
+            durationTimeSpan.textContent = '00:00';
+        }
 
+        playPauseBtn.addEventListener('click', () => {
+            if (audioPlayer.src) {
+                if (isPlaying) {
+                    audioPlayer.pause();
+                    playIcon.className = 'fas fa-play';
+                    clearInterval(progressInterval);
+                } else {
+                    audioPlayer.play().catch(e => console.log(e));
+                    playIcon.className = 'fas fa-pause';
+                    progressInterval = setInterval(updateProgress, 100);
+                }
+                isPlaying = !isPlaying;
+            }
+        });
+
+        audioPlayer.addEventListener('loadedmetadata', () => {
+            durationTimeSpan.textContent = formatTime(audioPlayer.duration);
+        });
+
+        audioPlayer.addEventListener('ended', () => {
+            playIcon.className = 'fas fa-play';
+            isPlaying = false;
+            clearInterval(progressInterval);
+            progressFill.style.width = '0%';
+            currentTimeSpan.textContent = '00:00';
+        });
+
+        progressBar.addEventListener('click', (e) => {
+            if (audioPlayer.duration) {
+                const rect = progressBar.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const width = rect.width;
+                // به دلیل transform: scaleX(-1) روی نوار، درصد باید معکوس شود
+                const percent = 1 - (clickX / width);
+                audioPlayer.currentTime = percent * audioPlayer.duration;
+                updateProgress();
+            }
+        });
+
+        // ======== نمایش منو و جزئیات ========
+        function showMainMenu() {
+            resetPlayer();
+            audioPlayerContainer.style.display = 'none';
             mainMenu.style.display = 'block';
             detailView.classList.remove('active');
             header.classList.remove('hidden');
@@ -723,14 +861,9 @@
                 return;
             }
 
-            // توقف پخش قبلی
-            audioPlayer.pause();
-            audioPlayer.currentTime = 0;
-
-            // تنظیم عنوان
+            resetPlayer();
             detailCategoryTitle.textContent = categoryNames[category] || category;
 
-            // مدیریت پلیر صوتی
             if (category === 'morning' || category === 'evening') {
                 audioPlayer.src = AUDIO_URLS[category];
                 audioPlayer.load();
@@ -739,7 +872,6 @@
                 audioPlayerContainer.style.display = 'none';
             }
 
-            // ساخت لیست اذکار
             const items = azkarData[category];
             let html = '';
             items.forEach(item => {
@@ -783,7 +915,7 @@
             }
         }
 
-        // شروع کار
+        // شروع
         loadAzkar();
         showMainMenu();
         initTheme();
