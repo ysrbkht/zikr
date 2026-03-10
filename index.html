@@ -57,7 +57,6 @@
             --switch-bg: #c2d6e8;
             --scrollbar-thumb: #9fb8d0;
             --scrollbar-track: #e2ecf5;
-            /* ترتیب فونت: عثمان طه، لوتوس، کامپوست، عربی سنتی */
             --selected-font: 'Uthman Taha', 'Lotus', 'Compset', 'Traditional Arabic', 'Amiri', serif;
             --selected-font-size: 1.6rem;
             --player-bg: #ffffff;
@@ -99,6 +98,9 @@
             display: flex;
             flex-direction: column;
             transition: background-color 0.3s, color 0.3s;
+        }
+        body[dir="ltr"] {
+            font-family: 'Segoe UI', 'Vazirmatn', sans-serif;
         }
         .app-container {
             width: 100%;
@@ -143,6 +145,10 @@
             left: 1rem;
             z-index: 30;
         }
+        body[dir="ltr"] .settings-wrapper {
+            left: auto;
+            right: 1rem;
+        }
         .settings-icon {
             font-size: 2rem;
             color: var(--icon-color);
@@ -167,6 +173,10 @@
             min-width: 280px;
             z-index: 40;
             backdrop-filter: blur(5px);
+        }
+        body[dir="ltr"] .settings-panel {
+            left: auto;
+            right: 0;
         }
         .settings-panel.show {
             display: block;
@@ -244,6 +254,13 @@
         .inner-switch.active::after {
             left: calc(100% - 22px);
         }
+        body[dir="ltr"] .inner-switch::after {
+            left: 2px;
+            right: auto;
+        }
+        body[dir="ltr"] .inner-switch.active::after {
+            left: calc(100% - 22px);
+        }
 
         /* کنترل اندازه فونت */
         .font-size-control {
@@ -306,8 +323,28 @@
             background: var(--container-bg);
             color: var(--text-color);
         }
+        body[dir="ltr"] .font-select {
+            text-align: left;
+            padding-left: 1rem;
+            padding-right: 35px;
+            background-position: right 10px center;
+        }
 
-        /* منوی اصلی (با محدودیت عرض برای دسکتاپ) */
+        /* dropdown انتخاب زبان */
+        .language-select {
+            width: 100px;
+            background: var(--meta-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            padding: 0.4rem 0.8rem;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* منوی اصلی */
         .menu-grid {
             display: flex;
             flex-direction: column;
@@ -382,6 +419,9 @@
         .back-btn:hover {
             color: #1e3a8a;
         }
+        body[dir="ltr"] .back-btn {
+            transform: rotate(180deg);
+        }
         .detail-title {
             font-size: 1.5rem;
             font-weight: 700;
@@ -390,7 +430,7 @@
             line-height: 1.3;
         }
 
-        /* پلیرهای صوتی (مدرن) */
+        /* پلیرهای صوتی */
         .audio-player-container {
             padding: 0.8rem 1rem;
             background: var(--player-bg);
@@ -550,6 +590,10 @@
             margin-left: 0.3rem;
             margin-right: 0;
         }
+        body[dir="ltr"] .reference i {
+            margin-left: 0;
+            margin-right: 0.3rem;
+        }
 
         /* صفحه اذکار صوتی */
         .audio-detail {
@@ -614,20 +658,32 @@
         <div class="settings-wrapper">
             <i class="fas fa-cog settings-icon" id="settingsIcon"></i>
             <div class="settings-panel" id="settingsPanel">
+                <!-- انتخاب زبان -->
                 <div class="setting-item">
-                    <span class="setting-label"><i class="fas fa-moon"></i> حالت شب</span>
+                    <span class="setting-label"><i class="fas fa-globe"></i> <span data-i18n="language">زبان</span></span>
+                    <select class="language-select" id="languageSelect">
+                        <option value="fa">فارسی</option>
+                        <option value="ar">العربية</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <!-- حالت شب -->
+                <div class="setting-item">
+                    <span class="setting-label"><i class="fas fa-moon"></i> <span data-i18n="darkMode">حالت شب</span></span>
                     <div class="inner-switch" id="themeSwitchInner"></div>
                 </div>
+                <!-- اندازه فونت -->
                 <div class="setting-item">
-                    <span class="setting-label"><i class="fas fa-text-height"></i> اندازه متن</span>
+                    <span class="setting-label"><i class="fas fa-text-height"></i> <span data-i18n="fontSize">اندازه متن</span></span>
                     <div class="font-size-control">
                         <span class="font-size-btn" id="decreaseFont">−</span>
                         <span class="font-size-value" id="fontSizeValue">1.6</span>
                         <span class="font-size-btn" id="increaseFont">+</span>
                     </div>
                 </div>
+                <!-- انتخاب فونت -->
                 <div class="setting-item">
-                    <span class="setting-label"><i class="fas fa-font"></i> فونت</span>
+                    <span class="setting-label"><i class="fas fa-font"></i> <span data-i18n="font">فونت</span></span>
                     <div class="font-select-wrapper">
                         <select class="font-select" id="fontSelect">
                             <option value="Uthman">عثمان طه</option>
@@ -639,40 +695,40 @@
                 </div>
                 <!-- دکمه نصب PWA -->
                 <div class="setting-item" id="installButtonContainer">
-                    <span class="setting-label"><i class="fas fa-download"></i> نصب اپلیکیشن</span>
-                    <button class="install-btn" id="installBtn"><i class="fas fa-arrow-down"></i> نصب</button>
+                    <span class="setting-label"><i class="fas fa-download"></i> <span data-i18n="installApp">نصب اپلیکیشن</span></span>
+                    <button class="install-btn" id="installBtn"><i class="fas fa-arrow-down"></i> <span data-i18n="install">نصب</span></button>
                 </div>
                 <!-- دکمه دانلود برای آفلاین -->
                 <div class="setting-item" id="downloadButtonContainer">
-                    <span class="setting-label"><i class="fas fa-cloud-download-alt"></i> ذخیره برای آفلاین</span>
-                    <button class="download-btn" id="downloadBtn"><i class="fas fa-save"></i> دانلود</button>
+                    <span class="setting-label"><i class="fas fa-cloud-download-alt"></i> <span data-i18n="offlineSave">ذخیره برای آفلاین</span></span>
+                    <button class="download-btn" id="downloadBtn"><i class="fas fa-save"></i> <span data-i18n="download">دانلود</span></button>
                 </div>
             </div>
         </div>
 
         <div class="main-content" id="mainContent">
             <div class="header" id="header">
-                <h1>اذکار</h1>
+                <h1 data-i18n="appName">اذکار</h1>
             </div>
 
-            <!-- منوی اصلی (اکنون ۴ گزینه) -->
+            <!-- منوی اصلی -->
             <div id="mainMenu" class="main-menu">
                 <div class="menu-grid">
                     <div class="menu-card" data-category="morning">
                         <div class="menu-icon"><i class="fas fa-sun"></i></div>
-                        <div class="menu-info"><h2>اذکار صبح</h2></div>
+                        <div class="menu-info"><h2 data-i18n="morningAdhkar">اذکار صبح</h2></div>
                     </div>
                     <div class="menu-card" data-category="evening">
                         <div class="menu-icon"><i class="fas fa-moon"></i></div>
-                        <div class="menu-info"><h2>اذکار شام</h2></div>
+                        <div class="menu-info"><h2 data-i18n="eveningAdhkar">اذکار شام</h2></div>
                     </div>
                     <div class="menu-card" data-category="sleep">
                         <div class="menu-icon"><i class="fas fa-bed"></i></div>
-                        <div class="menu-info"><h2>اذکار خواب</h2></div>
+                        <div class="menu-info"><h2 data-i18n="sleepAdhkar">اذکار خواب</h2></div>
                     </div>
                     <div class="menu-card" data-category="audio">
                         <div class="menu-icon"><i class="fas fa-headphones"></i></div>
-                        <div class="menu-info"><h2>اذکار صوتی</h2></div>
+                        <div class="menu-info"><h2 data-i18n="audioAdhkar">اذکار صوتی</h2></div>
                     </div>
                 </div>
             </div>
@@ -683,19 +739,18 @@
                     <button class="back-btn" id="backBtn"><i class="fas fa-arrow-right"></i></button>
                     <span class="detail-title" id="detailCategoryTitle"></span>
                 </div>
-                <!-- این قسمت برای اذکار متنی (صبح، شام، خواب) پر می‌شود -->
                 <div id="detailList" class="dhikr-list"></div>
             </div>
 
-            <!-- صفحه اذکار صوتی (جداگانه) -->
+            <!-- صفحه اذکار صوتی -->
             <div id="audioDetailView" class="detail-view">
                 <div class="detail-header">
                     <button class="back-btn" id="backFromAudioBtn"><i class="fas fa-arrow-right"></i></button>
-                    <span class="detail-title">اذکار صوتی</span>
+                    <span class="detail-title" data-i18n="audioAdhkar">اذکار صوتی</span>
                 </div>
                 <div class="audio-detail">
                     <div class="audio-card">
-                        <div class="audio-title"><i class="fas fa-sun"></i> اذکار صبح</div>
+                        <div class="audio-title"><i class="fas fa-sun"></i> <span data-i18n="morningAudio">اذکار صبح</span></div>
                         <div class="custom-audio-player" data-audio="morning">
                             <button class="play-btn" data-id="morning">
                                 <i class="fas fa-play"></i>
@@ -710,7 +765,7 @@
                         </div>
                     </div>
                     <div class="audio-card">
-                        <div class="audio-title"><i class="fas fa-moon"></i> اذکار شام</div>
+                        <div class="audio-title"><i class="fas fa-moon"></i> <span data-i18n="eveningAudio">اذکار شام</span></div>
                         <div class="custom-audio-player" data-audio="evening">
                             <button class="play-btn" data-id="evening">
                                 <i class="fas fa-play"></i>
@@ -736,7 +791,7 @@
                     <svg class="telegram-svg" viewBox="0 0 24 24">
                         <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.87 4.326-2.96-.924c-.643-.2-.658-.643.135-.953l11.56-4.456c.537-.2 1.006.133.832.936z"/>
                     </svg>
-                    نظرات و پیشنهادات
+                    <span data-i18n="feedback">نظرات و پیشنهادات</span>
                 </a>
             </div>
         </div>
@@ -755,6 +810,78 @@
             '/zikr/fonts/TraditionalArabicBold.ttf'
         ];
 
+        // ======== ترجمه‌ها ========
+        const translations = {
+            fa: {
+                appName: 'اذکار',
+                morningAdhkar: 'اذکار صبح',
+                eveningAdhkar: 'اذکار شام',
+                sleepAdhkar: 'اذکار خواب',
+                audioAdhkar: 'اذکار صوتی',
+                language: 'زبان',
+                darkMode: 'حالت شب',
+                fontSize: 'اندازه متن',
+                font: 'فونت',
+                installApp: 'نصب اپلیکیشن',
+                install: 'نصب',
+                offlineSave: 'ذخیره برای آفلاین',
+                download: 'دانلود',
+                feedback: 'نظرات و پیشنهادات',
+                morningAudio: 'اذکار صبح',
+                eveningAudio: 'اذکار شام',
+                // برای عنوان صفحات داخلی
+                morning: 'اذکار صبح',
+                evening: 'اذکار شام',
+                sleep: 'اذکار خواب',
+                audio: 'اذکار صوتی'
+            },
+            ar: {
+                appName: 'الأذكار',
+                morningAdhkar: 'أذكار الصباح',
+                eveningAdhkar: 'أذكار المساء',
+                sleepAdhkar: 'أذكار النوم',
+                audioAdhkar: 'الأذكار الصوتية',
+                language: 'اللغة',
+                darkMode: 'الوضع الليلي',
+                fontSize: 'حجم الخط',
+                font: 'الخط',
+                installApp: 'تثبيت التطبيق',
+                install: 'تثبيت',
+                offlineSave: 'حفظ للاستخدام دون اتصال',
+                download: 'تحميل',
+                feedback: 'آراء واقتراحات',
+                morningAudio: 'أذكار الصباح',
+                eveningAudio: 'أذكار المساء',
+                morning: 'أذكار الصباح',
+                evening: 'أذكار المساء',
+                sleep: 'أذكار النوم',
+                audio: 'الأذكار الصوتية'
+            },
+            en: {
+                appName: 'Adhkar',
+                morningAdhkar: 'Morning Adhkar',
+                eveningAdhkar: 'Evening Adhkar',
+                sleepAdhkar: 'Sleep Adhkar',
+                audioAdhkar: 'Audio Adhkar',
+                language: 'Language',
+                darkMode: 'Dark Mode',
+                fontSize: 'Font Size',
+                font: 'Font',
+                installApp: 'Install App',
+                install: 'Install',
+                offlineSave: 'Save for Offline',
+                download: 'Download',
+                feedback: 'Feedback',
+                morningAudio: 'Morning Adhkar',
+                eveningAudio: 'Evening Adhkar',
+                morning: 'Morning Adhkar',
+                evening: 'Evening Adhkar',
+                sleep: 'Sleep Adhkar',
+                audio: 'Audio Adhkar'
+            }
+        };
+
+        let currentLanguage = localStorage.getItem('language') || 'fa';
         let azkarData = null;
         const appContainer = document.getElementById('appContainer');
         const mainMenu = document.getElementById('mainMenu');
@@ -768,9 +895,10 @@
         const footer = document.getElementById('footer');
         const mainContent = document.getElementById('mainContent');
         const categoryNames = {
-            morning: 'اذکار صبح',
-            evening: 'اذکار شام',
-            sleep: 'اذکار خواب'
+            morning: 'morning',
+            evening: 'evening',
+            sleep: 'sleep',
+            audio: 'audio'
         };
 
         // تنظیمات
@@ -781,6 +909,7 @@
         const increaseFont = document.getElementById('increaseFont');
         const fontSizeValue = document.getElementById('fontSizeValue');
         const fontSelect = document.getElementById('fontSelect');
+        const languageSelect = document.getElementById('languageSelect');
 
         // دکمه نصب و دانلود
         const installBtn = document.getElementById('installBtn');
@@ -788,7 +917,7 @@
         const downloadBtn = document.getElementById('downloadBtn');
         const downloadContainer = document.getElementById('downloadButtonContainer');
 
-        // متغیرهای پلیر (برای صفحه اذکار صوتی)
+        // متغیرهای پلیر
         const audioMorning = document.getElementById('audioMorning');
         const audioEvening = document.getElementById('audioEvening');
         const playBtns = document.querySelectorAll('.custom-audio-player .play-btn');
@@ -807,7 +936,7 @@
         };
 
         let currentFontSize = 1.6;
-        let currentFont = 'Uthman'; // پیش‌فرض عثمان طه
+        let currentFont = 'Uthman';
         let isPlaying = {
             morning: false,
             evening: false
@@ -818,7 +947,38 @@
         };
         let deferredPrompt;
 
-        // ======== توابع کمکی ========
+        // ======== توابع ترجمه ========
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
+            localStorage.setItem('language', lang);
+            languageSelect.value = lang;
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLanguage][key]) {
+                    el.textContent = translations[currentLanguage][key];
+                }
+            });
+            // به‌روزرسانی عنوان صفحات داخلی
+            if (detailView.classList.contains('active')) {
+                const cat = detailCategoryTitle.getAttribute('data-category');
+                if (cat && translations[currentLanguage][cat]) {
+                    detailCategoryTitle.textContent = translations[currentLanguage][cat];
+                }
+            }
+        }
+
+        languageSelect.addEventListener('change', (e) => {
+            setLanguage(e.target.value);
+        });
+
+        // ======== توابع فونت ========
         function applyFontSize(size) {
             document.documentElement.style.setProperty('--selected-font-size', size + 'rem');
             fontSizeValue.textContent = size.toFixed(1);
@@ -907,9 +1067,15 @@
                 fontSelect.value = 'Uthman';
                 applyFontFamily('Uthman');
             }
+            const savedLang = localStorage.getItem('language');
+            if (savedLang && ['fa', 'ar', 'en'].includes(savedLang)) {
+                setLanguage(savedLang);
+            } else {
+                setLanguage('fa');
+            }
         }
 
-        // ======== توابع پلیر برای صفحه اذکار صوتی ========
+        // ======== توابع پلیر ========
         function formatTime(seconds) {
             if (isNaN(seconds)) return '00:00';
             const mins = Math.floor(seconds / 60);
@@ -944,7 +1110,6 @@
             durationTimes[audioId].textContent = '00:00';
         }
 
-        // رویدادهای پلیر
         playBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const audioId = btn.dataset.id;
@@ -955,7 +1120,6 @@
                     icon.className = 'fas fa-play';
                     clearInterval(progressIntervals[audioId]);
                 } else {
-                    // توقف پلیر دیگر اگر در حال پخش است
                     if (audioId === 'morning' && isPlaying.evening) {
                         resetPlayer('evening');
                     } else if (audioId === 'evening' && isPlaying.morning) {
@@ -1014,12 +1178,10 @@
             deferredPrompt = null;
         });
 
-        // اگر قبلاً نصب شده یا در حالت standalone است، دکمه نصب را مخفی کن
         if (localStorage.getItem('appInstalled') || window.matchMedia('(display-mode: standalone)').matches) {
             installContainer.classList.add('hidden-btn');
         }
 
-        // رویداد نصب موفق
         window.addEventListener('appinstalled', () => {
             localStorage.setItem('appInstalled', 'true');
             installContainer.classList.add('hidden-btn');
@@ -1039,10 +1201,10 @@
                 await fetch('/zikr/icon.ico');
                 localStorage.setItem('offlineDownloaded', 'true');
                 downloadContainer.classList.add('hidden-btn');
-                alert('همه فایل‌ها با موفقیت برای استفاده آفلاین ذخیره شدند.');
+                alert(translations[currentLanguage].offlineSave + ' ' + translations[currentLanguage].download);
             } catch (error) {
                 console.error('خطا در دانلود:', error);
-                alert('خطا در دانلود فایل‌ها. لطفاً اتصال اینترنت را بررسی کنید.');
+                alert('Error downloading files. Please check your internet connection.');
             }
         }
 
@@ -1053,7 +1215,6 @@
 
         // ======== نمایش منو و جزئیات ========
         function showMainMenu() {
-            // ریست پلیرها
             resetPlayer('morning');
             resetPlayer('evening');
             mainMenu.style.display = 'block';
@@ -1066,7 +1227,6 @@
 
         function showCategory(category) {
             if (category === 'audio') {
-                // نمایش صفحه اذکار صوتی
                 resetPlayer('morning');
                 resetPlayer('evening');
                 mainMenu.style.display = 'none';
@@ -1078,13 +1238,14 @@
             }
 
             if (!azkarData || !azkarData[category]) {
-                detailList.innerHTML = `<div style="text-align:center; padding:2rem;">داده‌ای یافت نشد.</div>`;
+                detailList.innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage][category] || ''} یافت نشد.</div>`;
                 return;
             }
 
             resetPlayer('morning');
             resetPlayer('evening');
-            detailCategoryTitle.textContent = categoryNames[category] || category;
+            detailCategoryTitle.textContent = translations[currentLanguage][category] || category;
+            detailCategoryTitle.setAttribute('data-category', category);
 
             const items = azkarData[category];
             let html = '';
@@ -1093,8 +1254,8 @@
                     <div class="dhikr-card">
                         <div class="dhikr-text">${item.text}</div>
                         <div class="dhikr-meta">
-                            <span class="repeat-badge"><i class="fas fa-star"></i> ${item.repeat} مرتبه</span>
-                            <span class="reference"><i class="fas fa-book-open"></i> ${item.reference || 'منبع'}</span>
+                            <span class="repeat-badge"><i class="fas fa-star"></i> ${item.repeat} ${currentLanguage === 'fa' ? 'مرتبه' : (currentLanguage === 'ar' ? 'مرة' : 'times')}</span>
+                            <span class="reference"><i class="fas fa-book-open"></i> ${item.reference || (currentLanguage === 'fa' ? 'منبع' : (currentLanguage === 'ar' ? 'المصدر' : 'source'))}</span>
                         </div>
                     </div>
                 `;
@@ -1136,7 +1297,6 @@
         initTheme();
         loadSettings();
 
-        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed', err));
