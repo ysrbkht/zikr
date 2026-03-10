@@ -6,36 +6,57 @@
     <title>اذکار حرفه‌ای</title>
     <!-- PWA manifest -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1e3a8a">
+    <meta name="theme-color" content="#2c6b9e">
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Persian font for UI -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* تعریف فونت KFGQPC Uthman Taha Naskh Bold با فرمت TTF */
+        /* فونت‌های آپلود شده */
+        @font-face {
+            font-family: 'Compset';
+            src: url('/zikr/fonts/Compset-Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Traditional Arabic';
+            src: url('/zikr/fonts/TraditionalArabicBold.ttf') format('truetype');
+            font-weight: bold;
+            font-display: swap;
+        }
         @font-face {
             font-family: 'Uthman Taha';
             src: url('/zikr/fonts/UthmanTahaNaskhBold.ttf') format('truetype');
             font-weight: bold;
-            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Lotus';
+            src: url('/zikr/fonts/lotus-Bold.ttf') format('truetype');
+            font-weight: bold;
             font-display: swap;
         }
 
+        /* متغیرهای پیش‌فرض */
         :root {
-            --bg-color: #f1f5f9;
+            --bg-color: #f0f7ff;
             --container-bg: #ffffff;
-            --text-color: #0f172a;
-            --card-bg: #ffffff;
-            --card-border: #dee7f2;
-            --meta-bg: #f1f5f9;
-            --badge-bg: #e0e7ff;
-            --badge-color: #1e3a8a;
-            --footer-text: #64748b;
-            --icon-color: #1e3a8a;
-            --switch-bg: #ccc;
-            --scrollbar-thumb: #cbd5e1;
-            --scrollbar-track: #f1f5f9;
+            --text-color: #1e3a5f;
+            --card-bg: #f8fcff;
+            --card-border: #d0e2f2;
+            --meta-bg: #e6f0fa;
+            --badge-bg: #c2dbf0;
+            --badge-color: #1a4b77;
+            --footer-text: #4d7294;
+            --icon-color: #2c6b9e;
+            --switch-bg: #c2d6e8;
+            --scrollbar-thumb: #9fb8d0;
+            --scrollbar-track: #e2ecf5;
+            --selected-font: 'Compset', 'Traditional Arabic', 'Amiri', serif;
+            --selected-font-size: 1.6rem;
         }
+
         body.dark {
             --bg-color: #0f172a;
             --container-bg: #1e293b;
@@ -51,6 +72,7 @@
             --scrollbar-thumb: #475569;
             --scrollbar-track: #1e293b;
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Vazirmatn', sans-serif;
@@ -69,6 +91,7 @@
             flex-direction: column;
             position: relative;
             transition: background-color 0.3s;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.02);
         }
         .main-content {
             flex: 1;
@@ -79,80 +102,159 @@
         .detail-active .main-content {
             padding: 0;
         }
+
+        /* هدر اصلی (فقط در منو) */
         .header {
             text-align: center;
             margin-bottom: 2rem;
         }
         .header.hidden { display: none; }
         .header h1 {
-            font-size: 2.2rem; font-weight: 700;
-            background: linear-gradient(145deg, #1e3a8a, #3b5fb0);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #2c6b9e;
             margin-bottom: 0.2rem;
         }
         .dark .header h1 {
-            background: linear-gradient(145deg, #90caf9, #bbdefb);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            color: #aac3e0;
         }
-        .theme-switch-wrapper {
+        .header p {
+            color: var(--footer-text);
+            font-size: 1rem;
+        }
+
+        /* آیکون تنظیمات */
+        .settings-wrapper {
             position: absolute;
             top: 1rem;
             left: 1rem;
-            z-index: 20;
+            z-index: 30;
         }
-        .theme-switch {
-            background: var(--switch-bg);
-            border: none;
-            border-radius: 40px;
-            width: 60px;
-            height: 30px;
+        .settings-icon {
+            font-size: 2rem;
+            color: var(--icon-color);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .settings-icon:hover {
+            transform: rotate(90deg);
+        }
+
+        /* پنل تنظیمات حرفه‌ای */
+        .settings-panel {
+            position: absolute;
+            top: 3.5rem;
+            left: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 1.2rem;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            display: none;
+            min-width: 260px;
+            z-index: 40;
+            backdrop-filter: blur(5px);
+        }
+        .settings-panel.show {
+            display: block;
+        }
+        .setting-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 5px;
-            cursor: pointer;
-            position: relative;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: background-color 0.3s;
+            margin-bottom: 1.2rem;
         }
-        .theme-switch i {
+        .setting-item:last-child {
+            margin-bottom: 0;
+        }
+        .setting-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+        .setting-label i {
             font-size: 1.2rem;
-            z-index: 2;
-            transition: transform 0.3s, color 0.3s;
+            color: var(--icon-color);
+            width: 1.5rem;
         }
-        .theme-switch .fa-sun {
-            color: #fbbf24;
-            transform: rotate(0deg);
+
+        /* سوئیچ داخلی */
+        .inner-switch {
+            width: 50px;
+            height: 24px;
+            background: var(--switch-bg);
+            border-radius: 30px;
+            position: relative;
+            cursor: pointer;
+            border: none;
         }
-        .theme-switch .fa-moon {
-            color: #f1f5f9;
-            transform: rotate(0deg);
-        }
-        .dark .theme-switch .fa-sun {
-            transform: rotate(90deg);
-        }
-        .dark .theme-switch .fa-moon {
-            transform: rotate(90deg);
-        }
-        .theme-switch::after {
+        .inner-switch::after {
             content: '';
             position: absolute;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             background: white;
-            top: 3px;
-            left: 3px;
-            transition: left 0.3s, background 0.3s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-            z-index: 1;
+            top: 2px;
+            left: 2px;
+            transition: left 0.2s;
         }
-        .theme-switch.active::after {
-            left: calc(100% - 27px);
+        .inner-switch.active {
+            background: #1e3a8a;
         }
-        .dark .theme-switch::after {
-            background: #1e293b;
+        .inner-switch.active::after {
+            left: calc(100% - 22px);
         }
+
+        /* کنترل اندازه فونت */
+        .font-size-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .font-size-btn {
+            background: var(--meta-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            transition: 0.2s;
+        }
+        .font-size-btn:hover {
+            background: var(--badge-bg);
+        }
+        .font-size-value {
+            min-width: 45px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* dropdown انتخاب فونت */
+        .font-select {
+            background: var(--meta-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            padding: 0.4rem 1rem;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            outline: none;
+            width: 140px;
+        }
+        .font-select option {
+            background: var(--container-bg);
+        }
+
+        /* منوی اصلی */
         .menu-grid {
             display: flex;
             flex-direction: column;
@@ -163,10 +265,10 @@
             background: var(--card-bg);
             border-radius: 28px;
             padding: 2rem 1.5rem;
-            box-shadow: 0 10px 20px -5px rgba(0, 20, 60, 0.15);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.03);
             border: 1px solid var(--card-border);
             cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -175,7 +277,8 @@
         }
         .menu-card:hover {
             transform: scale(1.01);
-            border-color: #a3c0e0;
+            border-color: #b0c4de;
+            box-shadow: 0 12px 20px rgba(0,0,0,0.05);
         }
         .menu-info h2 {
             font-size: 1.9rem;
@@ -187,6 +290,8 @@
             color: var(--icon-color);
             opacity: 0.9;
         }
+
+        /* صفحه جزئیات */
         .detail-view {
             display: none;
             flex: 1;
@@ -227,6 +332,8 @@
             margin: 0;
             line-height: 1.3;
         }
+
+        /* لیست اذکار */
         .dhikr-list {
             flex: 1;
             overflow-y: auto;
@@ -246,7 +353,7 @@
             border-radius: 10px;
         }
         .dhikr-list::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            background: #7f9ab3;
         }
         @media (max-width: 768px) {
             .dhikr-list::-webkit-scrollbar {
@@ -257,6 +364,7 @@
                 scrollbar-width: none;
             }
         }
+
         .dhikr-card {
             background: var(--card-bg);
             border-radius: 18px;
@@ -265,14 +373,14 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.02);
             margin-bottom: 1rem;
         }
-        /* متن اذکار با فونت KFGQPC Uthman Taha (فقط TTF) */
         .dhikr-text {
-            font-family: 'Uthman Taha', 'Traditional Arabic', 'Amiri', 'Times New Roman', serif;
+            font-family: var(--selected-font);
             font-weight: bold;
-            font-size: 1.6rem;
+            font-size: var(--selected-font-size);
             line-height: 2.4rem;
             margin-bottom: 0.6rem;
             color: var(--text-color);
+            text-align: center;  /* وسط‌چین */
         }
         .dhikr-meta {
             display: flex;
@@ -312,6 +420,8 @@
             margin-left: 0.3rem;
             margin-right: 0;
         }
+
+        /* فوتر (فقط در منوی اصلی) */
         .footer {
             text-align: center;
             color: var(--footer-text);
@@ -324,7 +434,7 @@
             display: none;
         }
         .telegram-link {
-            color: #1e3a8a;
+            color: #2c6b9e;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
@@ -343,19 +453,45 @@
 </head>
 <body>
     <div class="app-container" id="appContainer">
-        <div class="theme-switch-wrapper">
-            <button class="theme-switch" id="themeSwitch">
-                <i class="fas fa-sun"></i>
-                <i class="fas fa-moon"></i>
-            </button>
+        <!-- تنظیمات (چرخ‌دنده) با پنل بازشو -->
+        <div class="settings-wrapper">
+            <i class="fas fa-cog settings-icon" id="settingsIcon"></i>
+            <div class="settings-panel" id="settingsPanel">
+                <!-- حالت شب/روز -->
+                <div class="setting-item">
+                    <span class="setting-label"><i class="fas fa-moon"></i> حالت شب</span>
+                    <div class="inner-switch" id="themeSwitchInner"></div>
+                </div>
+                <!-- اندازه فونت -->
+                <div class="setting-item">
+                    <span class="setting-label"><i class="fas fa-text-height"></i> اندازه متن</span>
+                    <div class="font-size-control">
+                        <span class="font-size-btn" id="decreaseFont">−</span>
+                        <span class="font-size-value" id="fontSizeValue">1.6</span>
+                        <span class="font-size-btn" id="increaseFont">+</span>
+                    </div>
+                </div>
+                <!-- انتخاب فونت -->
+                <div class="setting-item">
+                    <span class="setting-label"><i class="fas fa-font"></i> قلم</span>
+                    <select class="font-select" id="fontSelect">
+                        <option value="Compset">قلم کامپوست</option>
+                        <option value="Traditional">قلم عربی سنتی</option>
+                        <option value="Uthman">قلم عثمان طه</option>
+                        <option value="Lotus">قلم لوتوس</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="main-content" id="mainContent">
+            <!-- هدر اصلی با متن جدید و بدون آیکون ماه -->
             <div class="header" id="header">
-                <h1><i class="fas fa-moon" style="margin-left: 0.5rem;"></i> اذکار روزانه</h1>
+                <h1>اذکار صحیح روزانه</h1>
                 <p style="color: var(--footer-text);">هر زمان، هر مکان</p>
             </div>
 
+            <!-- منوی اصلی -->
             <div id="mainMenu" class="main-menu">
                 <div class="menu-grid">
                     <div class="menu-card" data-category="morning">
@@ -373,6 +509,7 @@
                 </div>
             </div>
 
+            <!-- صفحه جزئیات (مخفی در ابتدا) -->
             <div id="detailView" class="detail-view">
                 <div class="detail-header">
                     <button class="back-btn" id="backBtn"><i class="fas fa-arrow-right"></i></button>
@@ -381,6 +518,7 @@
                 <div id="detailList" class="dhikr-list"></div>
             </div>
 
+            <!-- فوتر (فقط در منوی اصلی) -->
             <div class="footer" id="footer">
                 <a href="https://t.me/YBAKHTIAR" target="_blank" class="telegram-link">
                     <svg class="telegram-svg" viewBox="0 0 24 24">
@@ -403,7 +541,6 @@
         const backBtn = document.getElementById('backBtn');
         const header = document.getElementById('header');
         const footer = document.getElementById('footer');
-        const themeSwitch = document.getElementById('themeSwitch');
         const mainContent = document.getElementById('mainContent');
         const categoryNames = {
             morning: 'اذکار صبح',
@@ -411,6 +548,114 @@
             sleep: 'اذکار خواب'
         };
 
+        // عناصر تنظیمات
+        const settingsIcon = document.getElementById('settingsIcon');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const themeSwitchInner = document.getElementById('themeSwitchInner');
+        const decreaseFont = document.getElementById('decreaseFont');
+        const increaseFont = document.getElementById('increaseFont');
+        const fontSizeValue = document.getElementById('fontSizeValue');
+        const fontSelect = document.getElementById('fontSelect');
+
+        // متغیرهای تنظیمات
+        let currentFontSize = 1.6; // rem
+        let currentFont = 'Compset'; // پیش‌فرض
+
+        // ======== توابع کمکی ========
+        function applyFontSize(size) {
+            document.documentElement.style.setProperty('--selected-font-size', size + 'rem');
+            fontSizeValue.textContent = size.toFixed(1);
+        }
+
+        function applyFontFamily(fontKey) {
+            let fontStack = '';
+            switch (fontKey) {
+                case 'Compset':
+                    fontStack = "'Compset', 'Traditional Arabic', 'Amiri', serif";
+                    break;
+                case 'Traditional':
+                    fontStack = "'Traditional Arabic', 'Amiri', serif";
+                    break;
+                case 'Uthman':
+                    fontStack = "'Uthman Taha', 'Traditional Arabic', 'Amiri', serif";
+                    break;
+                case 'Lotus':
+                    fontStack = "'Lotus', 'Traditional Arabic', 'Amiri', serif";
+                    break;
+                default:
+                    fontStack = "'Compset', 'Traditional Arabic', 'Amiri', serif";
+            }
+            document.documentElement.style.setProperty('--selected-font', fontStack);
+        }
+
+        // ======== تنظیمات پنل ========
+        settingsIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            settingsPanel.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!settingsPanel.contains(e.target) && !settingsIcon.contains(e.target)) {
+                settingsPanel.classList.remove('show');
+            }
+        });
+
+        // حالت شب
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                themeSwitchInner.classList.add('active');
+            }
+        }
+        themeSwitchInner.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            themeSwitchInner.classList.toggle('active');
+            const theme = document.body.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        });
+
+        // اندازه فونت
+        decreaseFont.addEventListener('click', () => {
+            currentFontSize = Math.max(1.0, currentFontSize - 0.1);
+            applyFontSize(currentFontSize);
+            localStorage.setItem('fontSize', currentFontSize.toFixed(1));
+        });
+        increaseFont.addEventListener('click', () => {
+            currentFontSize = Math.min(2.5, currentFontSize + 0.1);
+            applyFontSize(currentFontSize);
+            localStorage.setItem('fontSize', currentFontSize.toFixed(1));
+        });
+
+        // انتخاب فونت
+        fontSelect.addEventListener('change', (e) => {
+            currentFont = e.target.value;
+            applyFontFamily(currentFont);
+            localStorage.setItem('fontFamily', currentFont);
+        });
+
+        // بارگذاری تنظیمات ذخیره شده
+        function loadSettings() {
+            const savedFontSize = localStorage.getItem('fontSize');
+            if (savedFontSize) {
+                currentFontSize = parseFloat(savedFontSize);
+                applyFontSize(currentFontSize);
+            } else {
+                applyFontSize(1.6);
+            }
+
+            const savedFont = localStorage.getItem('fontFamily');
+            if (savedFont && ['Compset', 'Traditional', 'Uthman', 'Lotus'].includes(savedFont)) {
+                currentFont = savedFont;
+                fontSelect.value = savedFont;
+                applyFontFamily(savedFont);
+            } else {
+                fontSelect.value = 'Compset';
+                applyFontFamily('Compset');
+            }
+        }
+
+        // ======== نمایش منو و جزئیات ========
         function showMainMenu() {
             mainMenu.style.display = 'block';
             detailView.classList.remove('active');
@@ -439,6 +684,8 @@
                 `;
             });
             detailList.innerHTML = html;
+            detailList.scrollTop = 0;
+
             mainMenu.style.display = 'none';
             detailView.classList.add('active');
             header.classList.add('hidden');
@@ -466,22 +713,11 @@
             }
         }
 
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark');
-                themeSwitch.classList.add('active');
-            }
-        }
-        themeSwitch.addEventListener('click', () => {
-            document.body.classList.toggle('dark');
-            themeSwitch.classList.toggle('active');
-            localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-        });
-
+        // شروع کار
         loadAzkar();
         showMainMenu();
         initTheme();
+        loadSettings();
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
