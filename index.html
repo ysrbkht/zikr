@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>اذکار حرفه‌ای</title>
-    <!-- PWA manifest با مسیر نسبی -->
+    <!-- PWA manifest -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1e3a8a">
     <!-- Font Awesome -->
@@ -12,7 +12,6 @@
     <!-- Persian font -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* تمام استایل‌های قبلی به همان صورت باقی می‌ماند */
         :root {
             --bg-color: #f1f5f9;
             --container-bg: #ffffff;
@@ -50,29 +49,35 @@
             color: var(--text-color);
             min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
+            flex-direction: column;
             transition: background-color 0.3s, color 0.3s;
         }
+        /* کانتینر اصلی: بدون حاشیه و کاملاً عریض */
         .app-container {
-            max-width: 1200px;
             width: 100%;
+            max-width: none;
             background: var(--container-bg);
-            border-radius: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
-            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             position: relative;
             transition: background-color 0.3s;
         }
-        @media (min-width: 1024px) {
-            .app-container { max-width: 1000px; padding: 2.5rem; }
-            .dhikr-text { font-size: 2rem !important; line-height: 3rem !important; }
-            .detail-title { font-size: 2.2rem !important; }
-            .back-btn { font-size: 2.5rem !important; }
+        /* محتوای داخلی برای منوی اصلی */
+        .main-content {
+            flex: 1;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
         }
-        .header { text-align: center; margin-bottom: 2rem; transition: opacity 0.2s; }
+        /* در حالت جزئیات، padding حذف می‌شود */
+        .detail-active .main-content {
+            padding: 0;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
         .header.hidden { display: none; }
         .header h1 {
             font-size: 2.2rem; font-weight: 700;
@@ -84,7 +89,13 @@
             background: linear-gradient(145deg, #90caf9, #bbdefb);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .theme-switch-wrapper { position: absolute; top: 2rem; left: 2rem; z-index: 10; }
+        /* سوئیچ در گوشه کانتینر */
+        .theme-switch-wrapper {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 20;
+        }
         .theme-switch {
             background: var(--switch-bg); border: none; border-radius: 40px;
             width: 60px; height: 30px; display: flex; align-items: center;
@@ -101,7 +112,8 @@
         }
         .theme-switch.active::after { left: calc(100% - 27px); }
         .dark .theme-switch::after { background: #1e293b; }
-        .menu-grid { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 2rem; }
+        /* منوی اصلی */
+        .menu-grid { display: flex; flex-direction: column; gap: 1.2rem; margin-top: 1rem; }
         .menu-card {
             background: var(--card-bg); border-radius: 28px; padding: 2rem 1.5rem;
             box-shadow: 0 10px 20px -5px rgba(0, 20, 60, 0.15);
@@ -112,58 +124,83 @@
         .menu-card:hover { transform: scale(1.01); border-color: #a3c0e0; }
         .menu-info h2 { font-size: 1.9rem; font-weight: 600; color: var(--text-color); }
         .menu-icon { font-size: 3rem; color: var(--icon-color); opacity: 0.9; }
-        .detail-view { display: none; min-height: 70vh; }
-        .detail-view.active { display: block; }
-        .detail-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.8rem; }
+        /* صفحه جزئیات */
+        .detail-view {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            height: 100%;
+        }
+        .detail-view.active { display: flex; }
+        /* هدر داخلی چسبیده به بالا */
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.5rem 1rem;
+            background: var(--container-bg);
+            border-bottom: 1px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
         .back-btn {
-            background: none; border: none; font-size: 2rem; cursor: pointer;
-            color: var(--text-color); padding: 0.2rem 0.8rem 0.2rem 0;
+            background: none; border: none; font-size: 1.8rem; cursor: pointer;
+            color: var(--text-color); padding: 0.2rem 0.2rem 0.2rem 0;
+            line-height: 1;
         }
         .back-btn:hover { color: #1e3a8a; }
-        .detail-title { font-size: 1.8rem; font-weight: 700; color: var(--text-color); margin: 0; }
+        .detail-title {
+            font-size: 1.5rem; font-weight: 700; color: var(--text-color);
+            margin: 0; line-height: 1.3;
+        }
+        /* لیست اذکار */
         .dhikr-list {
-            display: flex; flex-direction: column; gap: 1rem; max-height: 70vh;
-            overflow-y: auto; padding-left: 0.5rem; padding-right: 0.5rem;
-            scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
         }
         .dhikr-list::-webkit-scrollbar { width: 8px; }
         .dhikr-list::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 10px; }
         .dhikr-list::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 10px; }
-        .dhikr-list::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         @media (max-width: 768px) {
             .dhikr-list::-webkit-scrollbar { width: 0; background: transparent; }
             .dhikr-list { scrollbar-width: none; }
         }
         .dhikr-card {
-            background: var(--card-bg); border-radius: 20px; padding: 1.2rem 1.2rem;
+            background: var(--card-bg); border-radius: 18px; padding: 1rem;
             border: 1px solid var(--card-border); box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+            margin-bottom: 1rem;
         }
         .dhikr-text {
             font-family: 'Traditional Arabic', 'Amiri', 'Times New Roman', serif;
             font-weight: bold; font-size: 1.6rem; line-height: 2.4rem;
-            margin-bottom: 0.8rem; color: var(--text-color);
+            margin-bottom: 0.6rem; color: var(--text-color);
         }
         .dhikr-meta {
-            display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: center;
+            display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
             justify-content: space-between; border-top: 1px dashed var(--card-border);
-            padding-top: 0.7rem;
+            padding-top: 0.5rem;
         }
         .repeat-badge {
             background: var(--badge-bg); color: var(--badge-color);
-            padding: 0.3rem 1rem; border-radius: 30px; font-size: 0.9rem;
+            padding: 0.2rem 0.8rem; border-radius: 30px; font-size: 0.85rem;
             font-weight: 500; display: inline-flex; align-items: center; gap: 0.3rem;
         }
         .reference {
             color: var(--footer-text); background: var(--meta-bg);
-            padding: 0.3rem 1rem; border-radius: 20px; font-size: 0.85rem;
-            max-width: 100%; display: inline-flex; align-items: center; gap: 0.3rem;
+            padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.8rem;
+            display: inline-flex; align-items: center; gap: 0.3rem;
             flex-direction: row;
         }
         .reference i { margin-left: 0.3rem; margin-right: 0; }
+        /* فوتر */
         .footer {
             text-align: center; color: var(--footer-text); font-size: 0.9rem;
-            margin-top: 2rem; border-top: 1px solid var(--card-border);
-            padding-top: 1.2rem; padding-bottom: 0.5rem;
+            margin-top: auto; border-top: 1px solid var(--card-border);
+            padding: 1.2rem 1rem 0.5rem;
         }
         .footer.hidden { display: none; }
         .telegram-link {
@@ -175,52 +212,66 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <div class="app-container" id="appContainer">
+        <!-- سوئیچ شب/روز -->
         <div class="theme-switch-wrapper">
             <button class="theme-switch" id="themeSwitch">
                 <i class="fas fa-sun"></i>
                 <i class="fas fa-moon"></i>
             </button>
         </div>
-        <div class="header" id="header">
-            <h1><i class="fas fa-moon" style="margin-left: 0.5rem;"></i> اذکار روزانه</h1>
-            <p style="color: var(--footer-text);">هر زمان، هر مکان</p>
-        </div>
-        <div id="mainMenu" class="main-menu">
-            <div class="menu-grid">
-                <div class="menu-card" data-category="morning">
-                    <div class="menu-icon"><i class="fas fa-sun"></i></div>
-                    <div class="menu-info"><h2>اذکار صبح</h2></div>
-                </div>
-                <div class="menu-card" data-category="evening">
-                    <div class="menu-icon"><i class="fas fa-moon"></i></div>
-                    <div class="menu-info"><h2>اذکار شام</h2></div>
-                </div>
-                <div class="menu-card" data-category="sleep">
-                    <div class="menu-icon"><i class="fas fa-bed"></i></div>
-                    <div class="menu-info"><h2>اذکار خواب</h2></div>
+
+        <!-- محتوای اصلی که در حالت منو padding دارد و در حالت جزئیات خیر -->
+        <div class="main-content" id="mainContent">
+            <!-- هدر (فقط در منو) -->
+            <div class="header" id="header">
+                <h1><i class="fas fa-moon" style="margin-left: 0.5rem;"></i> اذکار روزانه</h1>
+                <p style="color: var(--footer-text);">هر زمان، هر مکان</p>
+            </div>
+
+            <!-- منوی اصلی -->
+            <div id="mainMenu" class="main-menu">
+                <div class="menu-grid">
+                    <div class="menu-card" data-category="morning">
+                        <div class="menu-icon"><i class="fas fa-sun"></i></div>
+                        <div class="menu-info"><h2>اذکار صبح</h2></div>
+                    </div>
+                    <div class="menu-card" data-category="evening">
+                        <div class="menu-icon"><i class="fas fa-moon"></i></div>
+                        <div class="menu-info"><h2>اذکار شام</h2></div>
+                    </div>
+                    <div class="menu-card" data-category="sleep">
+                        <div class="menu-icon"><i class="fas fa-bed"></i></div>
+                        <div class="menu-info"><h2>اذکار خواب</h2></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div id="detailView" class="detail-view">
-            <div class="detail-header">
-                <button class="back-btn" id="backBtn"><i class="fas fa-arrow-right"></i></button>
-                <span class="detail-title" id="detailCategoryTitle"></span>
+
+            <!-- صفحه جزئیات (مخفی) -->
+            <div id="detailView" class="detail-view">
+                <div class="detail-header">
+                    <button class="back-btn" id="backBtn"><i class="fas fa-arrow-right"></i></button>
+                    <span class="detail-title" id="detailCategoryTitle"></span>
+                </div>
+                <div id="detailList" class="dhikr-list"></div>
             </div>
-            <div id="detailList" class="dhikr-list"></div>
-        </div>
-        <div class="footer" id="footer">
-            <a href="https://t.me/YBAKHTIAR" target="_blank" class="telegram-link">
-                <svg class="telegram-svg" viewBox="0 0 24 24">
-                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.87 4.326-2.96-.924c-.643-.2-.658-.643.135-.953l11.56-4.456c.537-.2 1.006.133.832.936z"/>
-                </svg>
-                نظرات و پیشنهادات
-            </a>
-        </div>
-    </div>
+
+            <!-- فوتر (فقط در منو) -->
+            <div class="footer" id="footer">
+                <a href="https://t.me/YBAKHTIAR" target="_blank" class="telegram-link">
+                    <svg class="telegram-svg" viewBox="0 0 24 24">
+                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.87 4.326-2.96-.924c-.643-.2-.658-.643.135-.953l11.56-4.456c.537-.2 1.006.133.832.936z"/>
+                    </svg>
+                    نظرات و پیشنهادات
+                </a>
+            </div>
+        </div> <!-- پایان main-content -->
+    </div> <!-- پایان app-container -->
+
     <script>
         const JSON_URL = 'https://raw.githubusercontent.com/ysrbkht/zikr/main/azkar.json';
         let azkarData = null;
+        const appContainer = document.getElementById('appContainer');
         const mainMenu = document.getElementById('mainMenu');
         const detailView = document.getElementById('detailView');
         const detailList = document.getElementById('detailList');
@@ -229,6 +280,7 @@
         const header = document.getElementById('header');
         const footer = document.getElementById('footer');
         const themeSwitch = document.getElementById('themeSwitch');
+        const mainContent = document.getElementById('mainContent');
         const categoryNames = { morning: 'اذکار صبح', evening: 'اذکار شام', sleep: 'اذکار خواب' };
 
         function showMainMenu() {
@@ -236,6 +288,7 @@
             detailView.classList.remove('active');
             header.classList.remove('hidden');
             footer.classList.remove('hidden');
+            appContainer.classList.remove('detail-active');
         }
         function showCategory(category) {
             if (!azkarData || !azkarData[category]) {
@@ -261,6 +314,7 @@
             detailView.classList.add('active');
             header.classList.add('hidden');
             footer.classList.add('hidden');
+            appContainer.classList.add('detail-active');
         }
         document.querySelectorAll('.menu-card').forEach(card => {
             card.addEventListener('click', () => {
