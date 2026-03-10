@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اذکار حرفه‌ای</title>
+    <!-- PWA manifest -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Theme color for browser -->
+    <meta name="theme-color" content="#1e3a8a">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Persian font -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Dark mode variables */
+        :root {
+            --bg-color: #f1f5f9;
+            --container-bg: #ffffff;
+            --text-color: #0f172a;
+            --card-bg: #ffffff;
+            --card-border: #dee7f2;
+            --meta-bg: #f1f5f9;
+            --badge-bg: #e0e7ff;
+            --badge-color: #1e3a8a;
+            --footer-text: #64748b;
+            --icon-color: #1e3a8a;
+            --switch-bg: #ccc;
+        }
+
+        body.dark {
+            --bg-color: #0f172a;
+            --container-bg: #1e293b;
+            --text-color: #e2e8f0;
+            --card-bg: #334155;
+            --card-border: #475569;
+            --meta-bg: #1e293b;
+            --badge-bg: #1e3a8a;
+            --badge-color: #ffffff;
+            --footer-text: #94a3b8;
+            --icon-color: #ffffff;
+            --switch-bg: #475569;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .app-container {
+            max-width: 650px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--container-bg);
+            border-radius: 40px 40px 30px 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            padding: 1.5rem 1.5rem 1rem;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            transition: opacity 0.2s;
+        }
+        .header.hidden {
+            display: none;
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #1e3a8a, #3b5fb0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.2rem;
+        }
+        .dark .header h1 {
+            background: linear-gradient(145deg, #90caf9, #bbdefb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Dark mode switch - top left corner */
+        .theme-switch-wrapper {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 10;
+        }
+        .theme-switch {
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+            background-color: var(--switch-bg);
+            border-radius: 26px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+        .theme-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: white;
+            top: 2px;
+            left: 2px;
+            transition: 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        .theme-switch.active {
+            background-color: #1e3a8a;
+        }
+        .theme-switch.active::after {
+            left: calc(100% - 24px);
+        }
+        .dark .theme-switch {
+            background-color: #1e3a8a;
+        }
+        .dark .theme-switch::after {
+            background-color: #ffffff;
+        }
+
+        /* Main menu cards */
+        .menu-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+        .menu-card {
+            background: var(--card-bg);
+            border-radius: 28px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 10px 20px -5px rgba(0, 20, 60, 0.15);
+            border: 1px solid var(--card-border);
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            text-align: center;
+        }
+        .menu-card:hover {
+            transform: scale(1.01);
+            border-color: #a3c0e0;
+        }
+        .menu-info h2 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .menu-icon {
+            font-size: 3rem;
+            color: var(--icon-color);
+            opacity: 0.9;
+        }
+
+        /* Detail view */
+        .detail-view {
+            display: none;
+            min-height: 70vh;
+        }
+        .detail-view.active {
+            display: block;
+        }
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.8rem;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 0.2rem 0.8rem 0.2rem 0;
+        }
+        .back-btn:hover {
+            color: #1e3a8a;
+        }
+        .detail-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        /* Dhikr list */
+        .dhikr-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-left: 0.2rem;
+            padding-right: 0.2rem;
+        }
+        .dhikr-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.2rem 1.2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+        }
+        .dhikr-text {
+            font-family: 'Traditional Arabic', 'Amiri', 'Times New Roman', serif;
+            font-weight: bold;
+            font-size: 1.6rem;
+            line-height: 2.4rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+        }
+        .dhikr-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px dashed var(--card-border);
+            padding-top: 0.7rem;
+        }
+        .repeat-badge {
+            background: var(--badge-bg);
+            color: var(--badge-color);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .reference {
+            color: var(--footer-text);
+            background: var(--meta-bg);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            max-width: 100%;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            /* Ensure icon is on the right in RTL */
+            flex-direction: row;
+        }
+        .reference i {
+            margin-left: 0.3rem;
+            margin-right: 0;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: var(--footer-text);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--card-border);
+            padding-top: 1.2rem;
+            padding-bottom: 0.5rem;
+        }
+        .footer.hidden {
+            display: none;
+        }
+        .telegram-link {
+            color: #1e3a8a;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+        .dark .telegram-link {
+            color: #90caf9;
+        }
+        .telegram-svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Dark mode switch in corner -->
+        <div class="theme-switch-wrapper">
+            <span class="theme-switch" id="themeSwitch"></span>
+        </div>
+
+        <!-- Header -->
+        <div class="header" id="header">
+            <h1><i class="fas fa-moon" style="margin-left: 0.5rem;"></i> اذکار روزانه</h1>
+            <p style="color: var(--footer-text);">هر زمان، هر مکان</p>
+        </div>
+
+        <!-- Main menu -->
+        <div id="mainMenu" class="main-menu">
+            <div class="menu-grid">
+                <div class="menu-card" data-category="morning">
+                    <div class="menu-icon"><i class="fas fa-sun"></i></div>
+                    <div class="menu-info"><h2>اذکار صبح</h2></div>
+                </div>
+                <div class="menu-card" data-category="evening">
+                    <div class="menu-icon"><i class="fas fa-moon"></i></div>
+                    <div class="menu-info"><h2>اذکار شام</h2></div>
+                </div>
+                <div class="menu-card" data-category="sleep">
+                    <div class="menu-icon"><i class="fas fa-bed"></i></div>
+                    <div class="menu-info"><h2>اذکار خواب</h2></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail view -->
+        <div id="detailView" class="detail-view">
+            <div class="detail-header">
+                <button class="back-btn" id="backBtn"><i class="fas fa-arrow-right"></i></button>
+                <span class="detail-title" id="detailCategoryTitle"></span>
+            </div>
+            <div id="detailList" class="dhikr-list"></div>
+        </div>
+
+        <!-- Footer with Telegram link -->
+        <div class="footer" id="footer">
+            <a href="https://t.me/YBAKHTIAR" target="_blank" class="telegram-link">
+                <svg class="telegram-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.87 4.326-2.96-.924c-.643-.2-.658-.643.135-.953l11.56-4.456c.537-.2 1.006.133.832.936z"/>
+                </svg>
+                نظرات و پیشنهادات
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const JSON_URL = 'https://raw.githubusercontent.com/YBakhtiar/zikr/main/azkar.json';
+        let azkarData = null;
+
+        const mainMenu = document.getElementById('mainMenu');
+        const detailView = document.getElementById('detailView');
+        const detailList = document.getElementById('detailList');
+        const detailCategoryTitle = document.getElementById('detailCategoryTitle');
+        const backBtn = document.getElementById('backBtn');
+        const header = document.getElementById('header');
+        const footer = document.getElementById('footer');
+        const themeSwitch = document.getElementById('themeSwitch');
+
+        const categoryNames = {
+            morning: 'اذکار صبح',
+            evening: 'اذکار شام',
+            sleep: 'اذکار خواب'
+        };
+
+        function showMainMenu() {
+            mainMenu.style.display = 'block';
+            detailView.classList.remove('active');
+            header.classList.remove('hidden');
+            footer.classList.remove('hidden');
+        }
+
+        function showCategory(category) {
+            if (!azkarData || !azkarData[category]) {
+                detailList.innerHTML = `<div style="text-align:center; padding:2rem;">داده‌ای یافت نشد.</div>`;
+                return;
+            }
+            detailCategoryTitle.textContent = categoryNames[category] || category;
+            const items = azkarData[category];
+            let html = '';
+            items.forEach(item => {
+                // Use Persian numerals (they are same as Arabic numerals in Unicode)
+                const repeatText = item.repeat.toString(); // will display as ۱,۲,۳ etc.
+                html += `
+                    <div class="dhikr-card">
+                        <div class="dhikr-text">${item.text}</div>
+                        <div class="dhikr-meta">
+                            <span class="repeat-badge"><i class="fas fa-redo-alt"></i> ${repeatText} مرتبه</span>
+                            <span class="reference"><i class="fas fa-book-open"></i> ${item.reference || 'منبع'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            detailList.innerHTML = html;
+
+            mainMenu.style.display = 'none';
+            detailView.classList.add('active');
+            header.classList.add('hidden');
+            footer.classList.add('hidden');
+        }
+
+        document.querySelectorAll('.menu-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const cat = card.dataset.category;
+                if (cat) showCategory(cat);
+            });
+        });
+
+        backBtn.addEventListener('click', showMainMenu);
+
+        async function loadAzkar() {
+            try {
+                const response = await fetch(JSON_URL);
+                if (!response.ok) throw new Error('خطا در دریافت اطلاعات');
+                azkarData = await response.json();
+            } catch (error) {
+                console.error(error);
+                alert('امکان بارگیری اذکار وجود ندارد. لطفاً اتصال اینترنت را بررسی کنید.');
+            }
+        }
+
+        // Dark mode
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                themeSwitch.classList.add('active');
+            }
+        }
+        themeSwitch.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            themeSwitch.classList.toggle('active');
+            const theme = document.body.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        });
+
+        loadAzkar();
+        showMainMenu();
+        initTheme();
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed', err));
+            });
+        }
+    </script>
+</body>
+</html>
