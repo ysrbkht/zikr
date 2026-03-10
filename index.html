@@ -11,12 +11,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Persian font for UI -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!-- تعریف فونت KFGQPC Uthman Taha Naskh Bold (فایل باید در مسیر fonts آپلود شود) -->
     <style>
+        /* تعریف فونت KFGQPC Uthman Taha Naskh Bold با فرمت TTF */
         @font-face {
             font-family: 'Uthman Taha';
-            src: url('/zikr/fonts/UthmanTahaNaskhBold.woff2') format('woff2'),
-                 url('/zikr/fonts/UthmanTahaNaskhBold.ttf') format('truetype');
+            src: url('/zikr/fonts/UthmanTahaNaskhBold.ttf') format('truetype');
             font-weight: bold;
             font-style: normal;
             font-display: swap;
@@ -95,7 +94,6 @@
             background: linear-gradient(145deg, #90caf9, #bbdefb);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        /* سوئیچ دارک مود حرفه‌ای */
         .theme-switch-wrapper {
             position: absolute;
             top: 1rem;
@@ -155,7 +153,6 @@
         .dark .theme-switch::after {
             background: #1e293b;
         }
-        /* منوی اصلی */
         .menu-grid {
             display: flex;
             flex-direction: column;
@@ -190,7 +187,6 @@
             color: var(--icon-color);
             opacity: 0.9;
         }
-        /* صفحه جزئیات (تمام‌صفحه) */
         .detail-view {
             display: none;
             flex: 1;
@@ -269,7 +265,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.02);
             margin-bottom: 1rem;
         }
-        /* متن اذکار با فونت KFGQPC Uthman Taha */
+        /* متن اذکار با فونت KFGQPC Uthman Taha (فقط TTF) */
         .dhikr-text {
             font-family: 'Uthman Taha', 'Traditional Arabic', 'Amiri', 'Times New Roman', serif;
             font-weight: bold;
