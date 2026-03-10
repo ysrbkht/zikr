@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اذکار حرفه‌ای</title>
+    <title>اذکار</title>
     <!-- PWA manifest -->
     <link rel="manifest" href="manifest.json">
+    <!-- آیکون‌ها برای نوار آدرس و موارد دیگر -->
+    <link rel="icon" type="image/png" sizes="512x512" href="/zikr/icon.png">
+    <link rel="icon" type="image/x-icon" href="/zikr/icon.ico">
+    <link rel="apple-touch-icon" href="/zikr/icon.png">
     <meta name="theme-color" content="#2c6b9e">
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Persian font for UI -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* فونت‌های آپلود شده با نام دقیق فایل‌ها */
+        /* فونت‌های آپلود شده */
         @font-face {
             font-family: 'Compset';
             src: url('/zikr/fonts/Compset-Bold.ttf') format('truetype');
@@ -187,6 +191,30 @@
             color: var(--icon-color);
             width: 1.5rem;
         }
+        /* دکمه نصب و دانلود */
+        .install-btn, .download-btn {
+            background: var(--player-btn-bg);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: 0.2s;
+        }
+        .install-btn:hover, .download-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+        .install-btn i, .download-btn i {
+            font-size: 1rem;
+        }
+        .hidden-btn {
+            display: none !important;
+        }
 
         /* سوئیچ داخلی */
         .inner-switch {
@@ -278,12 +306,16 @@
             color: var(--text-color);
         }
 
-        /* منوی اصلی */
+        /* منوی اصلی (با محدودیت عرض برای دسکتاپ) */
         .menu-grid {
             display: flex;
             flex-direction: column;
             gap: 1.2rem;
             margin-top: 1rem;
+            max-width: 400px; /* برای دسکتاپ عرض کمتر */
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
         }
         .menu-card {
             background: var(--card-bg);
@@ -357,7 +389,7 @@
             line-height: 1.3;
         }
 
-        /* پلیر صوتی مدرن با جهت درست برای RTL */
+        /* پلیر صوتی */
         .audio-player-container {
             padding: 0.8rem 1rem;
             background: var(--player-bg);
@@ -372,7 +404,7 @@
             border-radius: 40px;
             padding: 0.4rem 1rem;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            direction: ltr; /* برای ثابت ماندن دکمه در سمت راست */
+            direction: ltr;
         }
         .play-btn {
             width: 36px;
@@ -400,13 +432,12 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            direction: rtl; /* چیدمان زمان‌ها به صورت راست‌چین */
+            direction: ltr;
         }
         .time {
             font-size: 0.8rem;
             color: var(--player-time-color);
             min-width: 45px;
-            font-feature-settings: 'tnum';
             text-align: center;
         }
         .progress-bar {
@@ -416,7 +447,6 @@
             border-radius: 10px;
             cursor: pointer;
             position: relative;
-            transform: scaleX(-1); /* معکوس کردن جهت نوار */
         }
         .progress-fill {
             height: 100%;
@@ -576,12 +606,22 @@
                         </select>
                     </div>
                 </div>
+                <!-- دکمه نصب PWA -->
+                <div class="setting-item" id="installButtonContainer">
+                    <span class="setting-label"><i class="fas fa-download"></i> نصب اپلیکیشن</span>
+                    <button class="install-btn" id="installBtn"><i class="fas fa-arrow-down"></i> نصب</button>
+                </div>
+                <!-- دکمه دانلود برای آفلاین -->
+                <div class="setting-item" id="downloadButtonContainer">
+                    <span class="setting-label"><i class="fas fa-cloud-download-alt"></i> ذخیره برای آفلاین</span>
+                    <button class="download-btn" id="downloadBtn"><i class="fas fa-save"></i> دانلود</button>
+                </div>
             </div>
         </div>
 
         <div class="main-content" id="mainContent">
             <div class="header" id="header">
-                <h1>اذکار صحیح روزانه</h1>
+                <h1>اذکار</h1>
             </div>
 
             <!-- منوی اصلی -->
@@ -608,7 +648,7 @@
                     <button class="back-btn" id="backBtn"><i class="fas fa-arrow-right"></i></button>
                     <span class="detail-title" id="detailCategoryTitle"></span>
                 </div>
-                <!-- پلیر صوتی با جهت درست -->
+                <!-- پلیر صوتی -->
                 <div class="audio-player-container" id="audioPlayerContainer">
                     <div class="custom-audio-player">
                         <button class="play-btn" id="playPauseBtn">
@@ -647,6 +687,12 @@
             morning: 'https://raw.githubusercontent.com/ysrbkht/zikr/main/morning.mp3',
             evening: 'https://raw.githubusercontent.com/ysrbkht/zikr/main/evening.mp3'
         };
+        const FONT_URLS = [
+            '/zikr/fonts/Compset-Bold.ttf',
+            '/zikr/fonts/TraditionalArabicBold.ttf',
+            '/zikr/fonts/UthmanTahaNaskhBold.ttf',
+            '/zikr/fonts/lotus-Bold.ttf'
+        ];
 
         let azkarData = null;
         const appContainer = document.getElementById('appContainer');
@@ -683,6 +729,13 @@
         const progressBar = document.getElementById('progressBar');
         const progressFill = document.getElementById('progressFill');
 
+        // دکمه نصب و دانلود
+        const installBtn = document.getElementById('installBtn');
+        const installContainer = document.getElementById('installButtonContainer');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const downloadContainer = document.getElementById('downloadButtonContainer');
+
+        let deferredPrompt;
         let currentFontSize = 1.6;
         let currentFont = 'Compset';
         let isPlaying = false;
@@ -727,6 +780,7 @@
             }
         });
 
+        // حالت شب
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'dark') {
@@ -740,6 +794,7 @@
             localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
         });
 
+        // اندازه فونت
         decreaseFont.addEventListener('click', () => {
             currentFontSize = Math.max(1.0, currentFontSize - 0.1);
             applyFontSize(currentFontSize);
@@ -751,6 +806,7 @@
             localStorage.setItem('fontSize', currentFontSize.toFixed(1));
         });
 
+        // انتخاب فونت
         fontSelect.addEventListener('change', (e) => {
             currentFont = e.target.value;
             applyFontFamily(currentFont);
@@ -837,12 +893,70 @@
                 const rect = progressBar.getBoundingClientRect();
                 const clickX = e.clientX - rect.left;
                 const width = rect.width;
-                // به دلیل transform: scaleX(-1) روی نوار، درصد باید معکوس شود
-                const percent = 1 - (clickX / width);
+                const percent = clickX / width;
                 audioPlayer.currentTime = percent * audioPlayer.duration;
                 updateProgress();
             }
         });
+
+        // ======== نصب PWA ========
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // نمایش دکمه نصب اگر قبلاً نصب نشده باشد
+            if (!localStorage.getItem('appInstalled')) {
+                installContainer.classList.remove('hidden-btn');
+            }
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                localStorage.setItem('appInstalled', 'true');
+                installContainer.classList.add('hidden-btn');
+            }
+            deferredPrompt = null;
+        });
+
+        // اگر قبلاً نصب شده، دکمه نصب را مخفی کن
+        if (localStorage.getItem('appInstalled')) {
+            installContainer.classList.add('hidden-btn');
+        }
+
+        // ======== دانلود برای آفلاین (کش دستی) ========
+        async function downloadForOffline() {
+            try {
+                // کش کردن فایل JSON
+                await fetch(JSON_URL);
+                // کش کردن فایل‌های صوتی
+                for (let key in AUDIO_URLS) {
+                    await fetch(AUDIO_URLS[key]);
+                }
+                // کش کردن فونت‌ها
+                for (let url of FONT_URLS) {
+                    await fetch(url);
+                }
+                // کش کردن آیکون‌ها
+                await fetch('/zikr/icon.png');
+                await fetch('/zikr/icon.ico');
+                // پس از دانلود، دکمه را مخفی کن
+                localStorage.setItem('offlineDownloaded', 'true');
+                downloadContainer.classList.add('hidden-btn');
+                alert('همه فایل‌ها با موفقیت برای استفاده آفلاین ذخیره شدند.');
+            } catch (error) {
+                console.error('خطا در دانلود:', error);
+                alert('خطا در دانلود فایل‌ها. لطفاً اتصال اینترنت را بررسی کنید.');
+            }
+        }
+
+        downloadBtn.addEventListener('click', downloadForOffline);
+
+        // اگر قبلاً دانلود شده، دکمه را مخفی کن
+        if (localStorage.getItem('offlineDownloaded')) {
+            downloadContainer.classList.add('hidden-btn');
+        }
 
         // ======== نمایش منو و جزئیات ========
         function showMainMenu() {
@@ -921,6 +1035,7 @@
         initTheme();
         loadSettings();
 
+        // Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed', err));
