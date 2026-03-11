@@ -1,7 +1,7 @@
 {
-  "name": "اذکار",
-  "short_name": "اذکار",
-  "description": "برنامه اذکار صبح، شام و خواب",
+  "name": "الأذكار",
+  "short_name": "الأذكار",
+  "description": "برنامج أذكار الصباح والمساء والنوم",
   "start_url": "/zikr/index.html",
   "display": "standalone",
   "background_color": "#f0f7ff",
