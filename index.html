@@ -132,12 +132,12 @@
             color: #aac3e0;
         }
 
-        /* آیکون تنظیمات - در RTL چپ، در LTR راست */
+        /* آیکون تنظیمات */
         .settings-wrapper {
             position: absolute;
             top: 1rem;
             left: 1rem;
-            z-index: 40; /* بالاتر از هدر جزئیات */
+            z-index: 40;
         }
         [dir="ltr"] .settings-wrapper {
             left: auto;
@@ -153,7 +153,7 @@
             transform: rotate(90deg);
         }
 
-        /* پنل تنظیمات - در RTL چپ، در LTR راست */
+        /* پنل تنظیمات */
         .settings-panel {
             position: absolute;
             top: 3.5rem;
@@ -196,6 +196,46 @@
             color: var(--icon-color);
             width: 1.5rem;
         }
+
+        /* استایل مشترک برای dropdownهای فونت و زبان */
+        .select-wrapper {
+            position: relative;
+            width: 150px;
+        }
+        .custom-select {
+            width: 100%;
+            background: var(--meta-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            padding: 0.5rem 1rem;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232c6b9e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+            background-repeat: no-repeat;
+            background-position: left 10px center;
+            background-size: 16px;
+            padding-left: 35px;
+            text-align: right;
+        }
+        .dark .custom-select {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+        }
+        [dir="ltr"] .custom-select {
+            text-align: left;
+            padding-left: 1rem;
+            padding-right: 35px;
+            background-position: right 10px center;
+        }
+        .custom-select option {
+            background: var(--container-bg);
+            color: var(--text-color);
+        }
+
         /* دکمه نصب و دانلود */
         .install-btn, .download-btn {
             background: var(--player-btn-bg);
@@ -285,59 +325,6 @@
             font-weight: 500;
         }
 
-        /* dropdown انتخاب فونت */
-        .font-select-wrapper {
-            position: relative;
-            width: 150px;
-        }
-        .font-select {
-            width: 100%;
-            background: var(--meta-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 30px;
-            padding: 0.5rem 1rem;
-            color: var(--text-color);
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 0.9rem;
-            cursor: pointer;
-            outline: none;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232c6b9e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
-            background-repeat: no-repeat;
-            background-position: left 10px center;
-            background-size: 16px;
-            padding-left: 35px;
-            text-align: right;
-        }
-        .dark .font-select {
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
-        }
-        .font-select option {
-            background: var(--container-bg);
-            color: var(--text-color);
-        }
-        [dir="ltr"] .font-select {
-            text-align: left;
-            padding-left: 1rem;
-            padding-right: 35px;
-            background-position: right 10px center;
-        }
-
-        /* dropdown انتخاب زبان */
-        .language-select {
-            width: 100px;
-            background: var(--meta-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 30px;
-            padding: 0.4rem 0.8rem;
-            color: var(--text-color);
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 0.9rem;
-            cursor: pointer;
-            outline: none;
-        }
-
         /* منوی اصلی */
         .menu-grid {
             display: flex;
@@ -379,7 +366,7 @@
             opacity: 0.9;
         }
 
-        /* صفحه جزئیات (مشترک برای اذکار متنی و صوتی) */
+        /* صفحه جزئیات */
         .detail-view {
             display: none;
             flex: 1;
@@ -398,11 +385,9 @@
             border-bottom: 1px solid var(--card-border);
             position: sticky;
             top: 0;
-            z-index: 30; /* پایین‌تر از دکمه تنظیمات */
-            /* فاصله از دکمه تنظیمات */
-            margin-top: 2.8rem; /* ارتفاع دکمه تنظیمات + فاصله */
+            z-index: 30;
+            margin-top: 2.8rem;
         }
-        /* در حالت LTR هم همین فاصله حفظ شود */
         [dir="ltr"] .detail-header {
             margin-top: 2.8rem;
         }
@@ -419,7 +404,6 @@
         .back-btn:hover {
             color: #1e3a8a;
         }
-        /* در حالت LTR، دکمه برگشت در سمت چپ باقی می‌ماند */
         [dir="ltr"] .back-btn {
             transform: none;
         }
@@ -659,14 +643,16 @@
         <div class="settings-wrapper">
             <i class="fas fa-cog settings-icon" id="settingsIcon"></i>
             <div class="settings-panel" id="settingsPanel">
-                <!-- انتخاب زبان -->
+                <!-- انتخاب زبان (حرفه‌ای مشابه فونت) -->
                 <div class="setting-item">
                     <span class="setting-label"><i class="fas fa-globe"></i> <span data-i18n="language">اللغة</span></span>
-                    <select class="language-select" id="languageSelect">
-                        <option value="fa">فارسی</option>
-                        <option value="ar" selected>العربية</option>
-                        <option value="en">English</option>
-                    </select>
+                    <div class="select-wrapper">
+                        <select class="custom-select" id="languageSelect">
+                            <option value="fa">فارسی</option>
+                            <option value="ar" selected>العربية</option>
+                            <option value="en">English</option>
+                        </select>
+                    </div>
                 </div>
                 <!-- حالت شب -->
                 <div class="setting-item">
@@ -682,11 +668,11 @@
                         <span class="font-size-btn" id="increaseFont">+</span>
                     </div>
                 </div>
-                <!-- انتخاب فونت (بدون عربی سنتی) -->
+                <!-- انتخاب فونت -->
                 <div class="setting-item">
                     <span class="setting-label"><i class="fas fa-font"></i> <span data-i18n="font">الخط</span></span>
-                    <div class="font-select-wrapper">
-                        <select class="font-select" id="fontSelect">
+                    <div class="select-wrapper">
+                        <select class="custom-select" id="fontSelect">
                             <option value="Uthman" data-i18n-font="uthman">عثمان طه</option>
                             <option value="Lotus" data-i18n-font="lotus">لوتوس</option>
                             <option value="Compset" data-i18n-font="compset">کامپوست</option>
@@ -694,7 +680,7 @@
                     </div>
                 </div>
                 <!-- دکمه نصب PWA -->
-                <div class="setting-item" id="installButtonContainer">
+                <div class="setting-item" id="installButtonContainer" style="display: none;">
                     <span class="setting-label"><i class="fas fa-download"></i> <span data-i18n="installApp">تثبيت التطبيق</span></span>
                     <button class="install-btn" id="installBtn"><i class="fas fa-arrow-down"></i> <span data-i18n="install">تثبيت</span></button>
                 </div>
@@ -780,7 +766,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- المنت‌های صوتی مخفی -->
                 <audio id="audioMorning" preload="none" src="https://raw.githubusercontent.com/ysrbkht/zikr/main/morning.mp3"></audio>
                 <audio id="audioEvening" preload="none" src="https://raw.githubusercontent.com/ysrbkht/zikr/main/evening.mp3"></audio>
             </div>
@@ -861,7 +846,7 @@
                 evening: 'أذكار المساء',
                 sleep: 'أذكار النوم',
                 audio: 'الأذكار الصوتية',
-                times: 'مرة',
+                // حذف times از اینجا چون تابع جداگانه استفاده می‌کنیم
                 source: 'المصدر',
                 fontUthman: 'عثمان طه',
                 fontLotus: 'لوتس',
@@ -899,6 +884,14 @@
                 sleepStep2: 'Then wipe your body with them as far as you can, starting from your head and face. (Repeat this three times)'
             }
         };
+
+        // تابع کمکی برای نمایش صحیح "مرة" در عربی بر اساس عدد
+        function getArabicTimes(count) {
+            if (count === 1) return 'مرة';
+            if (count === 2) return 'مرتين';
+            if (count >= 3 && count <= 10) return 'مرات';
+            return 'مرة'; // برای اعداد بزرگتر از 10 معمولاً مفرد می‌آید (مثلاً 100 مرة)
+        }
 
         let currentLanguage = localStorage.getItem('language') || 'ar';
         let azkarData = null;
@@ -1128,7 +1121,7 @@
             }
             isPlaying[audioId] = false;
             const btn = document.querySelector(`[data-id="${audioId}"] i`);
-            btn.className = 'fas fa-play';
+            if (btn) btn.className = 'fas fa-play';
             const audio = audioId === 'morning' ? audioMorning : audioEvening;
             audio.pause();
             audio.currentTime = 0;
@@ -1189,29 +1182,34 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            // نمایش دکمه نصب اگر نصب نشده باشد
             if (!localStorage.getItem('appInstalled') && !window.matchMedia('(display-mode: standalone)').matches) {
-                installContainer.classList.remove('hidden-btn');
+                installContainer.style.display = 'flex';
             }
         });
 
         installBtn.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
+            if (!deferredPrompt) {
+                alert('امکان نصب در این لحظه وجود ندارد. لطفاً دوباره تلاش کنید.');
+                return;
+            }
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
             if (outcome === 'accepted') {
                 localStorage.setItem('appInstalled', 'true');
-                installContainer.classList.add('hidden-btn');
+                installContainer.style.display = 'none';
             }
             deferredPrompt = null;
         });
 
+        // اگر قبلاً نصب شده یا در حالت standalone است، دکمه نصب را مخفی کن
         if (localStorage.getItem('appInstalled') || window.matchMedia('(display-mode: standalone)').matches) {
-            installContainer.classList.add('hidden-btn');
+            installContainer.style.display = 'none';
         }
 
         window.addEventListener('appinstalled', () => {
             localStorage.setItem('appInstalled', 'true');
-            installContainer.classList.add('hidden-btn');
+            installContainer.style.display = 'none';
         });
 
         // ======== دانلود برای آفلاین ========
@@ -1282,11 +1280,19 @@
                     text = text.replace('دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:', translations[currentLanguage].sleepStep1);
                     text = text.replace('بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)', translations[currentLanguage].sleepStep2);
                 }
+                let timesWord = translations[currentLanguage].times; // پیش‌فرض برای انگلیسی و فارسی
+                if (currentLanguage === 'ar') {
+                    timesWord = getArabicTimes(item.repeat);
+                } else if (currentLanguage === 'fa') {
+                    timesWord = 'مرتبه'; // فارسی ثابت است
+                } else {
+                    timesWord = 'times'; // انگلیسی
+                }
                 html += `
                     <div class="dhikr-card">
                         <div class="dhikr-text">${text}</div>
                         <div class="dhikr-meta">
-                            <span class="repeat-badge"><i class="fas fa-star"></i> ${item.repeat} ${translations[currentLanguage].times}</span>
+                            <span class="repeat-badge"><i class="fas fa-star"></i> ${item.repeat} ${timesWord}</span>
                             <span class="reference"><i class="fas fa-book-open"></i> ${item.reference || translations[currentLanguage].source}</span>
                         </div>
                     </div>
