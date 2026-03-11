@@ -1,4 +1,4 @@
-const CACHE_NAME = 'azkar-cache-v10';
+const CACHE_NAME = 'azkar-cache-v11';
 const urlsToCache = [
   '/zikr/',
   '/zikr/index.html',
