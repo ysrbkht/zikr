@@ -73,7 +73,7 @@
             --badge-bg: #2b4f8e;
             --badge-color: #ffffff;
             --footer-text: #a0aec0;
-            --icon-color: #60a5fa; /* آبی روشن برای حالت شب */
+            --icon-color: #60a5fa;
             --switch-bg: #4a5568;
             --scrollbar-thumb: #4a5568;
             --scrollbar-track: #2d3748;
@@ -326,7 +326,7 @@
             font-weight: 500;
         }
 
-        /* منوی اصلی (با طراحی شبیه به اپلیکیشن قرآن) */
+        /* منوی اصلی (طراحی شبیه قرآن) */
         .menu-grid {
             display: flex;
             flex-direction: column;
@@ -385,7 +385,7 @@
             position: sticky;
             top: 0;
             z-index: 30;
-            margin-top: 3rem; /* فاصله از دکمه تنظیمات */
+            margin-top: 3rem;
         }
         [dir="ltr"] .detail-header {
             margin-top: 3rem;
@@ -693,7 +693,7 @@
                 <h1 data-i18n="appName">الأذكار</h1>
             </div>
 
-            <!-- منوی اصلی (طراحی جدید) -->
+            <!-- منوی اصلی -->
             <div id="mainMenu" class="main-menu">
                 <div class="menu-grid">
                     <div class="menu-card" data-category="morning">
@@ -790,7 +790,7 @@
             '/zikr/fonts/Compset-Bold.ttf'
         ];
 
-        // ======== ترجمه‌ها ========
+        // ترجمه‌ها
         const translations = {
             fa: {
                 appName: 'اذکار',
@@ -881,7 +881,6 @@
             }
         };
 
-        // تابع کمکی برای نمایش صحیح "مرة" در عربی بر اساس عدد
         function getArabicTimes(count) {
             if (count === 1) return 'مرة';
             if (count === 2) return 'مرتين';
@@ -903,7 +902,6 @@
         const footer = document.getElementById('footer');
         const mainContent = document.getElementById('mainContent');
 
-        // تنظیمات
         const settingsIcon = document.getElementById('settingsIcon');
         const settingsPanel = document.getElementById('settingsPanel');
         const themeSwitchInner = document.getElementById('themeSwitchInner');
@@ -913,13 +911,11 @@
         const fontSelect = document.getElementById('fontSelect');
         const languageSelect = document.getElementById('languageSelect');
 
-        // دکمه نصب و دانلود
         const installBtn = document.getElementById('installBtn');
         const installContainer = document.getElementById('installButtonContainer');
         const downloadBtn = document.getElementById('downloadBtn');
         const downloadContainer = document.getElementById('downloadButtonContainer');
 
-        // متغیرهای پلیر
         const audioMorning = document.getElementById('audioMorning');
         const audioEvening = document.getElementById('audioEvening');
         const playBtns = document.querySelectorAll('.custom-audio-player .play-btn');
@@ -939,17 +935,10 @@
 
         let currentFontSize = 1.6;
         let currentFont = 'Uthman';
-        let isPlaying = {
-            morning: false,
-            evening: false
-        };
-        let progressIntervals = {
-            morning: null,
-            evening: null
-        };
+        let isPlaying = { morning: false, evening: false };
+        let progressIntervals = { morning: null, evening: null };
         let deferredPrompt;
 
-        // ======== توابع ترجمه ========
         function setLanguage(lang) {
             currentLanguage = lang;
             document.documentElement.lang = lang;
@@ -983,21 +972,14 @@
             const options = fontSelect.querySelectorAll('option');
             options.forEach(opt => {
                 const value = opt.value;
-                if (value === 'Uthman') {
-                    opt.textContent = translations[currentLanguage].fontUthman;
-                } else if (value === 'Lotus') {
-                    opt.textContent = translations[currentLanguage].fontLotus;
-                } else if (value === 'Compset') {
-                    opt.textContent = translations[currentLanguage].fontCompset;
-                }
+                if (value === 'Uthman') opt.textContent = translations[currentLanguage].fontUthman;
+                else if (value === 'Lotus') opt.textContent = translations[currentLanguage].fontLotus;
+                else if (value === 'Compset') opt.textContent = translations[currentLanguage].fontCompset;
             });
         }
 
-        languageSelect.addEventListener('change', (e) => {
-            setLanguage(e.target.value);
-        });
+        languageSelect.addEventListener('change', (e) => setLanguage(e.target.value));
 
-        // ======== توابع فونت ========
         function applyFontSize(size) {
             document.documentElement.style.setProperty('--selected-font-size', size + 'rem');
             fontSizeValue.textContent = size.toFixed(1);
@@ -1005,23 +987,13 @@
 
         function applyFontFamily(fontKey) {
             let fontStack = '';
-            switch (fontKey) {
-                case 'Uthman':
-                    fontStack = "'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif";
-                    break;
-                case 'Lotus':
-                    fontStack = "'Lotus', 'Uthman Taha', 'Compset', 'Amiri', serif";
-                    break;
-                case 'Compset':
-                    fontStack = "'Compset', 'Uthman Taha', 'Lotus', 'Amiri', serif";
-                    break;
-                default:
-                    fontStack = "'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif";
-            }
+            if (fontKey === 'Uthman') fontStack = "'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif";
+            else if (fontKey === 'Lotus') fontStack = "'Lotus', 'Uthman Taha', 'Compset', 'Amiri', serif";
+            else if (fontKey === 'Compset') fontStack = "'Compset', 'Uthman Taha', 'Lotus', 'Amiri', serif";
+            else fontStack = "'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif";
             document.documentElement.style.setProperty('--selected-font', fontStack);
         }
 
-        // ======== تنظیمات پنل ========
         settingsIcon.addEventListener('click', (e) => {
             e.stopPropagation();
             settingsPanel.classList.toggle('show');
@@ -1033,7 +1005,6 @@
             }
         });
 
-        // حالت شب
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'dark') {
@@ -1047,7 +1018,6 @@
             localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
         });
 
-        // اندازه فونت
         decreaseFont.addEventListener('click', () => {
             currentFontSize = Math.max(1.0, currentFontSize - 0.1);
             applyFontSize(currentFontSize);
@@ -1059,7 +1029,6 @@
             localStorage.setItem('fontSize', currentFontSize.toFixed(1));
         });
 
-        // انتخاب فونت
         fontSelect.addEventListener('change', (e) => {
             currentFont = e.target.value;
             applyFontFamily(currentFont);
@@ -1071,9 +1040,7 @@
             if (savedFontSize) {
                 currentFontSize = parseFloat(savedFontSize);
                 applyFontSize(currentFontSize);
-            } else {
-                applyFontSize(1.6);
-            }
+            } else applyFontSize(1.6);
             const savedFont = localStorage.getItem('fontFamily');
             if (savedFont && ['Uthman', 'Lotus', 'Compset'].includes(savedFont)) {
                 currentFont = savedFont;
@@ -1084,14 +1051,11 @@
                 applyFontFamily('Uthman');
             }
             const savedLang = localStorage.getItem('language');
-            if (savedLang && ['fa', 'ar', 'en'].includes(savedLang)) {
-                setLanguage(savedLang);
-            } else {
-                setLanguage('ar');
-            }
+            if (savedLang && ['fa', 'ar', 'en'].includes(savedLang)) setLanguage(savedLang);
+            else setLanguage('ar');
         }
 
-        // ======== توابع پلیر ========
+        // پلیر
         function formatTime(seconds) {
             if (isNaN(seconds)) return '00:00';
             const mins = Math.floor(seconds / 60);
@@ -1136,11 +1100,8 @@
                     icon.className = 'fas fa-play';
                     clearInterval(progressIntervals[audioId]);
                 } else {
-                    if (audioId === 'morning' && isPlaying.evening) {
-                        resetPlayer('evening');
-                    } else if (audioId === 'evening' && isPlaying.morning) {
-                        resetPlayer('morning');
-                    }
+                    if (audioId === 'morning' && isPlaying.evening) resetPlayer('evening');
+                    else if (audioId === 'evening' && isPlaying.morning) resetPlayer('morning');
                     audio.play().catch(e => console.log(e));
                     icon.className = 'fas fa-pause';
                     progressIntervals[audioId] = setInterval(() => updateProgress(audioId), 100);
@@ -1155,7 +1116,6 @@
         audioEvening.addEventListener('loadedmetadata', () => {
             durationTimes.evening.textContent = formatTime(audioEvening.duration);
         });
-
         audioMorning.addEventListener('ended', () => resetPlayer('morning'));
         audioEvening.addEventListener('ended', () => resetPlayer('evening'));
 
@@ -1174,7 +1134,7 @@
             });
         });
 
-        // ======== نصب PWA ========
+        // نصب PWA
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -1185,7 +1145,7 @@
 
         installBtn.addEventListener('click', async () => {
             if (!deferredPrompt) {
-                alert('امکان نصب در این لحظه وجود ندارد. لطفاً دوباره تلاش کنید.');
+                alert('امکان نصب در این لحظه وجود ندارد.');
                 return;
             }
             deferredPrompt.prompt();
@@ -1206,13 +1166,12 @@
             installContainer.style.display = 'none';
         });
 
-        // ======== دانلود برای آفلاین با هشدار حجم ========
+        // دانلود آفلاین با مدیریت بهتر خطا و کش
         async function downloadForOffline() {
-            if (!confirm(translations[currentLanguage].confirmDownload)) {
-                return;
-            }
+            if (!confirm(translations[currentLanguage].confirmDownload)) return;
+
             try {
-                const cache = await caches.open('azkar-offline-v2');
+                const cache = await caches.open('azkar-offline-v3');
                 const urls = [
                     JSON_URL,
                     ...Object.values(AUDIO_URLS),
@@ -1220,24 +1179,34 @@
                     '/zikr/icon.png',
                     '/zikr/icon.ico'
                 ];
-                let successCount = 0;
+
+                let success = 0;
+                let failed = 0;
+
                 for (const url of urls) {
                     try {
-                        const response = await fetch(url, { cache: 'no-cache' });
+                        const response = await fetch(url, { 
+                            cache: 'no-cache',
+                            mode: 'cors',
+                            headers: { 'Cache-Control': 'no-cache' }
+                        });
                         if (response.ok) {
                             await cache.put(url, response.clone());
-                            successCount++;
+                            success++;
                         } else {
                             console.warn(`Failed to fetch ${url}: ${response.status}`);
+                            failed++;
                         }
                     } catch (e) {
                         console.warn(`Error fetching ${url}:`, e);
+                        failed++;
                     }
                 }
-                if (successCount > 0) {
+
+                if (success > 0) {
                     localStorage.setItem('offlineDownloaded', 'true');
                     downloadContainer.classList.add('hidden-btn');
-                    alert(successCount + ' فایل با موفقیت ذخیره شد.');
+                    alert(`${success} فایل با موفقیت ذخیره شد. ${failed > 0 ? `(${failed} فایل ناموفق)` : ''}`);
                 } else {
                     alert('هیچ فایلی ذخیره نشد. لطفاً اتصال اینترنت را بررسی کنید.');
                 }
@@ -1252,7 +1221,7 @@
             downloadContainer.classList.add('hidden-btn');
         }
 
-        // ======== نمایش منو و جزئیات ========
+        // نمایش منو و جزئیات
         function showMainMenu() {
             resetPlayer('morning');
             resetPlayer('evening');
@@ -1295,13 +1264,9 @@
                     text = text.replace('بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)', translations[currentLanguage].sleepStep2);
                 }
                 let timesWord = '';
-                if (currentLanguage === 'ar') {
-                    timesWord = getArabicTimes(item.repeat);
-                } else if (currentLanguage === 'fa') {
-                    timesWord = 'مرتبه';
-                } else {
-                    timesWord = 'times';
-                }
+                if (currentLanguage === 'ar') timesWord = getArabicTimes(item.repeat);
+                else if (currentLanguage === 'fa') timesWord = 'مرتبه';
+                else timesWord = 'times';
                 html += `
                     <div class="dhikr-card">
                         <div class="dhikr-text">${text}</div>
@@ -1343,7 +1308,6 @@
             }
         }
 
-        // شروع
         loadAzkar();
         showMainMenu();
         initTheme();
