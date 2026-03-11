@@ -16,7 +16,7 @@
     <!-- فونت فارسی برای رابط کاربری -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* فونت‌های آپلود شده (بدون Traditional Arabic) */
+        /* فونت‌های آپلود شده */
         @font-face {
             font-family: 'Uthman Taha';
             src: url('/zikr/fonts/UthmanTahaNaskhBold.ttf') format('truetype');
@@ -93,7 +93,7 @@
             flex-direction: column;
             transition: background-color 0.3s, color 0.3s;
         }
-        body[dir="ltr"] {
+        [dir="ltr"] body {
             font-family: 'Segoe UI', 'Vazirmatn', sans-serif;
         }
         .app-container {
@@ -132,14 +132,14 @@
             color: #aac3e0;
         }
 
-        /* آیکون تنظیمات - در RTL چپ، در LRT راست */
+        /* آیکون تنظیمات - در RTL چپ، در LTR راست */
         .settings-wrapper {
             position: absolute;
             top: 1rem;
             left: 1rem;
             z-index: 30;
         }
-        body[dir="ltr"] .settings-wrapper {
+        [dir="ltr"] .settings-wrapper {
             left: auto;
             right: 1rem;
         }
@@ -168,7 +168,7 @@
             z-index: 40;
             backdrop-filter: blur(5px);
         }
-        body[dir="ltr"] .settings-panel {
+        [dir="ltr"] .settings-panel {
             left: auto;
             right: 0;
         }
@@ -248,11 +248,11 @@
         .inner-switch.active::after {
             left: calc(100% - 22px);
         }
-        body[dir="ltr"] .inner-switch::after {
+        [dir="ltr"] .inner-switch::after {
             left: 2px;
             right: auto;
         }
-        body[dir="ltr"] .inner-switch.active::after {
+        [dir="ltr"] .inner-switch.active::after {
             left: calc(100% - 22px);
         }
 
@@ -285,7 +285,7 @@
             font-weight: 500;
         }
 
-        /* dropdown انتخاب فونت (بدون عربی سنتی) */
+        /* dropdown انتخاب فونت */
         .font-select-wrapper {
             position: relative;
             width: 150px;
@@ -317,7 +317,7 @@
             background: var(--container-bg);
             color: var(--text-color);
         }
-        body[dir="ltr"] .font-select {
+        [dir="ltr"] .font-select {
             text-align: left;
             padding-left: 1rem;
             padding-right: 35px;
@@ -413,9 +413,10 @@
         .back-btn:hover {
             color: #1e3a8a;
         }
-        /* در حالت LTR، دکمه برگشت باید در سمت چپ باشد و آیکون آن برعکس نشود */
-        body[dir="ltr"] .back-btn {
+        /* در حالت LTR، دکمه برگشت در سمت چپ باقی می‌ماند */
+        [dir="ltr"] .back-btn {
             transform: none;
+            margin-left: 0;
         }
         .detail-title {
             font-size: 1.5rem;
@@ -585,7 +586,7 @@
             margin-left: 0.3rem;
             margin-right: 0;
         }
-        body[dir="ltr"] .reference i {
+        [dir="ltr"] .reference i {
             margin-left: 0;
             margin-right: 0.3rem;
         }
@@ -828,11 +829,9 @@
                 audio: 'اذکار صوتی',
                 times: 'مرتبه',
                 source: 'منبع',
-                // نام فونت‌ها
                 fontUthman: 'عثمان طه',
                 fontLotus: 'لوتوس',
                 fontCompset: 'کامپوست',
-                // عبارات خاص اذکار خواب
                 sleepStep1: 'دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:',
                 sleepStep2: 'بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)'
             },
@@ -896,7 +895,7 @@
             }
         };
 
-        let currentLanguage = localStorage.getItem('language') || 'ar'; // عربی پیش‌فرض
+        let currentLanguage = localStorage.getItem('language') || 'ar';
         let azkarData = null;
         const appContainer = document.getElementById('appContainer');
         const mainMenu = document.getElementById('mainMenu');
@@ -909,12 +908,6 @@
         const header = document.getElementById('header');
         const footer = document.getElementById('footer');
         const mainContent = document.getElementById('mainContent');
-        const categoryNames = {
-            morning: 'morning',
-            evening: 'evening',
-            sleep: 'sleep',
-            audio: 'audio'
-        };
 
         // تنظیمات
         const settingsIcon = document.getElementById('settingsIcon');
@@ -970,9 +963,7 @@
             localStorage.setItem('language', lang);
             languageSelect.value = lang;
             applyTranslations();
-            // به‌روزرسانی نام فونت‌ها در dropdown
             updateFontNames();
-            // اگر در صفحه اذکار خواب هستیم، محتوای آن را دوباره نمایش دهیم
             if (detailView.classList.contains('active') && detailCategoryTitle.getAttribute('data-category') === 'sleep') {
                 showCategory('sleep');
             }
@@ -986,7 +977,6 @@
                     el.textContent = translations[currentLanguage][key];
                 }
             });
-            // به‌روزرسانی عنوان صفحات داخلی
             if (detailView.classList.contains('active')) {
                 const cat = detailCategoryTitle.getAttribute('data-category');
                 if (cat && translations[currentLanguage][cat]) {
@@ -1283,7 +1273,6 @@
             let html = '';
             items.forEach(item => {
                 let text = item.text;
-                // ترجمه عبارات خاص اذکار خواب
                 if (category === 'sleep') {
                     text = text.replace('دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:', translations[currentLanguage].sleepStep1);
                     text = text.replace('بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)', translations[currentLanguage].sleepStep2);
