@@ -325,45 +325,48 @@
             font-weight: 500;
         }
 
-        /* منوی اصلی */
+        /* ===== طراحی منوی اصلی (صفحه اول) ===== */
         .menu-grid {
             display: flex;
             flex-direction: column;
             gap: 1.2rem;
-            margin-top: 1rem;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
+            max-width: 500px;  /* محدودیت عرض برای دسکتاپ */
+            margin: 2rem auto 0; /* وسط‌چین */
             width: 100%;
         }
         .menu-card {
             background: var(--card-bg);
             border-radius: 28px;
-            padding: 2rem 1.5rem;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.03);
+            padding: 1.8rem 2rem; /* کمی جمع‌وجورتر */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--card-border);
             cursor: pointer;
             transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            text-align: center;
+            justify-content: flex-start; /* تراز چپ برای آیکون و متن */
+            gap: 2rem;
+            text-align: right;
         }
         .menu-card:hover {
-            transform: scale(1.01);
+            transform: scale(1.02);
             border-color: #b0c4de;
-            box-shadow: 0 12px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+        }
+        .menu-icon {
+            font-size: 2.8rem;
+            color: var(--icon-color);
+            opacity: 0.9;
+            min-width: 3.5rem; /* ثابت نگه داشتن عرض آیکون */
         }
         .menu-info h2 {
-            font-size: 1.9rem;
+            font-size: 1.8rem;
             font-weight: 600;
             color: var(--text-color);
         }
-        .menu-icon {
-            font-size: 3rem;
-            color: var(--icon-color);
-            opacity: 0.9;
+        /* برای حالت LTR نیز ترازها را تنظیم می‌کنیم */
+        [dir="ltr"] .menu-card {
+            justify-content: flex-start;
         }
 
         /* صفحه جزئیات */
@@ -643,7 +646,7 @@
         <div class="settings-wrapper">
             <i class="fas fa-cog settings-icon" id="settingsIcon"></i>
             <div class="settings-panel" id="settingsPanel">
-                <!-- انتخاب زبان (حرفه‌ای مشابه فونت) -->
+                <!-- انتخاب زبان -->
                 <div class="setting-item">
                     <span class="setting-label"><i class="fas fa-globe"></i> <span data-i18n="language">اللغة</span></span>
                     <div class="select-wrapper">
@@ -697,7 +700,7 @@
                 <h1 data-i18n="appName">الأذكار</h1>
             </div>
 
-            <!-- منوی اصلی -->
+            <!-- منوی اصلی (صفحه اول) -->
             <div id="mainMenu" class="main-menu">
                 <div class="menu-grid">
                     <div class="menu-card" data-category="morning">
@@ -793,6 +796,7 @@
             '/zikr/fonts/lotus-Bold.ttf',
             '/zikr/fonts/Compset-Bold.ttf'
         ];
+        const TOTAL_SIZE_MB = 20; // تخمین حجم کل بر اساس فایل‌ها
 
         // ======== ترجمه‌ها ========
         const translations = {
@@ -823,7 +827,8 @@
                 fontLotus: 'لوتوس',
                 fontCompset: 'کامپوست',
                 sleepStep1: 'دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:',
-                sleepStep2: 'بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)'
+                sleepStep2: 'بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)',
+                downloadConfirm: 'آیا می‌خواهید فایل‌ها را برای استفاده آفلاین دانلود کنید؟ حجم تقریبی {size} مگابایت است.'
             },
             ar: {
                 appName: 'الأذكار',
@@ -851,7 +856,8 @@
                 fontLotus: 'لوتس',
                 fontCompset: 'كومبست',
                 sleepStep1: 'اجمع يديك وانفث فيهما واقرأ هذه السور:',
-                sleepStep2: 'ثم امسح بهما جسدك مستطيعاً مبتدئاً برأسك ووجهك (كرر هذا ثلاث مرات)'
+                sleepStep2: 'ثم امسح بهما جسدك مستطيعاً مبتدئاً برأسك ووجهك (كرر هذا ثلاث مرات)',
+                downloadConfirm: 'هل تريد تنزيل الملفات لاستخدامها دون اتصال؟ الحجم التقريبي {size} ميجابايت.'
             },
             en: {
                 appName: 'Adhkar',
@@ -880,7 +886,8 @@
                 fontLotus: 'Lotus',
                 fontCompset: 'Compset',
                 sleepStep1: 'Cup your hands, blow into them, and recite these Surahs:',
-                sleepStep2: 'Then wipe your body with them as far as you can, starting from your head and face. (Repeat this three times)'
+                sleepStep2: 'Then wipe your body with them as far as you can, starting from your head and face. (Repeat this three times)',
+                downloadConfirm: 'Do you want to download files for offline use? Approximate size {size} MB.'
             }
         };
 
@@ -889,7 +896,7 @@
             if (count === 1) return 'مرة';
             if (count === 2) return 'مرتين';
             if (count >= 3 && count <= 10) return 'مرات';
-            return 'مرة'; // برای اعداد بزرگتر از 10 معمولاً مفرد می‌آید (مثلاً 100 مرة)
+            return 'مرة'; // برای اعداد بزرگتر از 10
         }
 
         let currentLanguage = localStorage.getItem('language') || 'ar';
@@ -1209,10 +1216,16 @@
             installContainer.style.display = 'none';
         });
 
-        // ======== دانلود برای آفلاین (اصلاح‌شده با Cache API) ========
+        // ======== دانلود برای آفلاین (اصلاح‌شده) ========
         async function downloadForOffline() {
+            // نمایش هشدار با حجم تخمینی
+            const confirmMsg = translations[currentLanguage].downloadConfirm.replace('{size}', TOTAL_SIZE_MB);
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+
             try {
-                const cache = await caches.open('azkar-offline-v1');
+                const cache = await caches.open('azkar-offline-v2');
                 const urls = [
                     JSON_URL,
                     ...Object.values(AUDIO_URLS),
@@ -1223,7 +1236,8 @@
                 let successCount = 0;
                 for (const url of urls) {
                     try {
-                        const response = await fetch(url, { cache: 'no-cache' }); // جلوگیری از کش مرورگر
+                        // استفاده از no-cors برای فایل‌های روی سرور دیگر (در صورت نیاز)
+                        const response = await fetch(url, { cache: 'no-cache', mode: 'cors' });
                         if (response.ok) {
                             await cache.put(url, response.clone());
                             successCount++;
