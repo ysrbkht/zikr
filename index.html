@@ -41,8 +41,9 @@
             --bg-color: #f0f7ff;
             --container-bg: #ffffff;
             --text-color: #1e3a5f;
-            --card-bg: #f8fcff;
+            --card-bg: #ffffff;
             --card-border: #d0e2f2;
+            --card-shadow: 0 10px 20px -5px rgba(0, 20, 60, 0.1);
             --meta-bg: #e6f0fa;
             --badge-bg: #c2dbf0;
             --badge-color: #1a4b77;
@@ -65,20 +66,21 @@
             --bg-color: #0f172a;
             --container-bg: #1e293b;
             --text-color: #e2e8f0;
-            --card-bg: #334155;
-            --card-border: #475569;
-            --meta-bg: #1e293b;
-            --badge-bg: #1e3a8a;
+            --card-bg: #2d3748;
+            --card-border: #4a5568;
+            --card-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+            --meta-bg: #2d3748;
+            --badge-bg: #2b4f8e;
             --badge-color: #ffffff;
-            --footer-text: #94a3b8;
-            --icon-color: #ffffff;
-            --switch-bg: #475569;
-            --scrollbar-thumb: #475569;
-            --scrollbar-track: #1e293b;
-            --player-bg: #1e293b;
+            --footer-text: #a0aec0;
+            --icon-color: #60a5fa; /* آبی روشن برای حالت شب */
+            --switch-bg: #4a5568;
+            --scrollbar-thumb: #4a5568;
+            --scrollbar-track: #2d3748;
+            --player-bg: #2d3748;
             --player-btn-bg: #3b82f6;
             --player-btn-color: white;
-            --player-progress-bg: #334155;
+            --player-progress-bg: #4a5568;
             --player-progress-fill: #60a5fa;
             --player-time-color: #e2e8f0;
         }
@@ -120,16 +122,15 @@
         .header {
             text-align: center;
             margin-bottom: 2rem;
+            padding: 1rem;
         }
         .header.hidden { display: none; }
         .header h1 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            color: #2c6b9e;
+            color: var(--icon-color);
             margin-bottom: 0.2rem;
-        }
-        .dark .header h1 {
-            color: #aac3e0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         /* آیکون تنظیمات */
@@ -162,7 +163,7 @@
             border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 1.2rem;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--card-shadow);
             display: none;
             min-width: 280px;
             z-index: 50;
@@ -197,7 +198,7 @@
             width: 1.5rem;
         }
 
-        /* استایل مشترک برای dropdownهای فونت و زبان */
+        /* استایل مشترک برای dropdownها */
         .select-wrapper {
             position: relative;
             width: 150px;
@@ -223,7 +224,7 @@
             text-align: right;
         }
         .dark .custom-select {
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2360a5fa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
         }
         [dir="ltr"] .custom-select {
             text-align: left;
@@ -325,48 +326,43 @@
             font-weight: 500;
         }
 
-        /* ===== طراحی منوی اصلی (صفحه اول) ===== */
+        /* منوی اصلی (با طراحی شبیه به اپلیکیشن قرآن) */
         .menu-grid {
             display: flex;
             flex-direction: column;
             gap: 1.2rem;
-            max-width: 500px;  /* محدودیت عرض برای دسکتاپ */
-            margin: 2rem auto 0; /* وسط‌چین */
+            margin: 2rem auto;
+            max-width: 450px;
             width: 100%;
         }
         .menu-card {
             background: var(--card-bg);
             border-radius: 28px;
-            padding: 1.8rem 2rem; /* کمی جمع‌وجورتر */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+            padding: 2rem 1.5rem;
+            box-shadow: var(--card-shadow);
             border: 1px solid var(--card-border);
             cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
-            justify-content: flex-start; /* تراز چپ برای آیکون و متن */
-            gap: 2rem;
-            text-align: right;
+            justify-content: center;
+            gap: 1rem;
+            text-align: center;
         }
         .menu-card:hover {
-            transform: scale(1.02);
-            border-color: #b0c4de;
-            box-shadow: 0 12px 20px rgba(0,0,0,0.1);
-        }
-        .menu-icon {
-            font-size: 2.8rem;
-            color: var(--icon-color);
-            opacity: 0.9;
-            min-width: 3.5rem; /* ثابت نگه داشتن عرض آیکون */
+            transform: translateY(-2px);
+            border-color: var(--icon-color);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
         }
         .menu-info h2 {
-            font-size: 1.8rem;
+            font-size: 1.9rem;
             font-weight: 600;
             color: var(--text-color);
         }
-        /* برای حالت LTR نیز ترازها را تنظیم می‌کنیم */
-        [dir="ltr"] .menu-card {
-            justify-content: flex-start;
+        .menu-icon {
+            font-size: 3rem;
+            color: var(--icon-color);
+            opacity: 0.9;
         }
 
         /* صفحه جزئیات */
@@ -389,10 +385,10 @@
             position: sticky;
             top: 0;
             z-index: 30;
-            margin-top: 2.8rem;
+            margin-top: 3rem; /* فاصله از دکمه تنظیمات */
         }
         [dir="ltr"] .detail-header {
-            margin-top: 2.8rem;
+            margin-top: 3rem;
         }
         .back-btn {
             background: none;
@@ -405,7 +401,7 @@
             transition: color 0.2s;
         }
         .back-btn:hover {
-            color: #1e3a8a;
+            color: var(--icon-color);
         }
         [dir="ltr"] .back-btn {
             transform: none;
@@ -623,15 +619,12 @@
             display: none;
         }
         .telegram-link {
-            color: #2c6b9e;
+            color: var(--icon-color);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
             font-weight: 500;
-        }
-        .dark .telegram-link {
-            color: #90caf9;
         }
         .telegram-svg {
             width: 24px;
@@ -676,9 +669,9 @@
                     <span class="setting-label"><i class="fas fa-font"></i> <span data-i18n="font">الخط</span></span>
                     <div class="select-wrapper">
                         <select class="custom-select" id="fontSelect">
-                            <option value="Uthman" data-i18n-font="uthman">عثمان طه</option>
-                            <option value="Lotus" data-i18n-font="lotus">لوتوس</option>
-                            <option value="Compset" data-i18n-font="compset">کامپوست</option>
+                            <option value="Uthman">عثمان طه</option>
+                            <option value="Lotus">لوتوس</option>
+                            <option value="Compset">کامپوست</option>
                         </select>
                     </div>
                 </div>
@@ -700,7 +693,7 @@
                 <h1 data-i18n="appName">الأذكار</h1>
             </div>
 
-            <!-- منوی اصلی (صفحه اول) -->
+            <!-- منوی اصلی (طراحی جدید) -->
             <div id="mainMenu" class="main-menu">
                 <div class="menu-grid">
                     <div class="menu-card" data-category="morning">
@@ -796,7 +789,6 @@
             '/zikr/fonts/lotus-Bold.ttf',
             '/zikr/fonts/Compset-Bold.ttf'
         ];
-        const TOTAL_SIZE_MB = 20; // تخمین حجم کل بر اساس فایل‌ها
 
         // ======== ترجمه‌ها ========
         const translations = {
@@ -821,14 +813,13 @@
                 evening: 'اذکار شام',
                 sleep: 'اذکار خواب',
                 audio: 'اذکار صوتی',
-                times: 'مرتبه',
                 source: 'منبع',
                 fontUthman: 'عثمان طه',
                 fontLotus: 'لوتوس',
                 fontCompset: 'کامپوست',
                 sleepStep1: 'دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:',
                 sleepStep2: 'بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)',
-                downloadConfirm: 'آیا می‌خواهید فایل‌ها را برای استفاده آفلاین دانلود کنید؟ حجم تقریبی {size} مگابایت است.'
+                confirmDownload: 'آیا می‌خواهید فایل‌های صوتی را برای استفاده آفلاین دانلود کنید؟ حجم تقریبی ۲۰ مگابایت.'
             },
             ar: {
                 appName: 'الأذكار',
@@ -857,7 +848,7 @@
                 fontCompset: 'كومبست',
                 sleepStep1: 'اجمع يديك وانفث فيهما واقرأ هذه السور:',
                 sleepStep2: 'ثم امسح بهما جسدك مستطيعاً مبتدئاً برأسك ووجهك (كرر هذا ثلاث مرات)',
-                downloadConfirm: 'هل تريد تنزيل الملفات لاستخدامها دون اتصال؟ الحجم التقريبي {size} ميجابايت.'
+                confirmDownload: 'هل تريد تحميل الملفات الصوتية للاستخدام دون اتصال؟ الحجم التقريبي 20 ميغابايت.'
             },
             en: {
                 appName: 'Adhkar',
@@ -880,14 +871,13 @@
                 evening: 'Evening Adhkar',
                 sleep: 'Sleep Adhkar',
                 audio: 'Audio Adhkar',
-                times: 'times',
                 source: 'source',
                 fontUthman: 'Uthman Taha',
                 fontLotus: 'Lotus',
                 fontCompset: 'Compset',
                 sleepStep1: 'Cup your hands, blow into them, and recite these Surahs:',
                 sleepStep2: 'Then wipe your body with them as far as you can, starting from your head and face. (Repeat this three times)',
-                downloadConfirm: 'Do you want to download files for offline use? Approximate size {size} MB.'
+                confirmDownload: 'Do you want to download audio files for offline use? Approximate size 20 MB.'
             }
         };
 
@@ -896,7 +886,7 @@
             if (count === 1) return 'مرة';
             if (count === 2) return 'مرتين';
             if (count >= 3 && count <= 10) return 'مرات';
-            return 'مرة'; // برای اعداد بزرگتر از 10
+            return 'مرة';
         }
 
         let currentLanguage = localStorage.getItem('language') || 'ar';
@@ -1216,14 +1206,11 @@
             installContainer.style.display = 'none';
         });
 
-        // ======== دانلود برای آفلاین (اصلاح‌شده) ========
+        // ======== دانلود برای آفلاین با هشدار حجم ========
         async function downloadForOffline() {
-            // نمایش هشدار با حجم تخمینی
-            const confirmMsg = translations[currentLanguage].downloadConfirm.replace('{size}', TOTAL_SIZE_MB);
-            if (!confirm(confirmMsg)) {
+            if (!confirm(translations[currentLanguage].confirmDownload)) {
                 return;
             }
-
             try {
                 const cache = await caches.open('azkar-offline-v2');
                 const urls = [
@@ -1236,8 +1223,7 @@
                 let successCount = 0;
                 for (const url of urls) {
                     try {
-                        // استفاده از no-cors برای فایل‌های روی سرور دیگر (در صورت نیاز)
-                        const response = await fetch(url, { cache: 'no-cache', mode: 'cors' });
+                        const response = await fetch(url, { cache: 'no-cache' });
                         if (response.ok) {
                             await cache.put(url, response.clone());
                             successCount++;
@@ -1251,7 +1237,7 @@
                 if (successCount > 0) {
                     localStorage.setItem('offlineDownloaded', 'true');
                     downloadContainer.classList.add('hidden-btn');
-                    alert(translations[currentLanguage].offlineSave + ' ' + translations[currentLanguage].download + '\n' + successCount + ' فایل ذخیره شد.');
+                    alert(successCount + ' فایل با موفقیت ذخیره شد.');
                 } else {
                     alert('هیچ فایلی ذخیره نشد. لطفاً اتصال اینترنت را بررسی کنید.');
                 }
