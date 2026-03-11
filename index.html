@@ -846,7 +846,6 @@
                 evening: 'أذكار المساء',
                 sleep: 'أذكار النوم',
                 audio: 'الأذكار الصوتية',
-                // حذف times از اینجا چون تابع جداگانه استفاده می‌کنیم
                 source: 'المصدر',
                 fontUthman: 'عثمان طه',
                 fontLotus: 'لوتس',
@@ -1182,7 +1181,6 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            // نمایش دکمه نصب اگر نصب نشده باشد
             if (!localStorage.getItem('appInstalled') && !window.matchMedia('(display-mode: standalone)').matches) {
                 installContainer.style.display = 'flex';
             }
@@ -1202,7 +1200,6 @@
             deferredPrompt = null;
         });
 
-        // اگر قبلاً نصب شده یا در حالت standalone است، دکمه نصب را مخفی کن
         if (localStorage.getItem('appInstalled') || window.matchMedia('(display-mode: standalone)').matches) {
             installContainer.style.display = 'none';
         }
@@ -1212,24 +1209,41 @@
             installContainer.style.display = 'none';
         });
 
-        // ======== دانلود برای آفلاین ========
+        // ======== دانلود برای آفلاین (اصلاح‌شده با Cache API) ========
         async function downloadForOffline() {
             try {
-                await fetch(JSON_URL);
-                for (let key in AUDIO_URLS) {
-                    await fetch(AUDIO_URLS[key]);
+                const cache = await caches.open('azkar-offline-v1');
+                const urls = [
+                    JSON_URL,
+                    ...Object.values(AUDIO_URLS),
+                    ...FONT_URLS,
+                    '/zikr/icon.png',
+                    '/zikr/icon.ico'
+                ];
+                let successCount = 0;
+                for (const url of urls) {
+                    try {
+                        const response = await fetch(url, { cache: 'no-cache' }); // جلوگیری از کش مرورگر
+                        if (response.ok) {
+                            await cache.put(url, response.clone());
+                            successCount++;
+                        } else {
+                            console.warn(`Failed to fetch ${url}: ${response.status}`);
+                        }
+                    } catch (e) {
+                        console.warn(`Error fetching ${url}:`, e);
+                    }
                 }
-                for (let url of FONT_URLS) {
-                    await fetch(url);
+                if (successCount > 0) {
+                    localStorage.setItem('offlineDownloaded', 'true');
+                    downloadContainer.classList.add('hidden-btn');
+                    alert(translations[currentLanguage].offlineSave + ' ' + translations[currentLanguage].download + '\n' + successCount + ' فایل ذخیره شد.');
+                } else {
+                    alert('هیچ فایلی ذخیره نشد. لطفاً اتصال اینترنت را بررسی کنید.');
                 }
-                await fetch('/zikr/icon.png');
-                await fetch('/zikr/icon.ico');
-                localStorage.setItem('offlineDownloaded', 'true');
-                downloadContainer.classList.add('hidden-btn');
-                alert(translations[currentLanguage].offlineSave + ' ' + translations[currentLanguage].download);
             } catch (error) {
-                console.error('خطا در دانلود:', error);
-                alert('Error downloading files. Please check your internet connection.');
+                console.error('خطا در باز کردن کش:', error);
+                alert('خطا در ذخیره‌سازی. لطفاً دوباره تلاش کنید.');
             }
         }
 
@@ -1280,13 +1294,13 @@
                     text = text.replace('دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:', translations[currentLanguage].sleepStep1);
                     text = text.replace('بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)', translations[currentLanguage].sleepStep2);
                 }
-                let timesWord = translations[currentLanguage].times; // پیش‌فرض برای انگلیسی و فارسی
+                let timesWord = '';
                 if (currentLanguage === 'ar') {
                     timesWord = getArabicTimes(item.repeat);
                 } else if (currentLanguage === 'fa') {
-                    timesWord = 'مرتبه'; // فارسی ثابت است
+                    timesWord = 'مرتبه';
                 } else {
-                    timesWord = 'times'; // انگلیسی
+                    timesWord = 'times';
                 }
                 html += `
                     <div class="dhikr-card">
