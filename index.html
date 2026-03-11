@@ -73,7 +73,7 @@
             --badge-bg: #2b4f8e;
             --badge-color: #ffffff;
             --footer-text: #a0aec0;
-            --icon-color: #60a5fa;
+            --icon-color: #60a5fa; /* آبی روشن برای حالت شب */
             --switch-bg: #4a5568;
             --scrollbar-thumb: #4a5568;
             --scrollbar-track: #2d3748;
@@ -1166,12 +1166,12 @@
             installContainer.style.display = 'none';
         });
 
-        // دانلود آفلاین با مدیریت بهتر خطا و کش
+        // دانلود آفلاین با Promise.allSettled
         async function downloadForOffline() {
             if (!confirm(translations[currentLanguage].confirmDownload)) return;
 
             try {
-                const cache = await caches.open('azkar-offline-v3');
+                const cache = await caches.open('azkar-offline-v4');
                 const urls = [
                     JSON_URL,
                     ...Object.values(AUDIO_URLS),
@@ -1180,33 +1180,31 @@
                     '/zikr/icon.ico'
                 ];
 
-                let success = 0;
-                let failed = 0;
-
-                for (const url of urls) {
-                    try {
-                        const response = await fetch(url, { 
-                            cache: 'no-cache',
-                            mode: 'cors',
-                            headers: { 'Cache-Control': 'no-cache' }
-                        });
-                        if (response.ok) {
+                const results = await Promise.allSettled(
+                    urls.map(async (url) => {
+                        try {
+                            const response = await fetch(url, { 
+                                cache: 'no-cache',
+                                mode: 'cors',
+                                headers: { 'Cache-Control': 'no-cache' }
+                            });
+                            if (!response.ok) throw new Error(`HTTP ${response.status}`);
                             await cache.put(url, response.clone());
-                            success++;
-                        } else {
-                            console.warn(`Failed to fetch ${url}: ${response.status}`);
-                            failed++;
+                            return { url, status: 'fulfilled' };
+                        } catch (error) {
+                            console.warn(`Failed to cache ${url}:`, error);
+                            return { url, status: 'rejected', reason: error.message };
                         }
-                    } catch (e) {
-                        console.warn(`Error fetching ${url}:`, e);
-                        failed++;
-                    }
-                }
+                    })
+                );
 
-                if (success > 0) {
+                const successCount = results.filter(r => r.status === 'fulfilled').length;
+                const failCount = results.filter(r => r.status === 'rejected').length;
+
+                if (successCount > 0) {
                     localStorage.setItem('offlineDownloaded', 'true');
                     downloadContainer.classList.add('hidden-btn');
-                    alert(`${success} فایل با موفقیت ذخیره شد. ${failed > 0 ? `(${failed} فایل ناموفق)` : ''}`);
+                    alert(`${successCount} فایل با موفقیت ذخیره شد. ${failCount > 0 ? `(${failCount} فایل ناموفق)` : ''}`);
                 } else {
                     alert('هیچ فایلی ذخیره نشد. لطفاً اتصال اینترنت را بررسی کنید.');
                 }
