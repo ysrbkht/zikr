@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اذکار</title>
+    <title>الأذكار</title>
     <!-- PWA manifest -->
     <link rel="manifest" href="manifest.json">
     <!-- آیکون‌ها -->
@@ -16,7 +16,7 @@
     <!-- فونت فارسی برای رابط کاربری -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* فونت‌های آپلود شده */
+        /* فونت‌های آپلود شده (بدون Traditional Arabic) */
         @font-face {
             font-family: 'Uthman Taha';
             src: url('/zikr/fonts/UthmanTahaNaskhBold.ttf') format('truetype');
@@ -32,12 +32,6 @@
         @font-face {
             font-family: 'Compset';
             src: url('/zikr/fonts/Compset-Bold.ttf') format('truetype');
-            font-weight: bold;
-            font-display: swap;
-        }
-        @font-face {
-            font-family: 'Traditional Arabic';
-            src: url('/zikr/fonts/TraditionalArabicBold.ttf') format('truetype');
             font-weight: bold;
             font-display: swap;
         }
@@ -57,7 +51,7 @@
             --switch-bg: #c2d6e8;
             --scrollbar-thumb: #9fb8d0;
             --scrollbar-track: #e2ecf5;
-            --selected-font: 'Uthman Taha', 'Lotus', 'Compset', 'Traditional Arabic', 'Amiri', serif;
+            --selected-font: 'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif;
             --selected-font-size: 1.6rem;
             --player-bg: #ffffff;
             --player-btn-bg: #2c6b9e;
@@ -138,7 +132,7 @@
             color: #aac3e0;
         }
 
-        /* آیکون تنظیمات */
+        /* آیکون تنظیمات - در RTL چپ، در LRT راست */
         .settings-wrapper {
             position: absolute;
             top: 1rem;
@@ -159,7 +153,7 @@
             transform: rotate(90deg);
         }
 
-        /* پنل تنظیمات */
+        /* پنل تنظیمات - در RTL چپ، در LTR راست */
         .settings-panel {
             position: absolute;
             top: 3.5rem;
@@ -291,7 +285,7 @@
             font-weight: 500;
         }
 
-        /* dropdown انتخاب فونت */
+        /* dropdown انتخاب فونت (بدون عربی سنتی) */
         .font-select-wrapper {
             position: relative;
             width: 150px;
@@ -419,8 +413,9 @@
         .back-btn:hover {
             color: #1e3a8a;
         }
+        /* در حالت LTR، دکمه برگشت باید در سمت چپ باشد و آیکون آن برعکس نشود */
         body[dir="ltr"] .back-btn {
-            transform: rotate(180deg);
+            transform: none;
         }
         .detail-title {
             font-size: 1.5rem;
@@ -660,55 +655,54 @@
             <div class="settings-panel" id="settingsPanel">
                 <!-- انتخاب زبان -->
                 <div class="setting-item">
-                    <span class="setting-label"><i class="fas fa-globe"></i> <span data-i18n="language">زبان</span></span>
+                    <span class="setting-label"><i class="fas fa-globe"></i> <span data-i18n="language">اللغة</span></span>
                     <select class="language-select" id="languageSelect">
                         <option value="fa">فارسی</option>
-                        <option value="ar">العربية</option>
+                        <option value="ar" selected>العربية</option>
                         <option value="en">English</option>
                     </select>
                 </div>
                 <!-- حالت شب -->
                 <div class="setting-item">
-                    <span class="setting-label"><i class="fas fa-moon"></i> <span data-i18n="darkMode">حالت شب</span></span>
+                    <span class="setting-label"><i class="fas fa-moon"></i> <span data-i18n="darkMode">الوضع الليلي</span></span>
                     <div class="inner-switch" id="themeSwitchInner"></div>
                 </div>
                 <!-- اندازه فونت -->
                 <div class="setting-item">
-                    <span class="setting-label"><i class="fas fa-text-height"></i> <span data-i18n="fontSize">اندازه متن</span></span>
+                    <span class="setting-label"><i class="fas fa-text-height"></i> <span data-i18n="fontSize">حجم الخط</span></span>
                     <div class="font-size-control">
                         <span class="font-size-btn" id="decreaseFont">−</span>
                         <span class="font-size-value" id="fontSizeValue">1.6</span>
                         <span class="font-size-btn" id="increaseFont">+</span>
                     </div>
                 </div>
-                <!-- انتخاب فونت -->
+                <!-- انتخاب فونت (بدون عربی سنتی) -->
                 <div class="setting-item">
-                    <span class="setting-label"><i class="fas fa-font"></i> <span data-i18n="font">فونت</span></span>
+                    <span class="setting-label"><i class="fas fa-font"></i> <span data-i18n="font">الخط</span></span>
                     <div class="font-select-wrapper">
                         <select class="font-select" id="fontSelect">
-                            <option value="Uthman">عثمان طه</option>
-                            <option value="Lotus">لوتوس</option>
-                            <option value="Compset">کامپوست</option>
-                            <option value="Traditional">عربی سنتی</option>
+                            <option value="Uthman" data-i18n-font="uthman">عثمان طه</option>
+                            <option value="Lotus" data-i18n-font="lotus">لوتوس</option>
+                            <option value="Compset" data-i18n-font="compset">کامپوست</option>
                         </select>
                     </div>
                 </div>
                 <!-- دکمه نصب PWA -->
                 <div class="setting-item" id="installButtonContainer">
-                    <span class="setting-label"><i class="fas fa-download"></i> <span data-i18n="installApp">نصب اپلیکیشن</span></span>
-                    <button class="install-btn" id="installBtn"><i class="fas fa-arrow-down"></i> <span data-i18n="install">نصب</span></button>
+                    <span class="setting-label"><i class="fas fa-download"></i> <span data-i18n="installApp">تثبيت التطبيق</span></span>
+                    <button class="install-btn" id="installBtn"><i class="fas fa-arrow-down"></i> <span data-i18n="install">تثبيت</span></button>
                 </div>
                 <!-- دکمه دانلود برای آفلاین -->
                 <div class="setting-item" id="downloadButtonContainer">
-                    <span class="setting-label"><i class="fas fa-cloud-download-alt"></i> <span data-i18n="offlineSave">ذخیره برای آفلاین</span></span>
-                    <button class="download-btn" id="downloadBtn"><i class="fas fa-save"></i> <span data-i18n="download">دانلود</span></button>
+                    <span class="setting-label"><i class="fas fa-cloud-download-alt"></i> <span data-i18n="offlineSave">حفظ للاستخدام دون اتصال</span></span>
+                    <button class="download-btn" id="downloadBtn"><i class="fas fa-save"></i> <span data-i18n="download">تحميل</span></button>
                 </div>
             </div>
         </div>
 
         <div class="main-content" id="mainContent">
             <div class="header" id="header">
-                <h1 data-i18n="appName">اذکار</h1>
+                <h1 data-i18n="appName">الأذكار</h1>
             </div>
 
             <!-- منوی اصلی -->
@@ -716,19 +710,19 @@
                 <div class="menu-grid">
                     <div class="menu-card" data-category="morning">
                         <div class="menu-icon"><i class="fas fa-sun"></i></div>
-                        <div class="menu-info"><h2 data-i18n="morningAdhkar">اذکار صبح</h2></div>
+                        <div class="menu-info"><h2 data-i18n="morningAdhkar">أذكار الصباح</h2></div>
                     </div>
                     <div class="menu-card" data-category="evening">
                         <div class="menu-icon"><i class="fas fa-moon"></i></div>
-                        <div class="menu-info"><h2 data-i18n="eveningAdhkar">اذکار شام</h2></div>
+                        <div class="menu-info"><h2 data-i18n="eveningAdhkar">أذكار المساء</h2></div>
                     </div>
                     <div class="menu-card" data-category="sleep">
                         <div class="menu-icon"><i class="fas fa-bed"></i></div>
-                        <div class="menu-info"><h2 data-i18n="sleepAdhkar">اذکار خواب</h2></div>
+                        <div class="menu-info"><h2 data-i18n="sleepAdhkar">أذكار النوم</h2></div>
                     </div>
                     <div class="menu-card" data-category="audio">
                         <div class="menu-icon"><i class="fas fa-headphones"></i></div>
-                        <div class="menu-info"><h2 data-i18n="audioAdhkar">اذکار صوتی</h2></div>
+                        <div class="menu-info"><h2 data-i18n="audioAdhkar">الأذكار الصوتية</h2></div>
                     </div>
                 </div>
             </div>
@@ -746,11 +740,11 @@
             <div id="audioDetailView" class="detail-view">
                 <div class="detail-header">
                     <button class="back-btn" id="backFromAudioBtn"><i class="fas fa-arrow-right"></i></button>
-                    <span class="detail-title" data-i18n="audioAdhkar">اذکار صوتی</span>
+                    <span class="detail-title" data-i18n="audioAdhkar">الأذكار الصوتية</span>
                 </div>
                 <div class="audio-detail">
                     <div class="audio-card">
-                        <div class="audio-title"><i class="fas fa-sun"></i> <span data-i18n="morningAudio">اذکار صبح</span></div>
+                        <div class="audio-title"><i class="fas fa-sun"></i> <span data-i18n="morningAudio">أذكار الصباح</span></div>
                         <div class="custom-audio-player" data-audio="morning">
                             <button class="play-btn" data-id="morning">
                                 <i class="fas fa-play"></i>
@@ -765,7 +759,7 @@
                         </div>
                     </div>
                     <div class="audio-card">
-                        <div class="audio-title"><i class="fas fa-moon"></i> <span data-i18n="eveningAudio">اذکار شام</span></div>
+                        <div class="audio-title"><i class="fas fa-moon"></i> <span data-i18n="eveningAudio">أذكار المساء</span></div>
                         <div class="custom-audio-player" data-audio="evening">
                             <button class="play-btn" data-id="evening">
                                 <i class="fas fa-play"></i>
@@ -791,7 +785,7 @@
                     <svg class="telegram-svg" viewBox="0 0 24 24">
                         <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.87 4.326-2.96-.924c-.643-.2-.658-.643.135-.953l11.56-4.456c.537-.2 1.006.133.832.936z"/>
                     </svg>
-                    <span data-i18n="feedback">نظرات و پیشنهادات</span>
+                    <span data-i18n="feedback">آراء واقتراحات</span>
                 </a>
             </div>
         </div>
@@ -806,8 +800,7 @@
         const FONT_URLS = [
             '/zikr/fonts/UthmanTahaNaskhBold.ttf',
             '/zikr/fonts/lotus-Bold.ttf',
-            '/zikr/fonts/Compset-Bold.ttf',
-            '/zikr/fonts/TraditionalArabicBold.ttf'
+            '/zikr/fonts/Compset-Bold.ttf'
         ];
 
         // ======== ترجمه‌ها ========
@@ -829,11 +822,19 @@
                 feedback: 'نظرات و پیشنهادات',
                 morningAudio: 'اذکار صبح',
                 eveningAudio: 'اذکار شام',
-                // برای عنوان صفحات داخلی
                 morning: 'اذکار صبح',
                 evening: 'اذکار شام',
                 sleep: 'اذکار خواب',
-                audio: 'اذکار صوتی'
+                audio: 'اذکار صوتی',
+                times: 'مرتبه',
+                source: 'منبع',
+                // نام فونت‌ها
+                fontUthman: 'عثمان طه',
+                fontLotus: 'لوتوس',
+                fontCompset: 'کامپوست',
+                // عبارات خاص اذکار خواب
+                sleepStep1: 'دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:',
+                sleepStep2: 'بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)'
             },
             ar: {
                 appName: 'الأذكار',
@@ -855,7 +856,14 @@
                 morning: 'أذكار الصباح',
                 evening: 'أذكار المساء',
                 sleep: 'أذكار النوم',
-                audio: 'الأذكار الصوتية'
+                audio: 'الأذكار الصوتية',
+                times: 'مرة',
+                source: 'المصدر',
+                fontUthman: 'عثمان طه',
+                fontLotus: 'لوتس',
+                fontCompset: 'كومبست',
+                sleepStep1: 'اجمع يديك وانفث فيهما واقرأ هذه السور:',
+                sleepStep2: 'ثم امسح بهما جسدك مستطيعاً مبتدئاً برأسك ووجهك (كرر هذا ثلاث مرات)'
             },
             en: {
                 appName: 'Adhkar',
@@ -877,11 +885,18 @@
                 morning: 'Morning Adhkar',
                 evening: 'Evening Adhkar',
                 sleep: 'Sleep Adhkar',
-                audio: 'Audio Adhkar'
+                audio: 'Audio Adhkar',
+                times: 'times',
+                source: 'source',
+                fontUthman: 'Uthman Taha',
+                fontLotus: 'Lotus',
+                fontCompset: 'Compset',
+                sleepStep1: 'Cup your hands, blow into them, and recite these Surahs:',
+                sleepStep2: 'Then wipe your body with them as far as you can, starting from your head and face. (Repeat this three times)'
             }
         };
 
-        let currentLanguage = localStorage.getItem('language') || 'fa';
+        let currentLanguage = localStorage.getItem('language') || 'ar'; // عربی پیش‌فرض
         let azkarData = null;
         const appContainer = document.getElementById('appContainer');
         const mainMenu = document.getElementById('mainMenu');
@@ -955,6 +970,12 @@
             localStorage.setItem('language', lang);
             languageSelect.value = lang;
             applyTranslations();
+            // به‌روزرسانی نام فونت‌ها در dropdown
+            updateFontNames();
+            // اگر در صفحه اذکار خواب هستیم، محتوای آن را دوباره نمایش دهیم
+            if (detailView.classList.contains('active') && detailCategoryTitle.getAttribute('data-category') === 'sleep') {
+                showCategory('sleep');
+            }
         }
 
         function applyTranslations() {
@@ -974,6 +995,20 @@
             }
         }
 
+        function updateFontNames() {
+            const options = fontSelect.querySelectorAll('option');
+            options.forEach(opt => {
+                const value = opt.value;
+                if (value === 'Uthman') {
+                    opt.textContent = translations[currentLanguage].fontUthman;
+                } else if (value === 'Lotus') {
+                    opt.textContent = translations[currentLanguage].fontLotus;
+                } else if (value === 'Compset') {
+                    opt.textContent = translations[currentLanguage].fontCompset;
+                }
+            });
+        }
+
         languageSelect.addEventListener('change', (e) => {
             setLanguage(e.target.value);
         });
@@ -988,19 +1023,16 @@
             let fontStack = '';
             switch (fontKey) {
                 case 'Uthman':
-                    fontStack = "'Uthman Taha', 'Lotus', 'Compset', 'Traditional Arabic', 'Amiri', serif";
+                    fontStack = "'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif";
                     break;
                 case 'Lotus':
-                    fontStack = "'Lotus', 'Uthman Taha', 'Compset', 'Traditional Arabic', 'Amiri', serif";
+                    fontStack = "'Lotus', 'Uthman Taha', 'Compset', 'Amiri', serif";
                     break;
                 case 'Compset':
-                    fontStack = "'Compset', 'Uthman Taha', 'Lotus', 'Traditional Arabic', 'Amiri', serif";
-                    break;
-                case 'Traditional':
-                    fontStack = "'Traditional Arabic', 'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif";
+                    fontStack = "'Compset', 'Uthman Taha', 'Lotus', 'Amiri', serif";
                     break;
                 default:
-                    fontStack = "'Uthman Taha', 'Lotus', 'Compset', 'Traditional Arabic', 'Amiri', serif";
+                    fontStack = "'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif";
             }
             document.documentElement.style.setProperty('--selected-font', fontStack);
         }
@@ -1059,7 +1091,7 @@
                 applyFontSize(1.6);
             }
             const savedFont = localStorage.getItem('fontFamily');
-            if (savedFont && ['Uthman', 'Lotus', 'Compset', 'Traditional'].includes(savedFont)) {
+            if (savedFont && ['Uthman', 'Lotus', 'Compset'].includes(savedFont)) {
                 currentFont = savedFont;
                 fontSelect.value = savedFont;
                 applyFontFamily(savedFont);
@@ -1071,7 +1103,7 @@
             if (savedLang && ['fa', 'ar', 'en'].includes(savedLang)) {
                 setLanguage(savedLang);
             } else {
-                setLanguage('fa');
+                setLanguage('ar');
             }
         }
 
@@ -1238,7 +1270,7 @@
             }
 
             if (!azkarData || !azkarData[category]) {
-                detailList.innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage][category] || ''} یافت نشد.</div>`;
+                detailList.innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage][category] || ''} ${translations[currentLanguage].source} یافت نشد.</div>`;
                 return;
             }
 
@@ -1250,12 +1282,18 @@
             const items = azkarData[category];
             let html = '';
             items.forEach(item => {
+                let text = item.text;
+                // ترجمه عبارات خاص اذکار خواب
+                if (category === 'sleep') {
+                    text = text.replace('دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:', translations[currentLanguage].sleepStep1);
+                    text = text.replace('بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)', translations[currentLanguage].sleepStep2);
+                }
                 html += `
                     <div class="dhikr-card">
-                        <div class="dhikr-text">${item.text}</div>
+                        <div class="dhikr-text">${text}</div>
                         <div class="dhikr-meta">
-                            <span class="repeat-badge"><i class="fas fa-star"></i> ${item.repeat} ${currentLanguage === 'fa' ? 'مرتبه' : (currentLanguage === 'ar' ? 'مرة' : 'times')}</span>
-                            <span class="reference"><i class="fas fa-book-open"></i> ${item.reference || (currentLanguage === 'fa' ? 'منبع' : (currentLanguage === 'ar' ? 'المصدر' : 'source'))}</span>
+                            <span class="repeat-badge"><i class="fas fa-star"></i> ${item.repeat} ${translations[currentLanguage].times}</span>
+                            <span class="reference"><i class="fas fa-book-open"></i> ${item.reference || translations[currentLanguage].source}</span>
                         </div>
                     </div>
                 `;
