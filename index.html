@@ -53,15 +53,15 @@
             --scrollbar-thumb: #9fb8d0;
             --scrollbar-track: #e2ecf5;
             --selected-font: 'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif;
-            --selected-font-size: 1.4rem; /* کمی کوچک‌تر */
+            --selected-font-size: 1.4rem;
             --player-bg: #ffffff;
             --player-btn-bg: #2c6b9e;
             --player-btn-color: white;
             --player-progress-bg: #d0e2f2;
             --player-progress-fill: #2c6b9e;
             --player-time-color: #1e3a5f;
-            --header-bg: rgba(255, 255, 255, 0.85);
-            --header-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --header-bg: rgba(255, 255, 255, 0.8);
+            --header-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             --modal-bg: #ffffff;
         }
 
@@ -86,8 +86,8 @@
             --player-progress-bg: #4a5568;
             --player-progress-fill: #60a5fa;
             --player-time-color: #e2e8f0;
-            --header-bg: rgba(30, 41, 59, 0.9);
-            --header-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --header-bg: rgba(30, 41, 59, 0.85);
+            --header-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             --modal-bg: #2d3748;
         }
 
@@ -117,13 +117,13 @@
             overflow: hidden;
         }
 
-        /* آیکون تنظیمات شناور (مشترک در همه صفحات) */
+        /* آیکون تنظیمات شناور (کوچک‌تر) */
         .settings-float {
             position: absolute;
             top: 1rem;
             left: 1rem;
             z-index: 100;
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--icon-color);
             cursor: pointer;
             transition: transform 0.2s ease;
@@ -323,9 +323,9 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start; /* محتوا از بالا شروع شود */
             align-items: center;
-            padding: 1.5rem;
+            padding: 0.5rem 1.5rem 0rem 1.5rem; /* padding بالا کم */
             height: 100%;
             overflow-y: auto;
         }
@@ -333,22 +333,22 @@
             font-size: 3rem;
             font-weight: 700;
             color: var(--icon-color);
-            margin-bottom: 2rem;
+            margin: 0.5rem 0 1rem 0; /* فاصله بالا کم، پایین متوسط */
             text-shadow: 0 2px 4px rgba(0,0,0,0.05);
             text-align: center;
         }
         .menu-grid {
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
+            gap: 1rem; /* کاهش فاصله بین آیتم‌ها */
             max-width: 450px;
             width: 100%;
-            margin: 0 auto;
+            margin: 0 auto 1rem auto; /* margin-bottom کم */
         }
         .menu-card {
             background: var(--card-bg);
             border-radius: 28px;
-            padding: 1.3rem 0.5rem;
+            padding: 1.2rem 0.5rem; /* کمی کوچک‌تر */
             box-shadow: var(--card-shadow);
             border: 1px solid var(--card-border);
             cursor: pointer;
@@ -365,12 +365,12 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
         }
         .menu-info h2 {
-            font-size: 1.9rem;
+            font-size: 1.8rem; /* کمی کوچک‌تر */
             font-weight: 600;
             color: var(--text-color);
         }
         .menu-icon {
-            font-size: 2rem;
+            font-size: 1.8rem; /* کوچک‌تر */
             color: var(--icon-color);
             opacity: 0.9;
         }
@@ -380,10 +380,10 @@
             display: none; /* فقط در حالت جزئیات نمایش داده شود */
             align-items: center;
             gap: 0.5rem;
-            padding: 0.8rem 1.5rem;
+            padding: 0.7rem 1.5rem;
             background: var(--header-bg);
             backdrop-filter: blur(15px);
-            border-bottom: 1px solid var(--card-border);
+            border-bottom: none; /* حذف خط زیر */
             border-radius: 0 0 30px 30px;
             box-shadow: var(--header-shadow);
             margin-bottom: 0.5rem;
@@ -397,7 +397,7 @@
         .detail-header .back-btn {
             background: none;
             border: none;
-            font-size: 1.8rem;
+            font-size: 1.6rem; /* کوچک‌تر */
             cursor: pointer;
             color: var(--text-color);
             padding: 0;
@@ -410,7 +410,7 @@
             color: var(--icon-color);
         }
         .detail-header .page-title {
-            font-size: 1.6rem;
+            font-size: 1.4rem; /* کوچک‌تر */
             font-weight: 700;
             color: var(--text-color);
             margin: 0;
@@ -518,7 +518,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.02);
         }
         .audio-title {
-            font-size: 1.4rem;
+            font-size: 1.3rem; /* کوچک‌تر */
             font-weight: 600;
             color: var(--text-color);
             margin-bottom: 0.8rem;
@@ -563,6 +563,9 @@
         .play-btn:hover {
             transform: scale(1.05);
         }
+        .play-btn i {
+            font-size: 1rem;
+        }
         .progress-area {
             flex: 1;
             display: flex;
@@ -601,7 +604,7 @@
             color: var(--footer-text);
             font-size: 0.9rem;
             border-top: 1px solid var(--card-border);
-            padding: 1rem;
+            padding: 0.8rem;
             background: var(--container-bg);
             flex-shrink: 0;
         }
@@ -697,7 +700,7 @@
 </head>
 <body>
     <div class="app-container" id="appContainer">
-        <!-- آیکون تنظیمات شناور (همیشه قابل مشاهده) -->
+        <!-- آیکون تنظیمات شناور -->
         <i class="fas fa-cog settings-float" id="settingsIcon"></i>
 
         <!-- پنل تنظیمات -->
@@ -744,7 +747,7 @@
             </div>
         </div>
 
-        <!-- هدر مخصوص صفحات داخلی (اذکار) - فقط در جزئیات نمایش داده می‌شود -->
+        <!-- هدر مخصوص صفحات داخلی (اذکار) -->
         <div class="detail-header" id="detailHeader">
             <button class="back-btn" id="backBtn"><i class="fas fa-arrow-right"></i></button>
             <span class="page-title" id="detailPageTitle"></span>
@@ -834,9 +837,7 @@
                 <div class="modal-icon" id="modalIcon"><i class="fas fa-cloud-download-alt"></i></div>
                 <div class="modal-title" id="modalTitle"></div>
                 <div class="modal-message" id="modalMessage"></div>
-                <div class="modal-actions" id="modalActions">
-                    <!-- دکمه‌ها به صورت داینامیک اضافه می‌شوند -->
-                </div>
+                <div class="modal-actions" id="modalActions"></div>
             </div>
         </div>
     </div>
@@ -1028,7 +1029,7 @@
         const modalMessage = document.getElementById('modalMessage');
         const modalActions = document.getElementById('modalActions');
 
-        let currentFontSize = 1.4; // کوچک‌تر
+        let currentFontSize = 1.4;
         let currentFont = 'Uthman';
         let isPlaying = { morning: false, evening: false };
         let progressIntervals = { morning: null, evening: null };
@@ -1044,6 +1045,8 @@
             updateFontNames();
             if (detailView.style.display !== 'none' && detailPageTitle.getAttribute('data-category') === 'sleep') {
                 showCategory('sleep');
+            } else if (audioDetailView.style.display !== 'none') {
+                detailPageTitle.textContent = translations[currentLanguage].audioAdhkar;
             }
         }
 
