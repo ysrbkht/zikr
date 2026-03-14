@@ -323,17 +323,21 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* محتوا در مرکز عمودی */
-            align-items: center;
-            padding: 1rem 1.5rem;
-            overflow-y: auto; /* در صورت نیاز اسکرول */
             height: 100%;
+            overflow-y: auto; /* در صورت نیاز اسکرول */
+            padding: 1rem 1.5rem 0 1.5rem;
+        }
+        .menu-content {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         .main-menu .app-title {
             font-size: 3rem;
             font-weight: 700;
             color: var(--icon-color);
-            margin-bottom: 1.5rem; /* فاصله از منو */
+            margin-bottom: 1.5rem;
             text-shadow: 0 2px 4px rgba(0,0,0,0.05);
             text-align: center;
         }
@@ -756,24 +760,35 @@
         <div class="main-content" id="mainContent">
             <!-- منوی اصلی -->
             <div id="mainMenu" class="main-menu">
-                <div class="app-title" id="mainAppTitle">الأذكار</div>
-                <div class="menu-grid">
-                    <div class="menu-card" data-category="morning">
-                        <div class="menu-icon"><i class="fas fa-sun"></i></div>
-                        <div class="menu-info"><h2 data-i18n="morningAdhkar">أذكار الصباح</h2></div>
+                <div class="menu-content">
+                    <div class="app-title" id="mainAppTitle">الأذكار</div>
+                    <div class="menu-grid">
+                        <div class="menu-card" data-category="morning">
+                            <div class="menu-icon"><i class="fas fa-sun"></i></div>
+                            <div class="menu-info"><h2 data-i18n="morningAdhkar">أذكار الصباح</h2></div>
+                        </div>
+                        <div class="menu-card" data-category="evening">
+                            <div class="menu-icon"><i class="fas fa-moon"></i></div>
+                            <div class="menu-info"><h2 data-i18n="eveningAdhkar">أذكار المساء</h2></div>
+                        </div>
+                        <div class="menu-card" data-category="sleep">
+                            <div class="menu-icon"><i class="fas fa-bed"></i></div>
+                            <div class="menu-info"><h2 data-i18n="sleepAdhkar">أذكار النوم</h2></div>
+                        </div>
+                        <div class="menu-card" data-category="audio">
+                            <div class="menu-icon"><i class="fas fa-headphones"></i></div>
+                            <div class="menu-info"><h2 data-i18n="audioAdhkar">الأذكار الصوتية</h2></div>
+                        </div>
                     </div>
-                    <div class="menu-card" data-category="evening">
-                        <div class="menu-icon"><i class="fas fa-moon"></i></div>
-                        <div class="menu-info"><h2 data-i18n="eveningAdhkar">أذكار المساء</h2></div>
-                    </div>
-                    <div class="menu-card" data-category="sleep">
-                        <div class="menu-icon"><i class="fas fa-bed"></i></div>
-                        <div class="menu-info"><h2 data-i18n="sleepAdhkar">أذكار النوم</h2></div>
-                    </div>
-                    <div class="menu-card" data-category="audio">
-                        <div class="menu-icon"><i class="fas fa-headphones"></i></div>
-                        <div class="menu-info"><h2 data-i18n="audioAdhkar">الأذكار الصوتية</h2></div>
-                    </div>
+                </div>
+                <!-- فوتر -->
+                <div class="footer" id="footer">
+                    <a href="https://t.me/YBAKHTIAR" target="_blank" class="telegram-link">
+                        <svg class="telegram-svg" viewBox="0 0 24 24">
+                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.87 4.326-2.96-.924c-.643-.2-.658-.643.135-.953l11.56-4.456c.537-.2 1.006.133.832.936z"/>
+                        </svg>
+                        <span data-i18n="feedback">آراء واقتراحات</span>
+                    </a>
                 </div>
             </div>
 
@@ -818,16 +833,6 @@
                 </div>
                 <audio id="audioMorning" preload="none" src="https://raw.githubusercontent.com/ysrbkht/zikr/main/morning.mp3"></audio>
                 <audio id="audioEvening" preload="none" src="https://raw.githubusercontent.com/ysrbkht/zikr/main/evening.mp3"></audio>
-            </div>
-
-            <!-- فوتر -->
-            <div class="footer" id="footer">
-                <a href="https://t.me/YBAKHTIAR" target="_blank" class="telegram-link">
-                    <svg class="telegram-svg" viewBox="0 0 24 24">
-                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.87 4.326-2.96-.924c-.643-.2-.658-.643.135-.953l11.56-4.456c.537-.2 1.006.133.832.936z"/>
-                    </svg>
-                    <span data-i18n="feedback">آراء واقتراحات</span>
-                </a>
             </div>
         </div>
 
