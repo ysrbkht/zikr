@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>الأذكار</title>
     <!-- PWA manifest -->
     <link rel="manifest" href="manifest.json">
@@ -60,6 +60,8 @@
             --player-progress-bg: #d0e2f2;
             --player-progress-fill: #2c6b9e;
             --player-time-color: #1e3a5f;
+            --header-bg: rgba(255, 255, 255, 0.9);
+            --header-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
         body.dark {
@@ -73,7 +75,7 @@
             --badge-bg: #2b4f8e;
             --badge-color: #ffffff;
             --footer-text: #a0aec0;
-            --icon-color: #60a5fa; /* آبی روشن برای حالت شب */
+            --icon-color: #60a5fa;
             --switch-bg: #4a5568;
             --scrollbar-thumb: #4a5568;
             --scrollbar-track: #2d3748;
@@ -83,6 +85,8 @@
             --player-progress-bg: #4a5568;
             --player-progress-fill: #60a5fa;
             --player-time-color: #e2e8f0;
+            --header-bg: rgba(30, 41, 59, 0.95);
+            --header-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -110,68 +114,84 @@
         }
         .main-content {
             flex: 1;
-            padding: 1.5rem;
             display: flex;
             flex-direction: column;
-        }
-        .detail-active .main-content {
             padding: 0;
         }
 
-        /* هدر اصلی */
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding: 1rem;
+        /* ===== هدر ثابت و حرفه‌ای ===== */
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--header-shadow);
+            padding: 0.8rem 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--card-border);
+            transition: background 0.3s;
         }
-        .header.hidden { display: none; }
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
+        .header-main {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex: 1;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-color);
+            padding: 0;
+            line-height: 1;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .back-btn:hover {
             color: var(--icon-color);
-            margin-bottom: 0.2rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-
-        /* آیکون تنظیمات */
-        .settings-wrapper {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            z-index: 40;
-        }
-        [dir="ltr"] .settings-wrapper {
-            left: auto;
-            right: 1rem;
+        .page-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0;
+            line-height: 1.3;
+            flex: 1;
         }
         .settings-icon {
             font-size: 2rem;
             color: var(--icon-color);
             cursor: pointer;
             transition: transform 0.2s ease;
+            flex-shrink: 0;
         }
         .settings-icon.rotate {
             transform: rotate(90deg);
         }
 
-        /* پنل تنظیمات */
+        /* ===== پنل تنظیمات ===== */
         .settings-panel {
             position: absolute;
-            top: 3.5rem;
-            left: 0;
+            top: 4.5rem;
+            left: 1rem;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 1.2rem;
             box-shadow: var(--card-shadow);
             display: none;
-            min-width: 280px;
-            z-index: 50;
-            backdrop-filter: blur(5px);
+            min-width: 300px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
         }
         [dir="ltr"] .settings-panel {
             left: auto;
-            right: 0;
+            right: 1rem;
         }
         .settings-panel.show {
             display: block;
@@ -326,14 +346,21 @@
             font-weight: 500;
         }
 
-        /* منوی اصلی (طراحی شبیه قرآن) */
+        /* ===== منوی اصلی ===== */
+        .main-menu {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 1.5rem;
+        }
         .menu-grid {
             display: flex;
             flex-direction: column;
             gap: 1.2rem;
-            margin: 2rem auto;
             max-width: 450px;
             width: 100%;
+            margin: 0 auto;
         }
         .menu-card {
             background: var(--card-bg);
@@ -365,7 +392,7 @@
             opacity: 0.9;
         }
 
-        /* صفحه جزئیات */
+        /* ===== صفحات جزئیات ===== */
         .detail-view {
             display: none;
             flex: 1;
@@ -374,117 +401,6 @@
         }
         .detail-view.active {
             display: flex;
-        }
-        .detail-header {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            padding: 0.5rem 1rem;
-            background: var(--container-bg);
-            border-bottom: 1px solid var(--card-border);
-            position: sticky;
-            top: 0;
-            z-index: 30;
-            margin-top: 3rem;
-        }
-        [dir="ltr"] .detail-header {
-            margin-top: 3rem;
-        }
-        .back-btn {
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            cursor: pointer;
-            color: var(--text-color);
-            padding: 0.2rem 0.2rem 0.2rem 0;
-            line-height: 1;
-            transition: color 0.2s;
-        }
-        .back-btn:hover {
-            color: var(--icon-color);
-        }
-        [dir="ltr"] .back-btn {
-            transform: none;
-        }
-        .detail-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-color);
-            margin: 0;
-            line-height: 1.3;
-        }
-
-        /* پلیرهای صوتی */
-        .audio-player-container {
-            padding: 0.8rem 1rem;
-            background: var(--player-bg);
-            border-bottom: 1px solid var(--card-border);
-        }
-        .custom-audio-player {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background: var(--meta-bg);
-            border-radius: 40px;
-            padding: 0.4rem 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            direction: ltr;
-            margin-bottom: 0.5rem;
-        }
-        .custom-audio-player:last-child {
-            margin-bottom: 0;
-        }
-        .play-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--player-btn-bg);
-            border: none;
-            color: var(--player-btn-color);
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.1s, background 0.2s;
-            flex-shrink: 0;
-        }
-        .play-btn:hover {
-            transform: scale(1.05);
-        }
-        .play-btn i {
-            font-size: 1rem;
-        }
-        .progress-area {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            direction: ltr;
-        }
-        .time {
-            font-size: 0.8rem;
-            color: var(--player-time-color);
-            min-width: 45px;
-            text-align: center;
-        }
-        .progress-bar {
-            flex: 1;
-            height: 5px;
-            background: var(--player-progress-bg);
-            border-radius: 10px;
-            cursor: pointer;
-            position: relative;
-        }
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--player-progress-fill);
-            border-radius: 10px;
-            transition: width 0.1s linear;
-        }
-        audio {
-            display: none;
         }
 
         /* لیست اذکار متنی */
@@ -606,14 +522,87 @@
             color: var(--icon-color);
         }
 
+        /* پلیرهای صوتی */
+        .audio-player-container {
+            padding: 0.8rem 1rem;
+            background: var(--player-bg);
+            border-bottom: 1px solid var(--card-border);
+        }
+        .custom-audio-player {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--meta-bg);
+            border-radius: 40px;
+            padding: 0.4rem 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            direction: ltr;
+            margin-bottom: 0.5rem;
+        }
+        .custom-audio-player:last-child {
+            margin-bottom: 0;
+        }
+        .play-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--player-btn-bg);
+            border: none;
+            color: var(--player-btn-color);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+            flex-shrink: 0;
+        }
+        .play-btn:hover {
+            transform: scale(1.05);
+        }
+        .play-btn i {
+            font-size: 1rem;
+        }
+        .progress-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            direction: ltr;
+        }
+        .time {
+            font-size: 0.8rem;
+            color: var(--player-time-color);
+            min-width: 45px;
+            text-align: center;
+        }
+        .progress-bar {
+            flex: 1;
+            height: 5px;
+            background: var(--player-progress-bg);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--player-progress-fill);
+            border-radius: 10px;
+            transition: width 0.1s linear;
+        }
+        audio {
+            display: none;
+        }
+
         /* فوتر */
         .footer {
             text-align: center;
             color: var(--footer-text);
             font-size: 0.9rem;
-            margin-top: auto;
             border-top: 1px solid var(--card-border);
             padding: 1.2rem 1rem 0.5rem;
+            margin-top: auto;
         }
         .footer.hidden {
             display: none;
@@ -631,68 +620,137 @@
             height: 24px;
             fill: currentColor;
         }
+
+        /* ===== مودال حرفه‌ای برای دانلود ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal-card {
+            background: var(--card-bg);
+            border-radius: 32px;
+            padding: 2rem 1.5rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            border: 1px solid var(--card-border);
+            text-align: center;
+        }
+        .modal-icon {
+            font-size: 3rem;
+            color: var(--icon-color);
+            margin-bottom: 1rem;
+        }
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        .modal-message {
+            font-size: 1rem;
+            color: var(--text-color);
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        .modal-btn {
+            padding: 0.7rem 2rem;
+            border-radius: 40px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            background: var(--meta-bg);
+            color: var(--text-color);
+            border: 1px solid var(--card-border);
+        }
+        .modal-btn.primary {
+            background: var(--player-btn-bg);
+            color: white;
+            border: none;
+        }
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
     <div class="app-container" id="appContainer">
-        <!-- تنظیمات -->
-        <div class="settings-wrapper">
+        <!-- هدر ثابت -->
+        <div class="app-header" id="appHeader">
+            <div class="header-main" id="headerMain">
+                <!-- دکمه برگشت (فقط در حالت جزئیات نمایش داده می‌شود) -->
+                <button class="back-btn" id="backBtn" style="display: none;"><i class="fas fa-arrow-right"></i></button>
+                <span class="page-title" id="pageTitle">الأذكار</span>
+            </div>
             <i class="fas fa-cog settings-icon" id="settingsIcon"></i>
-            <div class="settings-panel" id="settingsPanel">
-                <!-- انتخاب زبان -->
-                <div class="setting-item">
-                    <span class="setting-label"><i class="fas fa-globe"></i> <span data-i18n="language">اللغة</span></span>
-                    <div class="select-wrapper">
-                        <select class="custom-select" id="languageSelect">
-                            <option value="fa">فارسی</option>
-                            <option value="ar" selected>العربية</option>
-                            <option value="en">English</option>
-                        </select>
-                    </div>
+        </div>
+
+        <!-- پنل تنظیمات -->
+        <div class="settings-panel" id="settingsPanel">
+            <div class="setting-item">
+                <span class="setting-label"><i class="fas fa-globe"></i> <span data-i18n="language">اللغة</span></span>
+                <div class="select-wrapper">
+                    <select class="custom-select" id="languageSelect">
+                        <option value="fa">فارسی</option>
+                        <option value="ar" selected>العربية</option>
+                        <option value="en">English</option>
+                    </select>
                 </div>
-                <!-- حالت شب -->
-                <div class="setting-item">
-                    <span class="setting-label"><i class="fas fa-moon"></i> <span data-i18n="darkMode">الوضع الليلي</span></span>
-                    <div class="inner-switch" id="themeSwitchInner"></div>
+            </div>
+            <div class="setting-item">
+                <span class="setting-label"><i class="fas fa-moon"></i> <span data-i18n="darkMode">الوضع الليلي</span></span>
+                <div class="inner-switch" id="themeSwitchInner"></div>
+            </div>
+            <div class="setting-item">
+                <span class="setting-label"><i class="fas fa-text-height"></i> <span data-i18n="fontSize">حجم الخط</span></span>
+                <div class="font-size-control">
+                    <span class="font-size-btn" id="decreaseFont">−</span>
+                    <span class="font-size-value" id="fontSizeValue">1.6</span>
+                    <span class="font-size-btn" id="increaseFont">+</span>
                 </div>
-                <!-- اندازه فونت -->
-                <div class="setting-item">
-                    <span class="setting-label"><i class="fas fa-text-height"></i> <span data-i18n="fontSize">حجم الخط</span></span>
-                    <div class="font-size-control">
-                        <span class="font-size-btn" id="decreaseFont">−</span>
-                        <span class="font-size-value" id="fontSizeValue">1.6</span>
-                        <span class="font-size-btn" id="increaseFont">+</span>
-                    </div>
+            </div>
+            <div class="setting-item">
+                <span class="setting-label"><i class="fas fa-font"></i> <span data-i18n="font">الخط</span></span>
+                <div class="select-wrapper">
+                    <select class="custom-select" id="fontSelect">
+                        <option value="Uthman">عثمان طه</option>
+                        <option value="Lotus">لوتوس</option>
+                        <option value="Compset">کامپوست</option>
+                    </select>
                 </div>
-                <!-- انتخاب فونت -->
-                <div class="setting-item">
-                    <span class="setting-label"><i class="fas fa-font"></i> <span data-i18n="font">الخط</span></span>
-                    <div class="select-wrapper">
-                        <select class="custom-select" id="fontSelect">
-                            <option value="Uthman">عثمان طه</option>
-                            <option value="Lotus">لوتوس</option>
-                            <option value="Compset">کامپوست</option>
-                        </select>
-                    </div>
-                </div>
-                <!-- دکمه نصب PWA -->
-                <div class="setting-item" id="installButtonContainer" style="display: none;">
-                    <span class="setting-label"><i class="fas fa-download"></i> <span data-i18n="installApp">تثبيت التطبيق</span></span>
-                    <button class="install-btn" id="installBtn"><i class="fas fa-arrow-down"></i> <span data-i18n="install">تثبيت</span></button>
-                </div>
-                <!-- دکمه دانلود برای آفلاین -->
-                <div class="setting-item" id="downloadButtonContainer">
-                    <span class="setting-label"><i class="fas fa-cloud-download-alt"></i> <span data-i18n="offlineSave">حفظ للاستخدام دون اتصال</span></span>
-                    <button class="download-btn" id="downloadBtn"><i class="fas fa-save"></i> <span data-i18n="download">تحميل</span></button>
-                </div>
+            </div>
+            <div class="setting-item" id="installButtonContainer" style="display: none;">
+                <span class="setting-label"><i class="fas fa-download"></i> <span data-i18n="installApp">تثبيت التطبيق</span></span>
+                <button class="install-btn" id="installBtn"><i class="fas fa-arrow-down"></i> <span data-i18n="install">تثبيت</span></button>
+            </div>
+            <div class="setting-item" id="downloadButtonContainer">
+                <span class="setting-label"><i class="fas fa-cloud-download-alt"></i> <span data-i18n="offlineSave">حفظ للاستخدام دون اتصال</span></span>
+                <button class="download-btn" id="downloadBtn"><i class="fas fa-save"></i> <span data-i18n="download">تحميل</span></button>
             </div>
         </div>
 
         <div class="main-content" id="mainContent">
-            <div class="header" id="header">
-                <h1 data-i18n="appName">الأذكار</h1>
-            </div>
-
             <!-- منوی اصلی -->
             <div id="mainMenu" class="main-menu">
                 <div class="menu-grid">
@@ -717,19 +775,11 @@
 
             <!-- صفحه جزئیات (برای اذکار متنی) -->
             <div id="detailView" class="detail-view">
-                <div class="detail-header">
-                    <button class="back-btn" id="backBtn"><i class="fas fa-arrow-right"></i></button>
-                    <span class="detail-title" id="detailCategoryTitle"></span>
-                </div>
                 <div id="detailList" class="dhikr-list"></div>
             </div>
 
             <!-- صفحه اذکار صوتی -->
             <div id="audioDetailView" class="detail-view">
-                <div class="detail-header">
-                    <button class="back-btn" id="backFromAudioBtn"><i class="fas fa-arrow-right"></i></button>
-                    <span class="detail-title" data-i18n="audioAdhkar">الأذكار الصوتية</span>
-                </div>
                 <div class="audio-detail">
                     <div class="audio-card">
                         <div class="audio-title"><i class="fas fa-sun"></i> <span data-i18n="morningAudio">أذكار الصباح</span></div>
@@ -776,6 +826,19 @@
                 </a>
             </div>
         </div>
+
+        <!-- مودال دانلود -->
+        <div class="modal-overlay" id="downloadModal">
+            <div class="modal-card">
+                <div class="modal-icon"><i class="fas fa-cloud-download-alt"></i></div>
+                <div class="modal-title" data-i18n="confirmDownloadTitle">تأكيد التحميل</div>
+                <div class="modal-message" id="downloadModalMessage"></div>
+                <div class="modal-actions">
+                    <button class="modal-btn" id="modalCancel" data-i18n="cancel">إلغاء</button>
+                    <button class="modal-btn primary" id="modalConfirm" data-i18n="confirm">تأكيد</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -820,7 +883,10 @@
                 sleepStep1: 'دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:',
                 sleepStep2: 'بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)',
                 sleepSurah: 'سوره {الم سجده} و {ملک} را بخوانید',
-                confirmDownload: 'آیا می‌خواهید فایل‌های صوتی را برای استفاده آفلاین دانلود کنید؟ حجم تقریبی ۲۰ مگابایت.'
+                confirmDownloadTitle: 'تأیید دانلود',
+                confirmDownload: 'آیا می‌خواهید فایل‌های صوتی را برای استفاده آفلاین دانلود کنید؟ حجم تقریبی ۲۰ مگابایت.',
+                cancel: 'لغو',
+                confirm: 'تأیید'
             },
             ar: {
                 appName: 'الأذكار',
@@ -850,7 +916,10 @@
                 sleepStep1: 'اجمع يديك وانفث فيهما واقرأ هذه السور:',
                 sleepStep2: 'ثم امسح بهما جسدك مستطيعاً مبتدئاً برأسك ووجهك (كرر هذا ثلاث مرات)',
                 sleepSurah: 'اقرأ سورة {السجدة} و {الملك}',
-                confirmDownload: 'هل تريد تحميل الملفات الصوتية للاستخدام دون اتصال؟ الحجم التقريبي 20 ميغابايت.'
+                confirmDownloadTitle: 'تأكيد التحميل',
+                confirmDownload: 'هل تريد تحميل الملفات الصوتية للاستخدام دون اتصال؟ الحجم التقريبي 20 ميغابايت.',
+                cancel: 'إلغاء',
+                confirm: 'تأكيد'
             },
             en: {
                 appName: 'Adhkar',
@@ -880,7 +949,10 @@
                 sleepStep1: 'Cup your hands, blow into them, and recite these Surahs:',
                 sleepStep2: 'Then wipe your body with them as far as you can, starting from your head and face. (Repeat this three times)',
                 sleepSurah: 'Recite Surah {As-Sajdah} and {Al-Mulk}',
-                confirmDownload: 'Do you want to download audio files for offline use? Approximate size 20 MB.'
+                confirmDownloadTitle: 'Confirm Download',
+                confirmDownload: 'Do you want to download audio files for offline use? Approximate size 20 MB.',
+                cancel: 'Cancel',
+                confirm: 'Confirm'
             }
         };
 
@@ -898,12 +970,9 @@
         const detailView = document.getElementById('detailView');
         const audioDetailView = document.getElementById('audioDetailView');
         const detailList = document.getElementById('detailList');
-        const detailCategoryTitle = document.getElementById('detailCategoryTitle');
+        const pageTitle = document.getElementById('pageTitle');
         const backBtn = document.getElementById('backBtn');
-        const backFromAudioBtn = document.getElementById('backFromAudioBtn');
-        const header = document.getElementById('header');
         const footer = document.getElementById('footer');
-        const mainContent = document.getElementById('mainContent');
 
         const settingsIcon = document.getElementById('settingsIcon');
         const settingsPanel = document.getElementById('settingsPanel');
@@ -936,6 +1005,12 @@
             evening: document.querySelector('[data-fill="evening"]')
         };
 
+        // مودال
+        const downloadModal = document.getElementById('downloadModal');
+        const modalMessage = document.getElementById('downloadModalMessage');
+        const modalCancel = document.getElementById('modalCancel');
+        const modalConfirm = document.getElementById('modalConfirm');
+
         let currentFontSize = 1.6;
         let currentFont = 'Uthman';
         let isPlaying = { morning: false, evening: false };
@@ -950,7 +1025,7 @@
             languageSelect.value = lang;
             applyTranslations();
             updateFontNames();
-            if (detailView.classList.contains('active') && detailCategoryTitle.getAttribute('data-category') === 'sleep') {
+            if (detailView.classList.contains('active') && pageTitle.getAttribute('data-category') === 'sleep') {
                 showCategory('sleep');
             }
         }
@@ -963,10 +1038,13 @@
                     el.textContent = translations[currentLanguage][key];
                 }
             });
-            if (detailView.classList.contains('active')) {
-                const cat = detailCategoryTitle.getAttribute('data-category');
+            // به‌روزرسانی عنوان صفحه
+            if (mainMenu.style.display !== 'none') {
+                pageTitle.textContent = translations[currentLanguage].appName;
+            } else {
+                const cat = pageTitle.getAttribute('data-category');
                 if (cat && translations[currentLanguage][cat]) {
-                    detailCategoryTitle.textContent = translations[currentLanguage][cat];
+                    pageTitle.textContent = translations[currentLanguage][cat];
                 }
             }
         }
@@ -999,7 +1077,6 @@
 
         settingsIcon.addEventListener('click', (e) => {
             e.stopPropagation();
-            // اضافه کردن کلاس چرخش و حذف بعد از 200ms
             settingsIcon.classList.add('rotate');
             setTimeout(() => settingsIcon.classList.remove('rotate'), 200);
             settingsPanel.classList.toggle('show');
@@ -1172,10 +1249,24 @@
             installContainer.style.display = 'none';
         });
 
+        // مودال دانلود
+        function showDownloadModal() {
+            modalMessage.textContent = translations[currentLanguage].confirmDownload;
+            downloadModal.classList.add('show');
+        }
+
+        function hideDownloadModal() {
+            downloadModal.classList.remove('show');
+        }
+
+        modalCancel.addEventListener('click', hideDownloadModal);
+        modalConfirm.addEventListener('click', async () => {
+            hideDownloadModal();
+            await downloadForOffline();
+        });
+
         // دانلود آفلاین با Promise.allSettled
         async function downloadForOffline() {
-            if (!confirm(translations[currentLanguage].confirmDownload)) return;
-
             try {
                 const cache = await caches.open('azkar-offline-v4');
                 const urls = [
@@ -1220,7 +1311,7 @@
             }
         }
 
-        downloadBtn.addEventListener('click', downloadForOffline);
+        downloadBtn.addEventListener('click', showDownloadModal);
         if (localStorage.getItem('offlineDownloaded')) {
             downloadContainer.classList.add('hidden-btn');
         }
@@ -1229,12 +1320,13 @@
         function showMainMenu() {
             resetPlayer('morning');
             resetPlayer('evening');
-            mainMenu.style.display = 'block';
+            mainMenu.style.display = 'flex';
             detailView.classList.remove('active');
             audioDetailView.classList.remove('active');
-            header.classList.remove('hidden');
             footer.classList.remove('hidden');
-            appContainer.classList.remove('detail-active');
+            backBtn.style.display = 'none';
+            pageTitle.textContent = translations[currentLanguage].appName;
+            pageTitle.removeAttribute('data-category');
         }
 
         function showCategory(category) {
@@ -1243,9 +1335,10 @@
                 resetPlayer('evening');
                 mainMenu.style.display = 'none';
                 audioDetailView.classList.add('active');
-                header.classList.add('hidden');
                 footer.classList.add('hidden');
-                appContainer.classList.add('detail-active');
+                backBtn.style.display = 'flex';
+                pageTitle.textContent = translations[currentLanguage].audioAdhkar;
+                pageTitle.setAttribute('data-category', 'audio');
                 return;
             }
 
@@ -1256,8 +1349,9 @@
 
             resetPlayer('morning');
             resetPlayer('evening');
-            detailCategoryTitle.textContent = translations[currentLanguage][category] || category;
-            detailCategoryTitle.setAttribute('data-category', category);
+            pageTitle.textContent = translations[currentLanguage][category] || category;
+            pageTitle.setAttribute('data-category', category);
+            backBtn.style.display = 'flex';
 
             const items = azkarData[category];
             let html = '';
@@ -1266,7 +1360,6 @@
                 if (category === 'sleep') {
                     text = text.replace('دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:', translations[currentLanguage].sleepStep1);
                     text = text.replace('بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)', translations[currentLanguage].sleepStep2);
-                    // جایگزینی عبارت مربوط به سوره‌ها
                     text = text.replace('سوره {الم سجدةِ} و {مُلك} را بخوانید', translations[currentLanguage].sleepSurah);
                 }
                 let timesWord = '';
@@ -1288,9 +1381,7 @@
 
             mainMenu.style.display = 'none';
             detailView.classList.add('active');
-            header.classList.add('hidden');
             footer.classList.add('hidden');
-            appContainer.classList.add('detail-active');
         }
 
         document.querySelectorAll('.menu-card').forEach(card => {
@@ -1301,7 +1392,6 @@
         });
 
         backBtn.addEventListener('click', showMainMenu);
-        backFromAudioBtn.addEventListener('click', showMainMenu);
 
         async function loadAzkar() {
             try {
