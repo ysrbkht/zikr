@@ -91,12 +91,15 @@
             --modal-bg: #2d3748;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: 'Vazirmatn', sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
-            height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -107,7 +110,7 @@
         }
         .app-container {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             background: var(--container-bg);
             display: flex;
             flex-direction: column;
@@ -324,20 +327,20 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            overflow-y: auto; /* در صورت نیاز اسکرول */
-            padding: 1rem 1.5rem 0 1.5rem;
+            overflow-y: auto;
+            padding: 0.5rem 1.5rem 0 1.5rem; /* کاهش padding بالا */
         }
-        .menu-content {
-            flex: 1 0 auto;
+        .menu-center {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: center; /* محتوای اصلی در مرکز عمودی */
         }
         .main-menu .app-title {
             font-size: 3rem;
             font-weight: 700;
             color: var(--icon-color);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             text-shadow: 0 2px 4px rgba(0,0,0,0.05);
             text-align: center;
         }
@@ -760,7 +763,8 @@
         <div class="main-content" id="mainContent">
             <!-- منوی اصلی -->
             <div id="mainMenu" class="main-menu">
-                <div class="menu-content">
+                <!-- بخش مرکزی که title و کارت‌ها را در وسط قرار می‌دهد -->
+                <div class="menu-center">
                     <div class="app-title" id="mainAppTitle">الأذكار</div>
                     <div class="menu-grid">
                         <div class="menu-card" data-category="morning">
@@ -781,7 +785,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- فوتر -->
+                <!-- فوتر (همیشه در پایین) -->
                 <div class="footer" id="footer">
                     <a href="https://t.me/YBAKHTIAR" target="_blank" class="telegram-link">
                         <svg class="telegram-svg" viewBox="0 0 24 24">
@@ -1429,6 +1433,7 @@
                 `;
             });
             detailList.innerHTML = html;
+            // بازنشانی اسکرول به ابتدای لیست
             detailList.scrollTop = 0;
 
             mainMenu.style.display = 'none';
