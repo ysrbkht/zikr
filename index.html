@@ -148,9 +148,9 @@
             font-size: 2rem;
             color: var(--icon-color);
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s ease;
         }
-        .settings-icon:hover {
+        .settings-icon.rotate {
             transform: rotate(90deg);
         }
 
@@ -819,6 +819,7 @@
                 fontCompset: 'کامپوست',
                 sleepStep1: 'دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:',
                 sleepStep2: 'بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)',
+                sleepSurah: 'سوره {الم سجده} و {ملک} را بخوانید',
                 confirmDownload: 'آیا می‌خواهید فایل‌های صوتی را برای استفاده آفلاین دانلود کنید؟ حجم تقریبی ۲۰ مگابایت.'
             },
             ar: {
@@ -848,6 +849,7 @@
                 fontCompset: 'كومبست',
                 sleepStep1: 'اجمع يديك وانفث فيهما واقرأ هذه السور:',
                 sleepStep2: 'ثم امسح بهما جسدك مستطيعاً مبتدئاً برأسك ووجهك (كرر هذا ثلاث مرات)',
+                sleepSurah: 'اقرأ سورة {السجدة} و {الملك}',
                 confirmDownload: 'هل تريد تحميل الملفات الصوتية للاستخدام دون اتصال؟ الحجم التقريبي 20 ميغابايت.'
             },
             en: {
@@ -877,6 +879,7 @@
                 fontCompset: 'Compset',
                 sleepStep1: 'Cup your hands, blow into them, and recite these Surahs:',
                 sleepStep2: 'Then wipe your body with them as far as you can, starting from your head and face. (Repeat this three times)',
+                sleepSurah: 'Recite Surah {As-Sajdah} and {Al-Mulk}',
                 confirmDownload: 'Do you want to download audio files for offline use? Approximate size 20 MB.'
             }
         };
@@ -996,6 +999,9 @@
 
         settingsIcon.addEventListener('click', (e) => {
             e.stopPropagation();
+            // اضافه کردن کلاس چرخش و حذف بعد از 200ms
+            settingsIcon.classList.add('rotate');
+            setTimeout(() => settingsIcon.classList.remove('rotate'), 200);
             settingsPanel.classList.toggle('show');
         });
 
@@ -1260,6 +1266,8 @@
                 if (category === 'sleep') {
                     text = text.replace('دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:', translations[currentLanguage].sleepStep1);
                     text = text.replace('بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)', translations[currentLanguage].sleepStep2);
+                    // جایگزینی عبارت مربوط به سوره‌ها
+                    text = text.replace('سوره {الم سجدةِ} و {مُلك} را بخوانید', translations[currentLanguage].sleepSurah);
                 }
                 let timesWord = '';
                 if (currentLanguage === 'ar') timesWord = getArabicTimes(item.repeat);
