@@ -383,24 +383,35 @@
         }
 
        /* ===== هدر مخصوص صفحات داخلی (اذکار) ===== */
+        /* ===== هدر مخصوص صفحات داخلی (اذکار) ===== */
 .detail-header {
     display: none;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1.5rem;
-    background: rgba(44, 107, 158, 0.03); /* لایه‌ای بسیار کمرنگ از رنگ اصلی */
-    backdrop-filter: none;
-    border-bottom: none; /* حذف خط */
+    gap: 0.8rem;
+    padding: 0.9rem 1.8rem;
+    background: rgba(255, 255, 255, 0.6); /* شفافیت برای حالت روشن */
+    backdrop-filter: blur(12px); /* افکت شیشه‌ای */
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: none; /* بدون خط */
     border-radius: 0 0 30px 30px; /* گردی پایین */
-    box-shadow: 0 4px 12px -8px rgba(0, 0, 0, 0.2); /* سایه ملایم در پایین */
-    margin-bottom: 0.5rem;
+    box-shadow: 0 8px 20px -10px rgba(0, 40, 80, 0.15); /* سایه ملایم */
+    margin-bottom: 1rem;
     position: sticky;
     top: 0;
     z-index: 50;
+    transition: background 0.3s, box-shadow 0.3s;
 }
+
+/* حالت تاریک */
+body.dark .detail-header {
+    background: rgba(30, 41, 59, 0.7); /* شفافیت تیره */
+    box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.4);
+}
+
 .detail-header.active {
     display: flex;
 }
+
 .detail-header .back-btn {
     background: none;
     border: none;
@@ -409,19 +420,28 @@
     color: var(--text-color);
     padding: 0;
     line-height: 1;
-    transition: color 0.2s;
+    transition: color 0.2s, transform 0.2s;
     display: flex;
     align-items: center;
 }
+
 .detail-header .back-btn:hover {
     color: var(--icon-color);
+    transform: scale(1.1);
 }
+
 .detail-header .page-title {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-color);
     margin: 0;
     flex: 1;
+    letter-spacing: -0.02em; /* کمی جمع‌تر */
+}
+
+/* اضافه کردن افکت ظریف برای دکمه در حالت فعال (اختیاری) */
+.detail-header .back-btn:active {
+    transform: scale(0.95);
 }
 
         /* لیست اذکار متنی */
