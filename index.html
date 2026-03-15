@@ -381,8 +381,7 @@
             color: var(--icon-color);
             opacity: 0.9;
         }
-
-       /* ===== هدر مخصوص صفحات داخلی (اذکار) ===== */
+        /* ===== هدر مخصوص صفحات داخلی (اذکار) ===== */
 .detail-header {
     display: none;
     align-items: center;
@@ -391,9 +390,10 @@
     background: rgba(255, 255, 255, 0.75); /* پس‌زمینهٔ نیمه‌شفاف */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: none !important; /* حذف کامل خط */
-    border-radius: 0 0 30px 30px; /* گردی پایین */
-    box-shadow: 0 6px 15px -8px rgba(0, 0, 0, 0.2); /* سایهٔ ملایم */
+    border: none !important;       /* حذف هر نوع حاشیه */
+    outline: none !important;      /* حذف outline */
+    box-shadow: none !important;   /* حذف سایه */
+    border-radius: 0 0 30px 30px;  /* فقط گردی پایین */
     margin-bottom: 1rem;
     position: sticky;
     top: 0;
@@ -404,7 +404,6 @@
 /* حالت تاریک */
 body.dark .detail-header {
     background: rgba(30, 41, 59, 0.8);
-    box-shadow: 0 6px 15px -8px rgba(0, 0, 0, 0.5);
 }
 
 .detail-header.active {
@@ -437,6 +436,7 @@ body.dark .detail-header {
     flex: 1;
     letter-spacing: -0.02em;
 }
+        
         /* لیست اذکار متنی */
         .dhikr-list {
             flex: 1;
