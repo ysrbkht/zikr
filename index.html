@@ -381,20 +381,20 @@
             color: var(--icon-color);
             opacity: 0.9;
         }
-        /* ===== هدر مخصوص صفحات داخلی (اذکار) ===== */
+/* ===== هدر مخصوص صفحات داخلی (اذکار) ===== */
 .detail-header {
     display: none;
     align-items: center;
     gap: 0.8rem;
     padding: 0.9rem 1.8rem;
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.75); /* پس‌زمینهٔ شیشه‌ای */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-    border-radius: 0 0 30px 30px; /* فقط گردی پایین */
-    margin-bottom: 0; /* حذف فاصله پایین */
+    border: none !important;       /* حذف کامل هر نوع border */
+    outline: none !important;      /* حذف outline */
+    box-shadow: none !important;   /* حذف سایه */
+    border-radius: 0 0 30px 30px;  /* گردی پایین */
+    margin-bottom: 0;              /* بدون فاصله از محتوای بعدی */
     position: sticky;
     top: 0;
     z-index: 50;
