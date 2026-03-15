@@ -60,7 +60,7 @@
             --player-progress-bg: #d0e2f2;
             --player-progress-fill: #2c6b9e;
             --player-time-color: #1e3a5f;
-            --header-bg: transparent; /* شفاف */
+            --header-bg: transparent;
             --header-shadow: none;
             --modal-bg: #ffffff;
         }
@@ -328,16 +328,16 @@
             flex-direction: column;
             height: 100%;
             overflow-y: auto;
-            padding: 0.5rem 1.5rem 0 1.5rem; /* کاهش padding بالا */
+            padding: 0.5rem 1.5rem 0 1.5rem;
         }
         .menu-center {
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* محتوای اصلی در مرکز عمودی */
+            justify-content: center;
         }
         .main-menu .app-title {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--icon-color);
             margin-bottom: 1.2rem;
@@ -347,15 +347,15 @@
         .menu-grid {
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
-            max-width: 350px;
+            gap: 0.8rem;
+            max-width: 400px;
             width: 100%;
             margin: 0 auto;
         }
         .menu-card {
             background: var(--card-bg);
-            border-radius: 28px;
-            padding: 0.5rem 0.1rem;
+            border-radius: 20px;
+            padding: 0.6rem 0.4rem;
             box-shadow: var(--card-shadow);
             border: 1px solid var(--card-border);
             cursor: pointer;
@@ -363,7 +363,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
+            gap: 0.3rem;
             text-align: center;
         }
         .menu-card:hover {
@@ -372,27 +372,27 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
         }
         .menu-info h2 {
-            font-size: 1.7rem;
+            font-size: 1.3rem;
             font-weight: 600;
             color: var(--text-color);
         }
         .menu-icon {
-            font-size: 1.7rem;
+            font-size: 1.3rem;
             color: var(--icon-color);
             opacity: 0.9;
         }
 
         /* ===== هدر مخصوص صفحات داخلی (اذکار) ===== */
         .detail-header {
-            display: none; /* فقط در حالت جزئیات نمایش داده شود */
+            display: none;
             align-items: center;
             gap: 0.5rem;
             padding: 0.7rem 1.5rem;
-            background: transparent; /* پس‌زمینه شفاف */
-            backdrop-filter: none; /* بدون blur */
-            border-bottom: 1px solid var(--card-border); /* استروک */
+            background: transparent;
+            backdrop-filter: none;
+            border-bottom: 1px solid var(--card-border);
             border-radius: 0 0 30px 30px;
-            box-shadow: none; /* بدون سایه */
+            box-shadow: none;
             margin-bottom: 0.5rem;
             position: sticky;
             top: 0;
@@ -763,7 +763,6 @@
         <div class="main-content" id="mainContent">
             <!-- منوی اصلی -->
             <div id="mainMenu" class="main-menu">
-                <!-- بخش مرکزی که title و کارت‌ها را در وسط قرار می‌دهد -->
                 <div class="menu-center">
                     <div class="app-title" id="mainAppTitle">الأذكار</div>
                     <div class="menu-grid">
@@ -785,7 +784,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- فوتر (همیشه در پایین) -->
                 <div class="footer" id="footer">
                     <a href="https://t.me/YBAKHTIAR" target="_blank" class="telegram-link">
                         <svg class="telegram-svg" viewBox="0 0 24 24">
@@ -1053,7 +1051,7 @@
             applyTranslations();
             updateFontNames();
             if (detailView.style.display !== 'none' && detailPageTitle.getAttribute('data-category') === 'sleep') {
-                showCategory('sleep');
+                showCategory('sleep', false);
             } else if (audioDetailView.style.display !== 'none') {
                 detailPageTitle.textContent = translations[currentLanguage].audioAdhkar;
             }
@@ -1373,6 +1371,10 @@
             downloadContainer.classList.add('hidden-btn');
         }
 
+        // مدیریت تاریخچه برای دکمه برگشت سیستم
+        // در ابتدای لود، state اولیه را تنظیم می‌کنیم
+        history.replaceState({ page: 'main' }, '', location.pathname);
+
         // نمایش منو و جزئیات
         function showMainMenu() {
             resetPlayer('morning');
@@ -1384,7 +1386,7 @@
             detailHeader.classList.remove('active');
         }
 
-        function showCategory(category) {
+        function showCategory(category, shouldPushState = true) {
             if (category === 'audio') {
                 resetPlayer('morning');
                 resetPlayer('evening');
@@ -1395,6 +1397,9 @@
                 detailHeader.classList.add('active');
                 detailPageTitle.textContent = translations[currentLanguage].audioAdhkar;
                 detailPageTitle.setAttribute('data-category', 'audio');
+                if (shouldPushState) {
+                    history.pushState({ page: 'detail', category: 'audio' }, '', '#audio');
+                }
                 return;
             }
 
@@ -1433,23 +1438,37 @@
                 `;
             });
             detailList.innerHTML = html;
-            // بازنشانی اسکرول به ابتدای لیست
             detailList.scrollTop = 0;
 
             mainMenu.style.display = 'none';
             detailView.style.display = 'flex';
             audioDetailView.style.display = 'none';
             footer.classList.add('hidden');
+
+            if (shouldPushState) {
+                history.pushState({ page: 'detail', category: category }, '', '#' + category);
+            }
         }
 
         document.querySelectorAll('.menu-card').forEach(card => {
             card.addEventListener('click', () => {
                 const cat = card.dataset.category;
-                if (cat) showCategory(cat);
+                if (cat) showCategory(cat, true);
             });
         });
 
-        backBtn.addEventListener('click', showMainMenu);
+        backBtn.addEventListener('click', () => {
+            history.back();
+        });
+
+        // رویداد popstate برای مدیریت دکمه برگشت سیستم
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.page === 'detail') {
+                showCategory(event.state.category, false);
+            } else {
+                showMainMenu();
+            }
+        });
 
         async function loadAzkar() {
             try {
