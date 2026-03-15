@@ -10,13 +10,13 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/zikr/icon.png">
     <link rel="icon" type="image/x-icon" href="/zikr/icon.ico">
     <link rel="apple-touch-icon" href="/zikr/icon.png">
-    <meta name="theme-color" content="#2c6b9e" id="themeColor">
-    <!-- Font Awesome 6 (نسخه جدید) -->
+    <meta name="theme-color" content="#6366f1" id="themeColor">
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- فونت‌های فارسی و عربی (Vazirmatn و Amiri) -->
+    <!-- فونت‌های فارسی و عربی -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* ===== فونت‌های آپلود شده (محلی) ===== */
+        /* ===== فونت‌های آپلود شده ===== */
         @font-face {
             font-family: 'Uthman Taha';
             src: url('/zikr/fonts/UthmanTahaNaskhBold.ttf') format('truetype');
@@ -36,7 +36,7 @@
             font-display: swap;
         }
 
-        /* ===== متغیرهای تم استاندارد (پیش‌فرض) ===== */
+        /* ===== متغیرهای تم استاندارد (پشتیبان) ===== */
         :root {
             --bg-color: #f0f7ff;
             --container-bg: #ffffff;
@@ -132,6 +132,7 @@
             --text-color: #f8fafc;
             --card-bg: rgba(30, 41, 59, 0.7);
             --card-border: 1px solid rgba(255,255,255,0.1);
+            --meta-bg: #334155;                 /* تیره برای پس‌زمینه مرجع */
             --badge-bg: rgba(99,102,241,0.2);
             --badge-color: #818cf8;
             --footer-text: #94a3b8;
@@ -148,7 +149,7 @@
                 radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.2) 0px, transparent 50%);
         }
 
-        /* ===== استایل‌های پایه (مشترک) ===== */
+        /* استایل‌های پایه */
         html, body {
             height: 100%;
             margin: 0;
@@ -178,30 +179,30 @@
             overflow: hidden;
         }
 
-        /* آیکون تنظیمات شناور */
+        /* آیکون تنظیمات شناور - بزرگتر و هم‌ردیف */
         .settings-float {
             position: absolute;
-            top: 1rem;
-            left: 1rem;
+            top: 1.2rem;
+            left: 1.2rem;
             z-index: 100;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             color: var(--icon-color);
             cursor: pointer;
             transition: transform 0.2s ease;
         }
         [dir="ltr"] .settings-float {
             left: auto;
-            right: 1rem;
+            right: 1.2rem;
         }
-        .settings-float.rotate {
-            transform: rotate(90deg);
+        .settings-float:active {
+            transform: rotate(90deg) scale(1.1);
         }
 
         /* پنل تنظیمات */
         .settings-panel {
             position: absolute;
-            top: 4.5rem;
-            left: 1rem;
+            top: 5rem;
+            left: 1.2rem;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 24px;
@@ -214,10 +215,15 @@
         }
         [dir="ltr"] .settings-panel {
             left: auto;
-            right: 1rem;
+            right: 1.2rem;
         }
         .settings-panel.show {
             display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         .setting-item {
             display: flex;
@@ -240,8 +246,7 @@
             color: var(--icon-color);
             width: 1.5rem;
         }
-
-        /* استایل مشترک برای dropdownها */
+        /* dropdown */
         .select-wrapper {
             position: relative;
             width: 150px;
@@ -259,15 +264,15 @@
             outline: none;
             appearance: none;
             -webkit-appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232c6b9e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
             background-repeat: no-repeat;
             background-position: left 10px center;
             background-size: 16px;
             padding-left: 35px;
             text-align: right;
         }
-        .dark .custom-select {
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2360a5fa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+        body.dark .custom-select {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23818cf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
         }
         [dir="ltr"] .custom-select {
             text-align: left;
@@ -294,12 +299,9 @@
             gap: 0.3rem;
             transition: 0.2s;
         }
-        .install-btn:hover, .download-btn:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
-        }
-        .install-btn i, .download-btn i {
-            font-size: 1rem;
+        .install-btn:active, .download-btn:active {
+            opacity: 0.8;
+            transform: scale(0.98);
         }
         .hidden-btn {
             display: none !important;
@@ -360,8 +362,9 @@
             font-size: 1.2rem;
             transition: 0.2s;
         }
-        .font-size-btn:hover {
+        .font-size-btn:active {
             background: var(--badge-bg);
+            transform: scale(0.95);
         }
         .font-size-value {
             min-width: 45px;
@@ -424,10 +427,10 @@
             gap: 0.3rem;
             text-align: center;
         }
-        .menu-card:hover {
-            transform: translateY(-2px);
+        .menu-card:active {
+            transform: scale(0.98);
             border-color: var(--icon-color);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.2);
         }
         .menu-info h2 {
             font-size: 1.3rem;
@@ -440,7 +443,7 @@
             opacity: 0.9;
         }
 
-        /* هدر داخلی (مدرن) - هم برای تم استاندارد و هم مدرن */
+        /* هدر داخلی */
         .detail-header {
             display: none;
             align-items: center;
@@ -478,17 +481,17 @@
             color: var(--icon-color);
             padding: 0;
             line-height: 1;
-            transition: all 0.3s;
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
-        .detail-header .back-btn:hover {
+        .detail-header .back-btn:active {
             background: var(--icon-color);
             color: white;
             border-color: var(--icon-color);
-            transform: scale(1.05);
+            transform: scale(0.95);
         }
         .detail-header .page-title {
             font-size: 1.3rem;
@@ -530,7 +533,7 @@
             margin-bottom: 1rem;
             transition: transform 0.2s;
         }
-        .dhikr-card:hover {
+        .dhikr-card:active {
             transform: translateY(-2px);
         }
         .dhikr-text {
@@ -628,8 +631,8 @@
             transition: transform 0.1s, background 0.2s;
             flex-shrink: 0;
         }
-        .play-btn:hover {
-            transform: scale(1.05);
+        .play-btn:active {
+            transform: scale(0.95);
         }
         .progress-area {
             flex: 1;
@@ -683,6 +686,11 @@
             align-items: center;
             gap: 0.5rem;
             font-weight: 500;
+        }
+        .telegram-svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
         }
 
         /* مودال */
@@ -752,7 +760,7 @@
             color: white;
             border: none;
         }
-        .modal-btn:hover {
+        .modal-btn:active {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px -10px rgba(0,0,0,0.2);
         }
@@ -761,9 +769,9 @@
         body.theme-modern .settings-float {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
-            width: 50px;
-            height: 50px;
-            border-radius: 16px;
+            width: 55px;
+            height: 55px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -771,27 +779,22 @@
             border: var(--card-border);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        body.theme-modern .settings-float:hover {
-            transform: rotate(90deg) scale(1.1);
-            box-shadow: 0 10px 40px -10px rgba(99, 102, 241, 0.5);
-            background: white;
-        }
         body.theme-modern.dark .settings-float {
-            background: var(--card-dark);
+            background: var(--card-bg);
             color: #818cf8;
         }
         body.theme-modern .settings-panel {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
             border: var(--card-border);
-            animation: slideDown 0.3s ease-out;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         body.theme-modern.dark .settings-panel {
             background: rgba(30, 41, 59, 0.9);
+            color: #e2e8f0;
+        }
+        body.theme-modern.dark .custom-select {
+            background: #1e293b;
+            color: #e2e8f0;
         }
         body.theme-modern .menu-grid {
             display: grid;
@@ -816,7 +819,7 @@
             transition: opacity 0.3s;
             z-index: 0;
         }
-        body.theme-modern .menu-card:hover::before {
+        body.theme-modern .menu-card:active::before {
             opacity: 0.05;
         }
         body.theme-modern .menu-icon {
@@ -835,8 +838,8 @@
             color: #818cf8;
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
-        body.theme-modern .menu-card:hover .menu-icon {
-            transform: scale(1.1) rotate(5deg);
+        body.theme-modern .menu-card:active .menu-icon {
+            transform: scale(1.05);
         }
         body.theme-modern .app-title {
             background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
@@ -894,7 +897,7 @@
             opacity: 0;
             transition: opacity 0.2s;
         }
-        body.theme-modern .progress-bar:hover .progress-fill::after {
+        body.theme-modern .progress-bar:active .progress-fill::after {
             opacity: 1;
         }
         body.theme-modern .audio-card {
@@ -907,9 +910,14 @@
             padding: 0.5rem 1rem;
             border-radius: 20px;
         }
-        body.theme-modern .footer .telegram-link:hover {
+        body.theme-modern .footer .telegram-link:active {
             background: rgba(99, 102, 241, 0.2);
             transform: translateY(-2px);
+        }
+        /* اصلاح قاب مرجع در تم مدرن حالت شب */
+        body.theme-modern.dark .reference {
+            background: #334155;
+            color: #e2e8f0;
         }
     </style>
 </head>
@@ -935,11 +943,11 @@
                 <div class="inner-switch" id="themeSwitchInner"></div>
             </div>
             <div class="setting-item">
-                <span class="setting-label"><i class="fas fa-palette"></i> <span>السمة</span></span>
+                <span class="setting-label"><i class="fas fa-palette"></i> <span data-i18n="theme">السمة</span></span>
                 <div class="select-wrapper">
                     <select class="custom-select" id="themeSelect">
-                        <option value="standard">قياسي (Standard)</option>
-                        <option value="modern">حديث (Modern)</option>
+                        <option value="standard" data-i18n-option="standardTheme">قياسي</option>
+                        <option value="modern" data-i18n-option="modernTheme">حديث</option>
                     </select>
                 </div>
             </div>
@@ -971,7 +979,7 @@
             </div>
         </div>
 
-        <!-- هدر مخصوص صفحات داخلی -->
+        <!-- هدر داخلی -->
         <div class="detail-header" id="detailHeader">
             <button class="back-btn" id="backBtn"><i class="fas fa-arrow-right"></i></button>
             <span class="page-title" id="detailPageTitle"></span>
@@ -1003,7 +1011,7 @@
                 </div>
                 <div class="footer" id="footer">
                     <a href="https://t.me/YBAKHTIAR" target="_blank" class="telegram-link">
-                        <svg class="telegram-svg" viewBox="0 0 24 24" width="24" height="24">
+                        <svg class="telegram-svg" viewBox="0 0 24 24">
                             <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.87 4.326-2.96-.924c-.643-.2-.658-.643.135-.953l11.56-4.456c.537-.2 1.006.133.832.936z"/>
                         </svg>
                         <span data-i18n="feedback">آراء واقتراحات</span>
@@ -1078,7 +1086,7 @@
             '/zikr/fonts/Compset-Bold.ttf'
         ];
 
-        // ترجمه‌ها
+        // ترجمه‌ها (با اضافه شدن کلید theme و نام گزینه‌ها)
         const translations = {
             fa: {
                 appName: 'اذکار',
@@ -1090,6 +1098,9 @@
                 darkMode: 'حالت شب',
                 fontSize: 'اندازه متن',
                 font: 'فونت',
+                theme: 'تم',
+                standardTheme: 'استاندارد',
+                modernTheme: 'مدرن',
                 installApp: 'نصب اپلیکیشن',
                 install: 'نصب',
                 offlineSave: 'ذخیره برای آفلاین',
@@ -1128,6 +1139,9 @@
                 darkMode: 'الوضع الليلي',
                 fontSize: 'حجم الخط',
                 font: 'الخط',
+                theme: 'السمة',
+                standardTheme: 'قياسي',
+                modernTheme: 'حديث',
                 installApp: 'تثبيت التطبيق',
                 install: 'تثبيت',
                 offlineSave: 'حفظ للاستخدام دون اتصال',
@@ -1166,6 +1180,9 @@
                 darkMode: 'Dark Mode',
                 fontSize: 'Font Size',
                 font: 'Font',
+                theme: 'Theme',
+                standardTheme: 'Standard',
+                modernTheme: 'Modern',
                 installApp: 'Install App',
                 install: 'Install',
                 offlineSave: 'Save for Offline',
@@ -1196,7 +1213,7 @@
             }
         };
 
-        // جایگزین localStorage برای محیط iframe
+        // جایگزین localStorage
         var appStorage = (function() {
             var store = {};
             return {
@@ -1257,7 +1274,6 @@
             evening: document.querySelector('[data-fill="evening"]')
         };
 
-        // مودال
         const customModal = document.getElementById('customModal');
         const modalIcon = document.getElementById('modalIcon');
         const modalTitle = document.getElementById('modalTitle');
@@ -1281,6 +1297,15 @@
             themeSelect.value = theme;
         }
 
+        // ========== به‌روزرسانی نام گزینه‌های تم بر اساس زبان ==========
+        function updateThemeOptions() {
+            const options = themeSelect.querySelectorAll('option');
+            options.forEach(opt => {
+                const key = opt.value === 'standard' ? 'standardTheme' : 'modernTheme';
+                opt.textContent = translations[currentLanguage][key];
+            });
+        }
+
         // ========== توابع زبان ==========
         function setLanguage(lang) {
             currentLanguage = lang;
@@ -1290,6 +1315,7 @@
             languageSelect.value = lang;
             applyTranslations();
             updateFontNames();
+            updateThemeOptions();
             if (detailView.style.display !== 'none' && detailPageTitle.getAttribute('data-category') === 'sleep') {
                 showCategory('sleep', false);
             } else if (audioDetailView.style.display !== 'none') {
@@ -1359,9 +1385,9 @@
         });
 
         function initTheme() {
-            const savedTheme = appStorage.getItem('theme') || 'standard';
+            const savedTheme = appStorage.getItem('theme') || 'modern'; // پیش‌فرض مدرن
             setTheme(savedTheme);
-            const savedDark = appStorage.getItem('theme') || 'light'; // dark mode separate
+            const savedDark = appStorage.getItem('darkMode') || 'light';
             if (savedDark === 'dark') {
                 document.body.classList.add('dark');
                 themeSwitchInner.classList.add('active');
@@ -1412,7 +1438,7 @@
 
             const savedTheme = appStorage.getItem('theme');
             if (savedTheme) setTheme(savedTheme);
-            else setTheme('standard');
+            else setTheme('modern'); // پیش‌فرض مدرن
 
             const savedDark = appStorage.getItem('darkMode');
             if (savedDark === 'dark') {
