@@ -216,34 +216,66 @@
         }
 
         /* ===== پنل تنظیمات ===== */
-        .settings-panel {
+        /* ===== پنل تنظیمات ===== */
+.settings-panel {
     position: absolute;
     top: 5rem;
-    left: 1.2rem;
-    right: 1.2rem;        /* فاصله از راست مانند چپ */
-    width: auto;           /* عرض بر اساس محتوا تنظیم شود */
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: 24px;
     padding: 1.2rem;
     box-shadow: var(--card-shadow);
     display: none;
-    min-width: 280px;      /* حداقل عرض برای نمایش مناسب */
+    min-width: 280px;
     z-index: 200;
     backdrop-filter: blur(10px);
+    width: auto;
 }
-        [dir="ltr"] .settings-panel {
-            left: auto;
-            right: auto;
-        }
-        .settings-panel.show {
-            display: block;
-            animation: slideDown 0.3s ease-out;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
+
+/* حالت راست‌چین (RTL) - پیش‌فرض */
+.settings-panel {
+    left: 1.2rem;
+    right: auto;                /* فقط فاصله از چپ */
+    max-width: 400px;           /* حداکثر عرض در صفحه‌های بزرگ */
+}
+
+/* حالت چپ‌چین (LTR) */
+[dir="ltr"] .settings-panel {
+    left: auto;
+    right: 1.2rem;              /* فقط فاصله از راست */
+    max-width: 400px;
+}
+
+/* پنل باز شده */
+.settings-panel.show {
+    display: block;
+    animation: slideDown 0.3s ease-out;
+}
+
+/* انیمیشن باز شدن */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* در موبایل (عرض کمتر از 600px) - فاصله از دو طرف */
+@media (max-width: 600px) {
+    .settings-panel {
+        left: 1.2rem !important;
+        right: 1.2rem !important;
+        max-width: none !important; /* حذف محدودیت عرض */
+    }
+    [dir="ltr"] .settings-panel {
+        left: 1.2rem !important;
+        right: 1.2rem !important;
+    }
+}
 
         /* ===== خط فاصله بین آیتم‌های تنظیمات ===== */
         .setting-item {
