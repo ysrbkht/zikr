@@ -381,62 +381,173 @@
             color: var(--icon-color);
             opacity: 0.9;
         }
-/* ===== هدر مخصوص صفحات داخلی (اذکار) ===== */
-.detail-header {
-    display: none;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 0.9rem 1.8rem;
-    background: rgba(255, 255, 255, 0.75); /* پس‌زمینهٔ شیشه‌ای */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: none !important;       /* حذف کامل هر نوع border */
-    outline: none !important;      /* حذف outline */
-    box-shadow: none !important;   /* حذف سایه */
-    border-radius: 0 0 30px 30px;  /* گردی پایین */
-    margin-bottom: 0;              /* بدون فاصله از محتوای بعدی */
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    transition: background 0.3s;
-}
 
-/* حالت تاریک */
-body.dark .detail-header {
-    background: rgba(30, 41, 59, 0.8);
-}
+        /* ===== هدر مخصوص صفحات داخلی (اذکار) — طراحی مدرن ===== */
+        .detail-header {
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.7rem 1.4rem 0.85rem;
+            background: linear-gradient(
+                160deg,
+                rgba(255, 255, 255, 0.92) 0%,
+                rgba(230, 240, 250, 0.88) 100%
+            );
+            backdrop-filter: blur(24px) saturate(1.4);
+            -webkit-backdrop-filter: blur(24px) saturate(1.4);
+            border: none !important;
+            outline: none !important;
+            box-shadow:
+                0 8px 32px -8px rgba(44, 107, 158, 0.10),
+                inset 0 -1px 0 rgba(44, 107, 158, 0.06);
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
 
-.detail-header.active {
-    display: flex;
-}
+        /* خط تزئینی گرادیانی پایین هدر */
+        .detail-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            right: 10%;
+            height: 2.5px;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                var(--icon-color) 50%,
+                transparent 100%
+            );
+            border-radius: 2px;
+            opacity: 0.4;
+            transition: opacity 0.3s;
+        }
 
-.detail-header .back-btn {
-    background: none;
-    border: none;
-    font-size: 1.6rem;
-    cursor: pointer;
-    color: var(--text-color);
-    padding: 0;
-    line-height: 1;
-    transition: color 0.2s, transform 0.2s;
-    display: flex;
-    align-items: center;
-}
+        /* نشانگر مرکزی تزئینی */
+        .detail-header::before {
+            content: '✦';
+            position: absolute;
+            left: 50%;
+            bottom: -1px;
+            transform: translateX(-50%) translateY(50%);
+            font-size: 0.5rem;
+            color: var(--icon-color);
+            opacity: 0.5;
+            z-index: 1;
+        }
 
-.detail-header .back-btn:hover {
-    color: var(--icon-color);
-    transform: scale(1.1);
-}
+        /* حالت تاریک */
+        body.dark .detail-header {
+            background: linear-gradient(
+                160deg,
+                rgba(30, 41, 59, 0.94) 0%,
+                rgba(45, 55, 72, 0.90) 100%
+            );
+            box-shadow:
+                0 8px 32px -8px rgba(0, 0, 0, 0.28),
+                inset 0 -1px 0 rgba(96, 165, 250, 0.08);
+        }
 
-.detail-header .page-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-color);
-    margin: 0;
-    flex: 1;
-    letter-spacing: -0.02em;
-}
-        
+        body.dark .detail-header::after {
+            opacity: 0.3;
+        }
+
+        /* انیمیشن ورود هدر */
+        .detail-header.active {
+            display: flex;
+            animation: headerReveal 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes headerReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(-100%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* دکمه بازگشت */
+        .detail-header .back-btn {
+            background: var(--meta-bg);
+            border: 1px solid var(--card-border);
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: var(--icon-color);
+            padding: 0;
+            line-height: 1;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* افکت پر شدن پس‌زمینه هنگام هاور */
+        .detail-header .back-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--icon-color);
+            border-radius: inherit;
+            transform: scale(0);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 0;
+        }
+
+        .detail-header .back-btn i {
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s;
+        }
+
+        .detail-header .back-btn:hover::before,
+        .detail-header .back-btn:active::before {
+            transform: scale(1);
+        }
+
+        .detail-header .back-btn:hover {
+            color: #ffffff;
+            border-color: var(--icon-color);
+            box-shadow: 0 4px 16px -4px rgba(44, 107, 158, 0.35);
+            transform: scale(1.05);
+        }
+
+        .detail-header .back-btn:hover i {
+            color: #ffffff;
+        }
+
+        .detail-header .back-btn:active {
+            transform: scale(0.97);
+        }
+
+        body.dark .detail-header .back-btn:hover {
+            box-shadow: 0 4px 16px -4px rgba(96, 165, 250, 0.35);
+        }
+
+        /* عنوان صفحه */
+        .detail-header .page-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0;
+            flex: 1;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+        }
+
         /* لیست اذکار متنی */
         .dhikr-list {
             flex: 1;
@@ -905,7 +1016,7 @@ body.dark .detail-header {
                 sleepStep2: 'بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)',
                 sleepSurah: 'سوره {الم سجده} و {ملک} را بخوانید',
                 confirmDownloadTitle: 'تأیید دانلود',
-                confirmDownload: 'آیا می‌خواهید فایل‌های صوتی را برای استفاده آفلاین دانلود کنید؟ حجم تقریبی ۲۰ مگابایت.',
+                confirmDownload: 'آیا می\u200cخواهید فایل\u200cهای صوتی را برای استفاده آفلاین دانلود کنید؟ حجم تقریبی ۲۰ مگابایت.',
                 cancel: 'لغو',
                 confirm: 'تأیید',
                 downloadSuccess: 'دانلود با موفقیت انجام شد',
@@ -992,6 +1103,16 @@ body.dark .detail-header {
             }
         };
 
+        // جایگزین localStorage برای محیط iframe
+        var appStorage = (function() {
+            var store = {};
+            return {
+                getItem: function(key) { return store[key] !== undefined ? store[key] : null; },
+                setItem: function(key, value) { store[key] = String(value); },
+                removeItem: function(key) { delete store[key]; }
+            };
+        })();
+
         function getArabicTimes(count) {
             if (count === 1) return 'مرة';
             if (count === 2) return 'مرتين';
@@ -999,7 +1120,7 @@ body.dark .detail-header {
             return 'مرة';
         }
 
-        let currentLanguage = localStorage.getItem('language') || 'ar';
+        let currentLanguage = appStorage.getItem('language') || 'ar';
         let azkarData = null;
         const mainMenu = document.getElementById('mainMenu');
         const detailView = document.getElementById('detailView');
@@ -1059,7 +1180,7 @@ body.dark .detail-header {
             currentLanguage = lang;
             document.documentElement.lang = lang;
             document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
-            localStorage.setItem('language', lang);
+            appStorage.setItem('language', lang);
             languageSelect.value = lang;
             applyTranslations();
             updateFontNames();
@@ -1129,7 +1250,7 @@ body.dark .detail-header {
         });
 
         function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedTheme = appStorage.getItem('theme') || 'light';
             if (savedTheme === 'dark') {
                 document.body.classList.add('dark');
                 themeSwitchInner.classList.add('active');
@@ -1138,33 +1259,33 @@ body.dark .detail-header {
         themeSwitchInner.addEventListener('click', () => {
             document.body.classList.toggle('dark');
             themeSwitchInner.classList.toggle('active');
-            localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+            appStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
         });
 
         decreaseFont.addEventListener('click', () => {
             currentFontSize = Math.max(1.0, currentFontSize - 0.1);
             applyFontSize(currentFontSize);
-            localStorage.setItem('fontSize', currentFontSize.toFixed(1));
+            appStorage.setItem('fontSize', currentFontSize.toFixed(1));
         });
         increaseFont.addEventListener('click', () => {
             currentFontSize = Math.min(2.2, currentFontSize + 0.1);
             applyFontSize(currentFontSize);
-            localStorage.setItem('fontSize', currentFontSize.toFixed(1));
+            appStorage.setItem('fontSize', currentFontSize.toFixed(1));
         });
 
         fontSelect.addEventListener('change', (e) => {
             currentFont = e.target.value;
             applyFontFamily(currentFont);
-            localStorage.setItem('fontFamily', currentFont);
+            appStorage.setItem('fontFamily', currentFont);
         });
 
         function loadSettings() {
-            const savedFontSize = localStorage.getItem('fontSize');
+            const savedFontSize = appStorage.getItem('fontSize');
             if (savedFontSize) {
                 currentFontSize = parseFloat(savedFontSize);
                 applyFontSize(currentFontSize);
             } else applyFontSize(1.4);
-            const savedFont = localStorage.getItem('fontFamily');
+            const savedFont = appStorage.getItem('fontFamily');
             if (savedFont && ['Uthman', 'Lotus', 'Compset'].includes(savedFont)) {
                 currentFont = savedFont;
                 fontSelect.value = savedFont;
@@ -1173,7 +1294,7 @@ body.dark .detail-header {
                 fontSelect.value = 'Uthman';
                 applyFontFamily('Uthman');
             }
-            const savedLang = localStorage.getItem('language');
+            const savedLang = appStorage.getItem('language');
             if (savedLang && ['fa', 'ar', 'en'].includes(savedLang)) setLanguage(savedLang);
             else setLanguage('ar');
         }
@@ -1261,7 +1382,7 @@ body.dark .detail-header {
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            if (!localStorage.getItem('appInstalled') && !window.matchMedia('(display-mode: standalone)').matches) {
+            if (!appStorage.getItem('appInstalled') && !window.matchMedia('(display-mode: standalone)').matches) {
                 installContainer.style.display = 'flex';
             }
         });
@@ -1274,31 +1395,33 @@ body.dark .detail-header {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
             if (outcome === 'accepted') {
-                localStorage.setItem('appInstalled', 'true');
+                appStorage.setItem('appInstalled', 'true');
                 installContainer.style.display = 'none';
             }
             deferredPrompt = null;
         });
 
-        if (localStorage.getItem('appInstalled') || window.matchMedia('(display-mode: standalone)').matches) {
+        if (appStorage.getItem('appInstalled') || window.matchMedia('(display-mode: standalone)').matches) {
             installContainer.style.display = 'none';
         }
 
         window.addEventListener('appinstalled', () => {
-            localStorage.setItem('appInstalled', 'true');
+            appStorage.setItem('appInstalled', 'true');
             installContainer.style.display = 'none';
         });
 
         // مودال通用
-        function showModal(title, message, type = 'ok', callback = null) {
+        function showModal(title, message, type, callback) {
+            if (type === undefined) type = 'ok';
+            if (callback === undefined) callback = null;
             modalTitle.textContent = title;
             modalMessage.textContent = message;
             modalIcon.innerHTML = type === 'success' ? '<i class="fas fa-check-circle"></i>' : (type === 'error' ? '<i class="fas fa-exclamation-circle"></i>' : '<i class="fas fa-cloud-download-alt"></i>');
             modalActions.innerHTML = '';
-            const okBtn = document.createElement('button');
+            var okBtn = document.createElement('button');
             okBtn.className = 'modal-btn primary';
             okBtn.textContent = translations[currentLanguage].ok || 'OK';
-            okBtn.addEventListener('click', () => {
+            okBtn.addEventListener('click', function() {
                 customModal.classList.remove('show');
                 if (callback) callback();
             });
@@ -1311,14 +1434,14 @@ body.dark .detail-header {
             modalMessage.textContent = message;
             modalIcon.innerHTML = '<i class="fas fa-question-circle"></i>';
             modalActions.innerHTML = '';
-            const cancelBtn = document.createElement('button');
+            var cancelBtn = document.createElement('button');
             cancelBtn.className = 'modal-btn';
             cancelBtn.textContent = translations[currentLanguage].cancel;
-            cancelBtn.addEventListener('click', () => customModal.classList.remove('show'));
-            const confirmBtn = document.createElement('button');
+            cancelBtn.addEventListener('click', function() { customModal.classList.remove('show'); });
+            var confirmBtn = document.createElement('button');
             confirmBtn.className = 'modal-btn primary';
             confirmBtn.textContent = translations[currentLanguage].confirm;
-            confirmBtn.addEventListener('click', () => {
+            confirmBtn.addEventListener('click', function() {
                 customModal.classList.remove('show');
                 onConfirm();
             });
@@ -1330,40 +1453,41 @@ body.dark .detail-header {
         // دانلود آفلاین
         async function downloadForOffline() {
             try {
-                const cache = await caches.open('azkar-offline-v4');
-                const urls = [
+                var cache = await caches.open('azkar-offline-v4');
+                var urls = [
                     JSON_URL,
-                    ...Object.values(AUDIO_URLS),
-                    ...FONT_URLS,
+                    AUDIO_URLS.morning,
+                    AUDIO_URLS.evening
+                ].concat(FONT_URLS).concat([
                     '/zikr/icon.png',
                     '/zikr/icon.ico'
-                ];
+                ]);
 
-                const results = await Promise.allSettled(
-                    urls.map(async (url) => {
+                var results = await Promise.allSettled(
+                    urls.map(async function(url) {
                         try {
-                            const response = await fetch(url, { 
+                            var response = await fetch(url, {
                                 cache: 'no-cache',
                                 mode: 'cors',
                                 headers: { 'Cache-Control': 'no-cache' }
                             });
-                            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                            if (!response.ok) throw new Error('HTTP ' + response.status);
                             await cache.put(url, response.clone());
-                            return { url, status: 'fulfilled' };
+                            return { url: url, status: 'fulfilled' };
                         } catch (error) {
-                            console.warn(`Failed to cache ${url}:`, error);
-                            return { url, status: 'rejected', reason: error.message };
+                            console.warn('Failed to cache ' + url + ': ' + error);
+                            return { url: url, status: 'rejected', reason: error.message };
                         }
                     })
                 );
 
-                const successCount = results.filter(r => r.status === 'fulfilled').length;
-                const failCount = results.filter(r => r.status === 'rejected').length;
+                var successCount = results.filter(function(r) { return r.status === 'fulfilled'; }).length;
+                var failCount = results.filter(function(r) { return r.status === 'rejected'; }).length;
 
                 if (successCount > 0) {
-                    localStorage.setItem('offlineDownloaded', 'true');
+                    appStorage.setItem('offlineDownloaded', 'true');
                     downloadContainer.classList.add('hidden-btn');
-                    const msg = translations[currentLanguage].downloadSuccessMessage
+                    var msg = translations[currentLanguage].downloadSuccessMessage
                         .replace('{success}', successCount)
                         .replace('{fail}', failCount);
                     showModal(translations[currentLanguage].downloadSuccess, msg, 'success');
@@ -1371,16 +1495,16 @@ body.dark .detail-header {
                     showModal(translations[currentLanguage].downloadFailed, translations[currentLanguage].downloadFailedMessage, 'error');
                 }
             } catch (error) {
-                console.error('خطا در باز کردن کش:', error);
+                console.error(error);
                 showModal(translations[currentLanguage].downloadFailed, translations[currentLanguage].downloadFailedMessage, 'error');
             }
         }
 
-        downloadBtn.addEventListener('click', () => {
+        downloadBtn.addEventListener('click', function() {
             showConfirmModal(translations[currentLanguage].confirmDownloadTitle, translations[currentLanguage].confirmDownload, downloadForOffline);
         });
 
-        if (localStorage.getItem('offlineDownloaded')) {
+        if (appStorage.getItem('offlineDownloaded')) {
             downloadContainer.classList.add('hidden-btn');
         }
 
@@ -1398,7 +1522,8 @@ body.dark .detail-header {
             detailHeader.classList.remove('active');
         }
 
-        function showCategory(category, shouldPushState = true) {
+        function showCategory(category, shouldPushState) {
+            if (shouldPushState === undefined) shouldPushState = true;
             if (category === 'audio') {
                 resetPlayer('morning');
                 resetPlayer('evening');
@@ -1416,7 +1541,7 @@ body.dark .detail-header {
             }
 
             if (!azkarData || !azkarData[category]) {
-                detailList.innerHTML = `<div style="text-align:center; padding:2rem;">${translations[currentLanguage][category] || ''} ${translations[currentLanguage].source} یافت نشد.</div>`;
+                detailList.innerHTML = '<div style="text-align:center; padding:2rem;">' + (translations[currentLanguage][category] || '') + ' ' + translations[currentLanguage].source + ' یافت نشد.</div>';
                 return;
             }
 
@@ -1426,35 +1551,30 @@ body.dark .detail-header {
             detailPageTitle.setAttribute('data-category', category);
             detailHeader.classList.add('active');
 
-            const items = azkarData[category];
-            let html = '';
-            items.forEach(item => {
-                let text = item.text;
+            var items = azkarData[category];
+            var html = '';
+            items.forEach(function(item) {
+                var text = item.text;
                 if (category === 'sleep') {
                     text = text.replace('دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:', translations[currentLanguage].sleepStep1);
                     text = text.replace('بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)', translations[currentLanguage].sleepStep2);
                     text = text.replace('سوره {الم سجدةِ} و {مُلك} را بخوانید', translations[currentLanguage].sleepSurah);
                 }
-                let timesWord = '';
+                var timesWord = '';
                 if (currentLanguage === 'ar') timesWord = getArabicTimes(item.repeat);
                 else if (currentLanguage === 'fa') timesWord = 'مرتبه';
                 else timesWord = 'times';
-                html += `
-                    <div class="dhikr-card">
-                        <div class="dhikr-text">${text}</div>
-                        <div class="dhikr-meta">
-                            <span class="repeat-badge"><i class="fas fa-star"></i> ${item.repeat} ${timesWord}</span>
-                            <span class="reference"><i class="fas fa-book-open"></i> ${item.reference || translations[currentLanguage].source}</span>
-                        </div>
-                    </div>
-                `;
+                html += '<div class="dhikr-card">' +
+                    '<div class="dhikr-text">' + text + '</div>' +
+                    '<div class="dhikr-meta">' +
+                    '<span class="repeat-badge"><i class="fas fa-star"></i> ' + item.repeat + ' ' + timesWord + '</span>' +
+                    '<span class="reference"><i class="fas fa-book-open"></i> ' + (item.reference || translations[currentLanguage].source) + '</span>' +
+                    '</div></div>';
             });
             detailList.innerHTML = html;
 
-            // اگر از منوی اصلی وارد شده (shouldPushState = true) اسکرول را به بالا می‌بریم
             if (shouldPushState) {
-                // ریست اسکرول با تاخیر کوتاه برای اطمینان از اعمال بعد از رندر
-                setTimeout(() => {
+                setTimeout(function() {
                     detailList.scrollTop = 0;
                     detailList.scrollTo({ top: 0, behavior: 'auto' });
                 }, 0);
@@ -1470,19 +1590,18 @@ body.dark .detail-header {
             }
         }
 
-        document.querySelectorAll('.menu-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const cat = card.dataset.category;
+        document.querySelectorAll('.menu-card').forEach(function(card) {
+            card.addEventListener('click', function() {
+                var cat = card.dataset.category;
                 if (cat) showCategory(cat, true);
             });
         });
 
-        backBtn.addEventListener('click', () => {
+        backBtn.addEventListener('click', function() {
             history.back();
         });
 
-        // رویداد popstate برای مدیریت دکمه برگشت سیستم
-        window.addEventListener('popstate', (event) => {
+        window.addEventListener('popstate', function(event) {
             if (event.state && event.state.page === 'detail') {
                 showCategory(event.state.category, false);
             } else {
@@ -1492,7 +1611,7 @@ body.dark .detail-header {
 
         async function loadAzkar() {
             try {
-                const response = await fetch(JSON_URL);
+                var response = await fetch(JSON_URL);
                 if (!response.ok) throw new Error('خطا در دریافت اطلاعات');
                 azkarData = await response.json();
             } catch (error) {
@@ -1507,8 +1626,8 @@ body.dark .detail-header {
         loadSettings();
 
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed', err));
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js').catch(function(err) { console.log('SW registration failed', err); });
             });
         }
     </script>
