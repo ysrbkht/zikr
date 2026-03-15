@@ -1372,7 +1372,6 @@
         }
 
         // مدیریت تاریخچه برای دکمه برگشت سیستم
-        // در ابتدای لود، state اولیه را تنظیم می‌کنیم
         history.replaceState({ page: 'main' }, '', location.pathname);
 
         // نمایش منو و جزئیات
@@ -1438,7 +1437,15 @@
                 `;
             });
             detailList.innerHTML = html;
-            detailList.scrollTop = 0;
+
+            // اگر از منوی اصلی وارد شده (shouldPushState = true) اسکرول را به بالا می‌بریم
+            if (shouldPushState) {
+                // ریست اسکرول با تاخیر کوتاه برای اطمینان از اعمال بعد از رندر
+                setTimeout(() => {
+                    detailList.scrollTop = 0;
+                    detailList.scrollTo({ top: 0, behavior: 'auto' });
+                }, 0);
+            }
 
             mainMenu.style.display = 'none';
             detailView.style.display = 'flex';
