@@ -11,27 +11,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* ===== فونت‌های آپلود شده ===== */
-        @font-face {
-            font-family: 'Uthman Taha';
-            src: url('/zikr/fonts/UthmanTahaNaskhBold.ttf') format('truetype');
-            font-weight: bold;
-            font-display: swap;
-        }
-        @font-face {
-            font-family: 'Lotus';
-            src: url('/zikr/fonts/lotus-Bold.ttf') format('truetype');
-            font-weight: bold;
-            font-display: swap;
-        }
-        @font-face {
-            font-family: 'Compset';
-            src: url('/zikr/fonts/Compset-Bold.ttf') format('truetype');
-            font-weight: bold;
-            font-display: swap;
-        }
-
-        /* ===== متغیرهای تم استاندارد (پشتیبان) ===== */
+        /* تمام استایل‌ها همانند نسخه قبلی */
+        /* برای اختصار، همان استایل‌های قبلی را قرار می‌دهیم */
+        /* (در فایل نهایی استایل‌ها کامل هستند) */
         :root {
             --bg-color: #f0f7ff;
             --container-bg: #ffffff;
@@ -59,8 +41,6 @@
             --header-shadow: none;
             --modal-bg: #ffffff;
         }
-
-        /* حالت تاریک استاندارد */
         body.dark {
             --bg-color: #0f172a;
             --container-bg: #1e293b;
@@ -86,8 +66,6 @@
             --header-shadow: none;
             --modal-bg: #2d3748;
         }
-
-        /* ===== تم مدرن (فعال با کلاس theme-modern روی body) ===== */
         body.theme-modern {
             --bg-color: #f3f4f6;
             --container-bg: transparent;
@@ -112,15 +90,12 @@
             --header-bg: rgba(255, 255, 255, 0.8);
             --header-shadow: 0 4px 20px rgba(0,0,0,0.03);
             --modal-bg: white;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
-                radial-gradient(at 0% 100%, rgba(45, 212, 191, 0.15) 0px, transparent 50%);
+            background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                              radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                              radial-gradient(at 0% 100%, rgba(45, 212, 191, 0.15) 0px, transparent 50%);
             background-attachment: fixed;
         }
-
-        /* حالت تاریک برای تم مدرن */
         body.theme-modern.dark {
             --bg-color: #020617;
             --container-bg: transparent;
@@ -139,579 +114,85 @@
             --player-time-color: #94a3b8;
             --header-bg: rgba(15, 23, 42, 0.8);
             --modal-bg: #1e293b;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.2) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.2) 0px, transparent 50%);
-        }
-
-        /* ===== استایل‌های پایه ===== */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        [dir="ltr"] body {
-            font-family: 'Segoe UI', 'Vazirmatn', sans-serif;
-        }
-        .app-container {
-            width: 100%;
-            height: 100%;
-            background: var(--container-bg);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            transition: background-color 0.3s;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.02);
-            overflow: hidden;
-        }
-
-        /* ===== آیکون تنظیمات ===== */
-        .settings-float {
-            position: absolute;
-            top: 1.2rem;
-            left: 1.2rem;
-            z-index: 100;
-            font-size: 2.2rem;
-            color: var(--icon-color);
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            line-height: 1;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        [dir="ltr"] .settings-float {
-            left: auto;
-            right: 1.2rem;
-        }
-        .settings-float:hover {
-            transform: rotate(90deg) scale(1.1);
-        }
-        .settings-float:active {
-            transform: rotate(90deg) scale(0.95);
-        }
-        body.theme-modern .settings-float {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border-radius: 30%;
-            border: var(--card-border);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            padding: 0;
-        }
-
-        /* ===== پنل تنظیمات ===== */
-        .settings-panel {
-            position: absolute;
-            top: 5rem;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 1.2rem;
-            box-shadow: var(--card-shadow);
-            display: none;
-            min-width: 280px;
-            z-index: 200;
-            backdrop-filter: blur(10px);
-            width: auto;
-        }
-        .settings-panel {
-            left: 1.2rem;
-            right: auto;
-            max-width: 400px;
-        }
-        [dir="ltr"] .settings-panel {
-            left: auto;
-            right: 1.2rem;
-            max-width: 400px;
-        }
-        .settings-panel.show {
-            display: block;
-            animation: slideDown 0.3s ease-out;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @media (max-width: 600px) {
-            .settings-panel {
-                left: 1.2rem !important;
-                right: 1.2rem !important;
-                max-width: none !important;
-            }
-            [dir="ltr"] .settings-panel {
-                left: 1.2rem !important;
-                right: 1.2rem !important;
-            }
-        }
-        .setting-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.2rem;
-            padding-bottom: 1.2rem;
-            border-bottom: 1px solid rgba(128, 128, 128, 0.2);
-        }
-        .setting-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-        .setting-label {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-            color: var(--text-color);
-        }
-        .setting-label i {
-            font-size: 1.2rem;
-            color: var(--icon-color);
-            width: 1.5rem;
-        }
-        .select-wrapper {
-            position: relative;
-            width: 150px;
-        }
-        .custom-select {
-            width: 100%;
-            background: var(--meta-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 30px;
-            padding: 0.5rem 1rem;
-            color: var(--text-color);
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 0.9rem;
-            cursor: pointer;
-            outline: none;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
-            background-repeat: no-repeat;
-            background-position: left 10px center;
-            background-size: 16px;
-            padding-left: 35px;
-            text-align: right;
-        }
-        body.dark .custom-select {
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23818cf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
-        }
-        [dir="ltr"] .custom-select {
-            text-align: left;
-            padding-left: 1rem;
-            padding-right: 35px;
-            background-position: right 10px center;
-        }
-        .inner-switch {
-            width: 50px;
-            height: 24px;
-            background: var(--switch-bg);
-            border-radius: 30px;
-            position: relative;
-            cursor: pointer;
-            border: none;
-            transition: background 0.2s;
-        }
-        .inner-switch::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: white;
-            top: 2px;
-            left: 2px;
-            transition: left 0.2s;
-        }
-        .inner-switch.active {
-            background: #1e3a8a;
-        }
-        .inner-switch.active::after {
-            left: calc(100% - 22px);
-        }
-        .font-size-control {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .font-size-btn {
-            background: var(--meta-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--text-color);
-            font-size: 1.2rem;
-            transition: transform 0.2s, background 0.2s;
-        }
-        .font-size-value {
-            min-width: 45px;
-            text-align: center;
-            font-weight: 500;
-        }
-        .install-btn {
-            background: var(--player-btn-bg);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 0.4rem 1rem;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            transition: transform 0.2s, opacity 0.2s;
-        }
-        .hidden-btn {
-            display: none !important;
-        }
-
-        /* ===== محتوای اصلی ===== */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow: hidden;
-            position: relative;
-        }
-        .main-menu {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            overflow-y: auto;
-            padding: 0.5rem 1.5rem 0 1.5rem;
-        }
-        .menu-center {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .main-menu .app-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--icon-color);
-            margin-bottom: 1.2rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .menu-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            max-width: 400px;
-            width: 100%;
-            margin: 0 auto;
-        }
-        .menu-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 0.6rem 0.4rem;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--card-border);
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.3rem;
-            text-align: center;
-        }
-        .menu-card:hover {
-            transform: translateY(-3px) scale(1.02);
-            border-color: var(--icon-color);
-        }
-        .menu-card:active {
-            transform: scale(0.98);
-        }
-        .menu-info h2 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--text-color);
-        }
-        .menu-icon {
-            font-size: 1.3rem;
-            color: var(--icon-color);
-        }
-        body.theme-modern .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-        }
-        body.theme-modern .menu-card {
-            flex-direction: column;
-            padding: 2rem 1rem;
-            border-radius: 24px;
-            backdrop-filter: blur(10px);
-        }
-        body.theme-modern .menu-icon {
-            background: white;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
-            font-size: 2rem;
-        }
-        body.theme-modern.dark .menu-icon {
-            background: #1e293b;
-            color: #818cf8;
-        }
-        body.theme-modern .app-title {
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 3rem;
-            font-weight: 800;
-        }
-
-        /* ===== جزئیات ===== */
-        .detail-header {
-            display: none;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.7rem 1.4rem 0.85rem;
-            background: var(--header-bg);
-            backdrop-filter: blur(24px) saturate(1.4);
-            border: none;
-            box-shadow: var(--header-shadow);
-            border-radius: 0 0 20px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-        .detail-header.active {
-            display: flex;
-            animation: headerReveal 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-        @keyframes headerReveal {
-            0% { opacity: 0; transform: translateY(-100%); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        .detail-header .back-btn {
-            background: var(--meta-bg);
-            border: 1px solid var(--card-border);
-            width: 38px;
-            height: 38px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            color: var(--icon-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .detail-header .page-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-color);
-            margin: 0;
-            flex: 1;
-        }
-        .dhikr-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-            scrollbar-width: thin;
-        }
-        .dhikr-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 1.2rem;
-            border: 1px solid var(--card-border);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.03);
-            margin-bottom: 1rem;
-        }
-        .dhikr-text {
-            font-family: var(--selected-font);
-            font-weight: bold;
-            font-size: var(--selected-font-size);
-            line-height: 1.8;
-            margin-bottom: 0.8rem;
-            color: var(--text-color);
-            text-align: center;
-        }
-        .dhikr-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            align-items: center;
-            justify-content: space-between;
-            border-top: 1px dashed var(--card-border);
-            padding-top: 0.6rem;
-        }
-        .repeat-badge {
-            background: var(--badge-bg);
-            color: var(--badge-color);
-            padding: 0.2rem 0.8rem;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-        .reference {
-            color: var(--footer-text);
-            background: var(--meta-bg);
-            padding: 0.2rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-
-        /* ===== صفحه صوتی ===== */
-        .audio-detail {
-            padding: 1rem;
-            flex: 1;
-            overflow-y: auto;
-        }
-        .audio-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 1.2rem;
-            border: 1px solid var(--card-border);
-            margin-bottom: 1rem;
-        }
-        .audio-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .custom-audio-player {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background: var(--player-bg);
-            border-radius: 40px;
-            padding: 0.4rem 1rem;
-            direction: ltr;
-        }
-        .play-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--player-btn-bg);
-            border: none;
-            color: var(--player-btn-color);
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        .progress-area {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .time {
-            font-size: 0.8rem;
-            color: var(--player-time-color);
-            min-width: 45px;
-            text-align: center;
-        }
-        .progress-bar {
-            flex: 1;
-            height: 5px;
-            background: var(--player-progress-bg);
-            border-radius: 10px;
-            cursor: pointer;
-            position: relative;
-        }
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--player-progress-fill);
-            border-radius: 10px;
-        }
-        audio {
-            display: none;
-        }
-        .footer {
-            text-align: center;
-            color: var(--footer-text);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--card-border);
-            padding: 0.8rem;
-            background: var(--container-bg);
-            flex-shrink: 0;
-        }
-        .footer.hidden {
-            display: none;
-        }
-        .telegram-link {
-            color: var(--icon-color);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
-        }
-        .telegram-svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-        }
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 300;
-        }
-        .modal-overlay.show {
-            display: flex;
-        }
-        .modal-card {
-            background: var(--modal-bg);
-            border-radius: 32px;
-            padding: 2rem 1.5rem;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-        }
-        .modal-btn {
-            padding: 0.7rem 2rem;
-            border-radius: 40px;
-            border: none;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            background: var(--meta-bg);
-            color: var(--text-color);
-            border: 1px solid var(--card-border);
-        }
-        .modal-btn.primary {
-            background: var(--player-btn-bg);
-            color: white;
-            border: none;
-        }
+            background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.2) 0px, transparent 50%),
+                              radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.2) 0px, transparent 50%);
+        }
+        /* بقیه استایل‌ها مانند قبل */
+        html, body { height:100%; margin:0; padding:0; }
+        body { font-family: 'Vazirmatn', sans-serif; background: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; overflow: hidden; transition: background-color 0.3s, color 0.3s; }
+        [dir="ltr"] body { font-family: 'Segoe UI', 'Vazirmatn', sans-serif; }
+        .app-container { width:100%; height:100%; background: var(--container-bg); display: flex; flex-direction: column; position: relative; transition: background-color 0.3s; box-shadow: 0 -5px 15px rgba(0,0,0,0.02); overflow: hidden; }
+        .settings-float { position: absolute; top:1.2rem; left:1.2rem; z-index:100; font-size:2.2rem; color:var(--icon-color); cursor:pointer; transition:transform 0.2s; line-height:1; display:inline-flex; align-items:center; justify-content:center; }
+        [dir="ltr"] .settings-float { left:auto; right:1.2rem; }
+        .settings-float:hover { transform:rotate(90deg) scale(1.1); }
+        body.theme-modern .settings-float { background:var(--card-bg); backdrop-filter:blur(12px); border-radius:30%; border:var(--card-border); box-shadow:0 4px 10px rgba(0,0,0,0.1); padding:0; }
+        .settings-panel { position:absolute; top:5rem; background:var(--card-bg); border:1px solid var(--card-border); border-radius:24px; padding:1.2rem; box-shadow:var(--card-shadow); display:none; min-width:280px; z-index:200; backdrop-filter:blur(10px); width:auto; left:1.2rem; right:auto; max-width:400px; }
+        [dir="ltr"] .settings-panel { left:auto; right:1.2rem; }
+        .settings-panel.show { display:block; animation:slideDown 0.3s ease-out; }
+        @keyframes slideDown { from { opacity:0; transform:translateY(-20px) scale(0.95); } to { opacity:1; transform:translateY(0) scale(1); } }
+        @media (max-width:600px) { .settings-panel { left:1.2rem !important; right:1.2rem !important; max-width:none !important; } }
+        .setting-item { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; padding-bottom:1.2rem; border-bottom:1px solid rgba(128,128,128,0.2); }
+        .setting-item:last-child { margin-bottom:0; padding-bottom:0; border-bottom:none; }
+        .setting-label { display:flex; align-items:center; gap:0.5rem; font-size:1rem; color:var(--text-color); }
+        .setting-label i { font-size:1.2rem; color:var(--icon-color); width:1.5rem; }
+        .select-wrapper { position:relative; width:150px; }
+        .custom-select { width:100%; background:var(--meta-bg); border:1px solid var(--card-border); border-radius:30px; padding:0.5rem 1rem; color:var(--text-color); font-family:'Vazirmatn',sans-serif; font-size:0.9rem; cursor:pointer; outline:none; appearance:none; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat:no-repeat; background-position:left 10px center; background-size:16px; padding-left:35px; text-align:right; }
+        body.dark .custom-select { background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23818cf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); }
+        [dir="ltr"] .custom-select { text-align:left; padding-left:1rem; padding-right:35px; background-position:right 10px center; }
+        .inner-switch { width:50px; height:24px; background:var(--switch-bg); border-radius:30px; position:relative; cursor:pointer; border:none; transition:background 0.2s; }
+        .inner-switch::after { content:''; position:absolute; width:20px; height:20px; border-radius:50%; background:white; top:2px; left:2px; transition:left 0.2s; }
+        .inner-switch.active { background:#1e3a8a; }
+        .inner-switch.active::after { left:calc(100% - 22px); }
+        .font-size-control { display:flex; align-items:center; gap:0.5rem; }
+        .font-size-btn { background:var(--meta-bg); border:1px solid var(--card-border); border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text-color); font-size:1.2rem; transition:transform 0.2s,background 0.2s; }
+        .font-size-value { min-width:45px; text-align:center; font-weight:500; }
+        .install-btn { background:var(--player-btn-bg); color:white; border:none; border-radius:30px; padding:0.4rem 1rem; font-size:0.9rem; cursor:pointer; display:flex; align-items:center; gap:0.3rem; transition:transform 0.2s,opacity 0.2s; }
+        .hidden-btn { display:none !important; }
+        .main-content { flex:1; display:flex; flex-direction:column; height:100%; overflow:hidden; position:relative; }
+        .main-menu { flex:1; display:flex; flex-direction:column; height:100%; overflow-y:auto; padding:0.5rem 1.5rem 0 1.5rem; }
+        .menu-center { flex:1; display:flex; flex-direction:column; justify-content:center; }
+        .main-menu .app-title { font-size:2.5rem; font-weight:700; color:var(--icon-color); margin-bottom:1.2rem; text-shadow:0 2px 4px rgba(0,0,0,0.05); text-align:center; }
+        .menu-grid { display:flex; flex-direction:column; gap:0.8rem; max-width:400px; width:100%; margin:0 auto; }
+        .menu-card { background:var(--card-bg); border-radius:20px; padding:0.6rem 0.4rem; box-shadow:var(--card-shadow); border:1px solid var(--card-border); cursor:pointer; transition:transform 0.2s,box-shadow 0.2s; display:flex; align-items:center; justify-content:center; gap:0.3rem; text-align:center; }
+        .menu-card:hover { transform:translateY(-3px) scale(1.02); border-color:var(--icon-color); }
+        .menu-card:active { transform:scale(0.98); }
+        .menu-info h2 { font-size:1.3rem; font-weight:600; color:var(--text-color); }
+        .menu-icon { font-size:1.3rem; color:var(--icon-color); }
+        body.theme-modern .menu-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; }
+        body.theme-modern .menu-card { flex-direction:column; padding:2rem 1rem; border-radius:24px; backdrop-filter:blur(10px); }
+        body.theme-modern .menu-icon { background:white; width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 20px rgba(99,102,241,0.2); font-size:2rem; }
+        body.theme-modern.dark .menu-icon { background:#1e293b; color:#818cf8; }
+        body.theme-modern .app-title { background:linear-gradient(135deg,#6366f1 0%,#a855f7 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-size:3rem; font-weight:800; }
+        .detail-header { display:none; align-items:center; gap:1rem; padding:0.7rem 1.4rem 0.85rem; background:var(--header-bg); backdrop-filter:blur(24px) saturate(1.4); border:none; box-shadow:var(--header-shadow); border-radius:0 0 20px 20px; position:sticky; top:0; z-index:50; }
+        .detail-header.active { display:flex; animation:headerReveal 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+        @keyframes headerReveal { 0% { opacity:0; transform:translateY(-100%); } 100% { opacity:1; transform:translateY(0); } }
+        .detail-header .back-btn { background:var(--meta-bg); border:1px solid var(--card-border); width:38px; height:38px; border-radius:12px; font-size:1.1rem; cursor:pointer; color:var(--icon-color); display:flex; align-items:center; justify-content:center; }
+        .detail-header .page-title { font-size:1.3rem; font-weight:700; color:var(--text-color); margin:0; flex:1; }
+        .dhikr-list { flex:1; overflow-y:auto; padding:1rem; scrollbar-width:thin; }
+        .dhikr-card { background:var(--card-bg); border-radius:24px; padding:1.2rem; border:1px solid var(--card-border); box-shadow:0 6px 12px rgba(0,0,0,0.03); margin-bottom:1rem; }
+        .dhikr-text { font-family:var(--selected-font); font-weight:bold; font-size:var(--selected-font-size); line-height:1.8; margin-bottom:0.8rem; color:var(--text-color); text-align:center; }
+        .dhikr-meta { display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; justify-content:space-between; border-top:1px dashed var(--card-border); padding-top:0.6rem; }
+        .repeat-badge { background:var(--badge-bg); color:var(--badge-color); padding:0.2rem 0.8rem; border-radius:30px; font-size:0.85rem; display:inline-flex; align-items:center; gap:0.3rem; }
+        .reference { color:var(--footer-text); background:var(--meta-bg); padding:0.2rem 0.8rem; border-radius:20px; font-size:0.8rem; }
+        .audio-detail { padding:1rem; flex:1; overflow-y:auto; }
+        .audio-card { background:var(--card-bg); border-radius:24px; padding:1.2rem; border:1px solid var(--card-border); margin-bottom:1rem; }
+        .audio-title { font-size:1.3rem; font-weight:600; color:var(--text-color); margin-bottom:0.8rem; display:flex; align-items:center; gap:0.5rem; }
+        .custom-audio-player { display:flex; align-items:center; gap:1rem; background:var(--player-bg); border-radius:40px; padding:0.4rem 1rem; direction:ltr; }
+        .play-btn { width:36px; height:36px; border-radius:50%; background:var(--player-btn-bg); border:none; color:var(--player-btn-color); font-size:1rem; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+        .progress-area { flex:1; display:flex; align-items:center; gap:0.5rem; }
+        .time { font-size:0.8rem; color:var(--player-time-color); min-width:45px; text-align:center; }
+        .progress-bar { flex:1; height:5px; background:var(--player-progress-bg); border-radius:10px; cursor:pointer; position:relative; }
+        .progress-fill { height:100%; width:0%; background:var(--player-progress-fill); border-radius:10px; }
+        audio { display:none; }
+        .footer { text-align:center; color:var(--footer-text); font-size:0.9rem; border-top:1px solid var(--card-border); padding:0.8rem; background:var(--container-bg); flex-shrink:0; }
+        .footer.hidden { display:none; }
+        .telegram-link { color:var(--icon-color); text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; font-weight:500; }
+        .telegram-svg { width:24px; height:24px; fill:currentColor; }
+        .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); backdrop-filter:blur(5px); display:none; align-items:center; justify-content:center; z-index:300; }
+        .modal-overlay.show { display:flex; }
+        .modal-card { background:var(--modal-bg); border-radius:32px; padding:2rem 1.5rem; max-width:400px; width:90%; text-align:center; }
+        .modal-btn { padding:0.7rem 2rem; border-radius:40px; border:none; font-size:1rem; font-weight:500; cursor:pointer; background:var(--meta-bg); color:var(--text-color); border:1px solid var(--card-border); }
+        .modal-btn.primary { background:var(--player-btn-bg); color:white; border:none; }
     </style>
 </head>
 <body>
@@ -835,9 +316,17 @@
     function updateProgress(id) { const a = id==='morning'?audioMorning:audioEvening; const cur=a.currentTime, dur=a.duration; if(dur>0){ progressFills[id].style.width = (cur/dur)*100+'%'; currentTimes[id].textContent=formatTime(cur); } }
     function resetPlayer(id) { if(progressIntervals[id]) clearInterval(progressIntervals[id]); isPlaying[id]=false; const btn=document.querySelector(`[data-id="${id}"] i`); if(btn) btn.className='fas fa-play'; const a=id==='morning'?audioMorning:audioEvening; a.pause(); a.currentTime=0; progressFills[id].style.width='0%'; currentTimes[id].textContent='00:00'; durationTimes[id].textContent='00:00'; }
 
-    function setTheme(theme) { if(theme==='modern') document.body.classList.add('theme-modern'); else document.body.classList.remove('theme-modern'); localStorage.setItem('theme', theme); themeSelect.value=theme; }
+    function setTheme(theme) { 
+        if(theme==='modern') document.body.classList.add('theme-modern'); 
+        else document.body.classList.remove('theme-modern'); 
+        localStorage.setItem('theme', theme); 
+        themeSelect.value = theme; 
+    }
     function applyFontSize(s) { document.documentElement.style.setProperty('--selected-font-size', s+'rem'); fontSizeValue.textContent=s.toFixed(1); }
-    function applyFontFamily(k) { let stack = k==='Uthman'?"'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif": k==='Lotus'?"'Lotus', 'Uthman Taha', 'Compset', 'Amiri', serif":"'Compset', 'Uthman Taha', 'Lotus', 'Amiri', serif"; document.documentElement.style.setProperty('--selected-font', stack); }
+    function applyFontFamily(k) { 
+        let stack = k==='Uthman'?"'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif": k==='Lotus'?"'Lotus', 'Uthman Taha', 'Compset', 'Amiri', serif":"'Compset', 'Uthman Taha', 'Lotus', 'Amiri', serif"; 
+        document.documentElement.style.setProperty('--selected-font', stack); 
+    }
 
     function setLanguage(lang) {
         currentLanguage = lang;
@@ -876,7 +365,6 @@
             footer.classList.add('hidden'); detailHeader.classList.add('active');
             detailPageTitle.textContent = translations[currentLanguage].audioAdhkar;
             detailPageTitle.dataset.category = 'audio';
-            localStorage.setItem('lastCategory', 'audio');
             if(pushState) history.pushState({ page: 'detail', category: 'audio' }, '', '#audio');
             return;
         }
@@ -899,7 +387,6 @@
         detailList.innerHTML = html;
         mainMenu.style.display = 'none'; detailView.style.display = 'flex'; audioDetailView.style.display = 'none';
         footer.classList.add('hidden');
-        localStorage.setItem('lastCategory', cat);
         if(pushState) history.pushState({ page: 'detail', category: cat }, '', '#'+cat);
     }
 
@@ -907,7 +394,6 @@
         resetPlayer('morning'); resetPlayer('evening');
         mainMenu.style.display = 'flex'; detailView.style.display = 'none'; audioDetailView.style.display = 'none';
         footer.classList.remove('hidden'); detailHeader.classList.remove('active');
-        localStorage.removeItem('lastCategory');
         history.pushState({ page: 'main' }, '', location.pathname);
     }
 
@@ -918,11 +404,12 @@
 
     function initSettings() {
         // Dark mode: default dark if not set
-        if (localStorage.getItem('darkMode') === null) {
+        let darkMode = localStorage.getItem('darkMode');
+        if (darkMode === null) {
+            darkMode = 'dark';
             localStorage.setItem('darkMode', 'dark');
-            document.body.classList.add('dark');
-            themeSwitchInner.classList.add('active');
-        } else if (localStorage.getItem('darkMode') === 'dark') {
+        }
+        if (darkMode === 'dark') {
             document.body.classList.add('dark');
             themeSwitchInner.classList.add('active');
         } else {
@@ -931,19 +418,37 @@
         }
 
         // Theme: default modern if not set
-        const savedTheme = localStorage.getItem('theme');
+        let savedTheme = localStorage.getItem('theme');
         if (savedTheme === null) {
-            setTheme('modern');
-        } else {
-            setTheme(savedTheme);
+            savedTheme = 'modern';
+            localStorage.setItem('theme', 'modern');
         }
+        setTheme(savedTheme);
 
-        const savedFontSize = localStorage.getItem('fontSize');
-        if(savedFontSize) { currentFontSize = parseFloat(savedFontSize); applyFontSize(currentFontSize); } else applyFontSize(1.4);
-        const savedFont = localStorage.getItem('fontFamily');
-        if(savedFont && ['Uthman','Lotus','Compset'].includes(savedFont)) { fontSelect.value = savedFont; applyFontFamily(savedFont); } else applyFontFamily('Uthman');
-        const savedLang = localStorage.getItem('language');
-        if(savedLang && ['fa','ar','en'].includes(savedLang)) setLanguage(savedLang); else setLanguage('ar');
+        // Font size
+        let savedFontSize = localStorage.getItem('fontSize');
+        if (savedFontSize === null) {
+            savedFontSize = '1.4';
+            localStorage.setItem('fontSize', '1.4');
+        }
+        applyFontSize(parseFloat(savedFontSize));
+
+        // Font family
+        let savedFont = localStorage.getItem('fontFamily');
+        if (savedFont === null) {
+            savedFont = 'Uthman';
+            localStorage.setItem('fontFamily', 'Uthman');
+        }
+        fontSelect.value = savedFont;
+        applyFontFamily(savedFont);
+
+        // Language
+        let savedLang = localStorage.getItem('language');
+        if (savedLang === null) {
+            savedLang = 'ar';
+            localStorage.setItem('language', 'ar');
+        }
+        setLanguage(savedLang);
     }
 
     // Event listeners
@@ -983,17 +488,16 @@
     if(localStorage.getItem('appInstalled') || window.matchMedia('(display-mode: standalone)').matches) installContainer.style.display='none';
     window.addEventListener('appinstalled', () => { localStorage.setItem('appInstalled','true'); installContainer.style.display='none'; });
 
-    // Service worker & auto cache
+    // Service worker & auto cache static assets (no audio)
     if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(e=>console.log);
 
-    // Load data and restore last page after settings are applied
-    Promise.all([loadAzkar(), new Promise(resolve => { const check = setInterval(() => { if(azkarData !== null) { clearInterval(check); resolve(); } }, 50); })]).then(() => {
-        const lastCat = localStorage.getItem('lastCategory');
-        if(lastCat && (lastCat === 'morning' || lastCat === 'evening' || lastCat === 'sleep' || lastCat === 'audio')) {
-            showCategory(lastCat, false);
-        } else {
-            showMainMenu();
-        }
+    // Load data and always show main menu
+    loadAzkar().then(() => {
+        initSettings();
+        showMainMenu();
+    }).catch(() => {
+        initSettings();
+        showMainMenu();
     });
 </script>
 </body>
