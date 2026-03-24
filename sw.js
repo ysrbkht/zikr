@@ -1,6 +1,6 @@
 const APP_CACHE_NAME = 'azkar-static-v1';
+const AUDIO_CACHE_NAME = 'azkar-audio-v1';
 
-// فقط فایل‌های ضروری و ایستا (بدون فایل صوتی)
 const urlsToCache = [
   './',
   './index.html',
@@ -33,7 +33,7 @@ self.addEventListener('activate', event => {
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheName !== APP_CACHE_NAME && cacheName.startsWith('azkar-')) {
+          if ((cacheName.startsWith('azkar-') && cacheName !== APP_CACHE_NAME && cacheName !== AUDIO_CACHE_NAME)) {
             return caches.delete(cacheName);
           }
         })
@@ -45,13 +45,28 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = event.request.url;
 
-  // استراتژی Cache First برای فایل‌های ایستا
-  if (url.includes('fonts') || url.includes('icon') || url.includes('azkar.json') || url.includes('css') || url.includes('manifest.json') || url.endsWith('.html')) {
+  // اگر درخواست فایل صوتی باشد، ابتدا از کش صوتی بررسی کن
+  if (url.includes('morning.mp3') || url.includes('evening.mp3')) {
+    event.respondWith(
+      caches.open(AUDIO_CACHE_NAME).then(cache => 
+        cache.match(event.request).then(cachedResponse => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          return fetch(event.request).then(networkResponse => {
+            // اما ما بعد از دانلود دستی آن را در کش قرار می‌دهیم، نه خودکار
+            return networkResponse;
+          });
+        })
+      )
+    );
+  }
+  // برای فایل‌های ایستا (فونت، آیکون، json، css، manifest، html)
+  else if (url.includes('fonts') || url.includes('icon') || url.includes('azkar.json') || url.includes('css') || url.includes('manifest.json') || url.endsWith('.html')) {
     event.respondWith(
       caches.open(APP_CACHE_NAME).then(cache => 
         cache.match(event.request).then(cachedResponse => {
           if (cachedResponse) {
-            // در پس‌زمینه آپدیت کن
             fetch(event.request).then(networkResponse => {
               if (networkResponse && networkResponse.status === 200) {
                 cache.put(event.request, networkResponse.clone());
@@ -69,9 +84,7 @@ self.addEventListener('fetch', event => {
       )
     );
   } else {
-    // برای فایل‌های صوتی و غیره، فقط از شبکه (بدون کش)
     event.respondWith(fetch(event.request).catch(() => {
-      // اگر ناوبری بود و قطع اینترنت، index.html را از کش برگردان
       if (event.request.mode === 'navigate') {
         return caches.match('./index.html');
       }
