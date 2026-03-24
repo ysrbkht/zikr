@@ -1,7 +1,6 @@
-const APP_CACHE_NAME = 'azkar-app-v1';
-const AUDIO_CACHE_NAME = 'azkar-audio-v1';
+const APP_CACHE_NAME = 'azkar-static-v1';
 
-// فایل‌های ضروری برای اجرای آفلاین
+// فقط فایل‌های ضروری و ایستا (بدون فایل صوتی)
 const urlsToCache = [
   './',
   './index.html',
@@ -16,33 +15,16 @@ const urlsToCache = [
   '/zikr/fonts/Compset-Bold.ttf'
 ];
 
-// فایل‌های صوتی (در کش جداگانه برای مدیریت بهتر)
-const audioUrls = [
-  'https://raw.githubusercontent.com/ysrbkht/zikr/main/morning.mp3',
-  'https://raw.githubusercontent.com/ysrbkht/zikr/main/evening.mp3'
-];
-
 self.addEventListener('install', event => {
   self.skipWaiting();
   event.waitUntil(
-    Promise.allSettled([
-      // کش کردن فایل‌های اصلی
-      caches.open(APP_CACHE_NAME).then(cache => 
-        Promise.allSettled(
-          urlsToCache.map(url => 
-            cache.add(url).catch(err => console.log('Failed to cache', url, err))
-          )
-        )
-      ),
-      // کش کردن فایل‌های صوتی در کش جداگانه
-      caches.open(AUDIO_CACHE_NAME).then(cache => 
-        Promise.allSettled(
-          audioUrls.map(url => 
-            cache.add(url).catch(err => console.log('Failed to cache audio', url, err))
-          )
+    caches.open(APP_CACHE_NAME).then(cache => 
+      Promise.allSettled(
+        urlsToCache.map(url => 
+          cache.add(url).catch(err => console.log('Failed to cache', url, err))
         )
       )
-    ])
+    )
   );
 });
 
@@ -51,9 +33,7 @@ self.addEventListener('activate', event => {
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          // حذف کش‌های قدیمی
-          if ((cacheName.startsWith('azkar-app-') && cacheName !== APP_CACHE_NAME) ||
-              (cacheName.startsWith('azkar-audio-') && cacheName !== AUDIO_CACHE_NAME)) {
+          if (cacheName !== APP_CACHE_NAME && cacheName.startsWith('azkar-')) {
             return caches.delete(cacheName);
           }
         })
@@ -65,37 +45,13 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = event.request.url;
 
-  // استراتژی برای فایل‌های صوتی: Cache First
-  if (url.includes('morning.mp3') || url.includes('evening.mp3')) {
-    event.respondWith(
-      caches.open(AUDIO_CACHE_NAME).then(cache => 
-        cache.match(event.request).then(cachedResponse => {
-          if (cachedResponse) {
-            // اگر در کش بود، همان را برگردان و در پس‌زمینه آپدیت کن
-            fetch(event.request).then(networkResponse => {
-              if (networkResponse && networkResponse.status === 200) {
-                cache.put(event.request, networkResponse.clone());
-              }
-            }).catch(() => {});
-            return cachedResponse;
-          }
-          // اگر در کش نبود، از شبکه بگیر و کش کن
-          return fetch(event.request).then(networkResponse => {
-            if (networkResponse && networkResponse.status === 200) {
-              cache.put(event.request, networkResponse.clone());
-            }
-            return networkResponse;
-          });
-        })
-      )
-    );
-  }
-  // برای فونت‌ها و فایل‌های استاتیک: Cache First (مشابه بالا)
-  else if (url.includes('fonts') || url.includes('icon') || url.includes('azkar.json') || url.includes('css')) {
+  // استراتژی Cache First برای فایل‌های ایستا
+  if (url.includes('fonts') || url.includes('icon') || url.includes('azkar.json') || url.includes('css') || url.includes('manifest.json') || url.endsWith('.html')) {
     event.respondWith(
       caches.open(APP_CACHE_NAME).then(cache => 
         cache.match(event.request).then(cachedResponse => {
           if (cachedResponse) {
+            // در پس‌زمینه آپدیت کن
             fetch(event.request).then(networkResponse => {
               if (networkResponse && networkResponse.status === 200) {
                 cache.put(event.request, networkResponse.clone());
@@ -112,32 +68,14 @@ self.addEventListener('fetch', event => {
         })
       )
     );
-  }
-  // برای ناوبری و سایر درخواست‌ها: Stale-While-Revalidate
-  else {
-    event.respondWith(
-      caches.match(event.request).then(cachedResponse => {
-        if (cachedResponse) {
-          fetch(event.request).then(networkResponse => {
-            if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-              caches.open(APP_CACHE_NAME).then(cache => cache.put(event.request, networkResponse.clone()));
-            }
-          }).catch(() => {});
-          return cachedResponse;
-        }
-        return fetch(event.request).then(networkResponse => {
-          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-            const responseToCache = networkResponse.clone();
-            caches.open(APP_CACHE_NAME).then(cache => cache.put(event.request, responseToCache));
-          }
-          return networkResponse;
-        }).catch(async () => {
-          // اگر شبکه قطع بود و درخواست ناوبری بود، index.html را برگردان
-          if (event.request.mode === 'navigate') {
-            return caches.match('./index.html');
-          }
-        });
-      })
-    );
+  } else {
+    // برای فایل‌های صوتی و غیره، فقط از شبکه (بدون کش)
+    event.respondWith(fetch(event.request).catch(() => {
+      // اگر ناوبری بود و قطع اینترنت، index.html را از کش برگردان
+      if (event.request.mode === 'navigate') {
+        return caches.match('./index.html');
+      }
+      return new Response('Network error', { status: 408 });
+    }));
   }
 });
