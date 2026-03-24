@@ -58,6 +58,7 @@
             --header-bg: transparent;
             --header-shadow: none;
             --modal-bg: #ffffff;
+            --completed-color: #10b981;
         }
 
         /* حالت تاریک استاندارد */
@@ -85,6 +86,7 @@
             --header-bg: transparent;
             --header-shadow: none;
             --modal-bg: #2d3748;
+            --completed-color: #34d399;
         }
 
         /* ===== تم مدرن (فعال با کلاس theme-modern روی body) ===== */
@@ -142,6 +144,7 @@
             background-image: 
                 radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.2) 0px, transparent 50%),
                 radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.2) 0px, transparent 50%);
+            --completed-color: #4ade80;
         }
 
         /* ===== استایل‌های پایه ===== */
@@ -537,6 +540,7 @@
             border: 1px solid var(--card-border);
             box-shadow: 0 6px 12px rgba(0,0,0,0.03);
             margin-bottom: 1rem;
+            transition: all 0.2s;
         }
         .dhikr-text {
             font-family: var(--selected-font);
@@ -556,7 +560,7 @@
             border-top: 1px dashed var(--card-border);
             padding-top: 0.6rem;
         }
-        .repeat-badge {
+        .repeat-badge, .completed-badge {
             background: var(--badge-bg);
             color: var(--badge-color);
             padding: 0.2rem 0.8rem;
@@ -565,6 +569,23 @@
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            user-select: none;
+        }
+        .repeat-badge:hover {
+            transform: scale(1.05);
+            background: var(--badge-color);
+            color: var(--badge-bg);
+        }
+        .repeat-badge:active {
+            transform: scale(0.95);
+        }
+        .completed-badge {
+            background: var(--completed-color);
+            color: white;
+            cursor: default;
+            pointer-events: none;
         }
         .reference {
             color: var(--footer-text);
@@ -767,7 +788,9 @@
             sleepStep1: 'دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:',
             sleepStep2: 'بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)',
             sleepSurah: 'سوره {الم سجده} و {ملک} را بخوانید',
-            ok: 'باشه'
+            ok: 'باشه',
+            remaining: 'باقی',
+            completed: 'انجام شد'
         },
         ar: {
             appName: 'الأذكار', morningAdhkar: 'أذكار الصباح', eveningAdhkar: 'أذكار المساء', sleepAdhkar: 'أذكار النوم', audioAdhkar: 'الأذكار الصوتية',
@@ -778,7 +801,9 @@
             sleepStep1: 'اجمع يديك وانفث فيهما واقرأ هذه السور:',
             sleepStep2: 'ثم امسح بهما جسدك مستطيعاً مبتدئاً برأسك ووجهك (كرر هذا ثلاث مرات)',
             sleepSurah: 'اقرأ سورة {السجدة} و {الملك}',
-            ok: 'حسناً'
+            ok: 'حسناً',
+            remaining: 'المتبقي',
+            completed: 'مكتمل'
         },
         en: {
             appName: 'Adhkar', morningAdhkar: 'Morning Adhkar', eveningAdhkar: 'Evening Adhkar', sleepAdhkar: 'Sleep Adhkar', audioAdhkar: 'Audio Adhkar',
@@ -789,7 +814,9 @@
             sleepStep1: 'Cup your hands, blow into them, and recite these Surahs:',
             sleepStep2: 'Then wipe your body with them as far as you can, starting from your head and face. (Repeat this three times)',
             sleepSurah: 'Recite Surah {As-Sajdah} and {Al-Mulk}',
-            ok: 'OK'
+            ok: 'OK',
+            remaining: 'remaining',
+            completed: 'Completed'
         }
     };
 
@@ -877,6 +904,9 @@
         customModal.classList.add('show');
     }
 
+    // ذخیره‌سازی وضعیت شمارش برای هر کارت (در حافظه موقت)
+    let remainingCounts = [];
+
     function showCategory(cat, pushState=true) {
         if(cat === 'audio') {
             resetPlayer('morning'); resetPlayer('evening');
@@ -892,18 +922,64 @@
         detailPageTitle.textContent = translations[currentLanguage][cat] || cat;
         detailPageTitle.dataset.category = cat;
         detailHeader.classList.add('active');
+
+        const items = azkarData[cat];
+        // مقداردهی اولیه باقی‌مانده‌ها
+        remainingCounts = items.map(item => item.repeat);
         let html = '';
-        azkarData[cat].forEach(item => {
+        items.forEach((item, idx) => {
             let text = item.text;
             if(cat === 'sleep') {
                 text = text.replace('دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:', translations[currentLanguage].sleepStep1);
                 text = text.replace('بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)', translations[currentLanguage].sleepStep2);
                 text = text.replace('سوره {الم سجدةِ} و {مُلك} را بخوانید', translations[currentLanguage].sleepSurah);
             }
-            let timesWord = (currentLanguage==='ar') ? (item.repeat===1?'مرة':item.repeat===2?'مرتين':'مرات') : (currentLanguage==='fa'?'مرتبه':'times');
-            html += `<div class="dhikr-card"><div class="dhikr-text">${text}</div><div class="dhikr-meta"><span class="repeat-badge"><i class="fas fa-star"></i> ${item.repeat} ${timesWord}</span><span class="reference"><i class="fas fa-book-open"></i> ${item.reference || translations[currentLanguage].source}</span></div></div>`;
+            const remaining = remainingCounts[idx];
+            const completed = remaining === 0;
+            const badgeHtml = completed
+                ? `<span class="completed-badge"><i class="fas fa-check-circle"></i> ${translations[currentLanguage].completed}</span>`
+                : `<span class="repeat-badge" data-idx="${idx}"><i class="fas fa-star"></i> ${remaining} ${translations[currentLanguage].remaining}</span>`;
+            html += `<div class="dhikr-card" data-idx="${idx}">
+                        <div class="dhikr-text">${text}</div>
+                        <div class="dhikr-meta">
+                            ${badgeHtml}
+                            <span class="reference"><i class="fas fa-book-open"></i> ${item.reference || translations[currentLanguage].source}</span>
+                        </div>
+                    </div>`;
         });
         detailList.innerHTML = html;
+
+        // اضافه کردن رویداد کلیک به همه دکمه‌های شمارش
+        document.querySelectorAll('.repeat-badge').forEach(badge => {
+            badge.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const idx = parseInt(badge.dataset.idx);
+                if (remainingCounts[idx] > 0) {
+                    remainingCounts[idx]--;
+                    const card = badge.closest('.dhikr-card');
+                    const metaDiv = card.querySelector('.dhikr-meta');
+                    const newRemaining = remainingCounts[idx];
+                    if (newRemaining === 0) {
+                        // تبدیل به تیک
+                        const completedHtml = `<span class="completed-badge"><i class="fas fa-check-circle"></i> ${translations[currentLanguage].completed}</span>`;
+                        const referenceSpan = metaDiv.querySelector('.reference');
+                        metaDiv.innerHTML = completedHtml + (referenceSpan ? referenceSpan.outerHTML : '');
+                        // اضافه کردن افکت انیمیشن
+                        const completedBadge = metaDiv.querySelector('.completed-badge');
+                        if (completedBadge) {
+                            completedBadge.style.transform = 'scale(1.2)';
+                            setTimeout(() => { if(completedBadge) completedBadge.style.transform = ''; }, 200);
+                        }
+                    } else {
+                        badge.innerHTML = `<i class="fas fa-star"></i> ${newRemaining} ${translations[currentLanguage].remaining}`;
+                        // افکت کوچک
+                        badge.style.transform = 'scale(1.1)';
+                        setTimeout(() => { badge.style.transform = ''; }, 150);
+                    }
+                }
+            });
+        });
+
         mainMenu.style.display = 'none'; detailView.style.display = 'flex'; audioDetailView.style.display = 'none';
         footer.classList.add('hidden');
         if(pushState) history.pushState({ page: 'detail', category: cat }, '', '#'+cat);
@@ -914,6 +990,8 @@
         mainMenu.style.display = 'flex'; detailView.style.display = 'none'; audioDetailView.style.display = 'none';
         footer.classList.remove('hidden'); detailHeader.classList.remove('active');
         history.pushState({ page: 'main' }, '', location.pathname);
+        // ریست شمارنده‌ها هنگام برگشت به منو (اختیاری)
+        remainingCounts = [];
     }
 
     async function loadAzkar() {
@@ -922,7 +1000,6 @@
     }
 
     function initSettings() {
-        // Dark mode: default dark if not set
         let darkMode = localStorage.getItem('darkMode');
         if (darkMode === null) {
             darkMode = 'dark';
@@ -936,7 +1013,6 @@
             themeSwitchInner.classList.remove('active');
         }
 
-        // Theme: default modern if not set
         let savedTheme = localStorage.getItem('theme');
         if (savedTheme === null) {
             savedTheme = 'modern';
@@ -944,7 +1020,6 @@
         }
         setTheme(savedTheme);
 
-        // Font size
         let savedFontSize = localStorage.getItem('fontSize');
         if (savedFontSize === null) {
             savedFontSize = '1.4';
@@ -952,7 +1027,6 @@
         }
         applyFontSize(parseFloat(savedFontSize));
 
-        // Font family
         let savedFont = localStorage.getItem('fontFamily');
         if (savedFont === null) {
             savedFont = 'Uthman';
@@ -961,7 +1035,6 @@
         fontSelect.value = savedFont;
         applyFontFamily(savedFont);
 
-        // Language
         let savedLang = localStorage.getItem('language');
         if (savedLang === null) {
             savedLang = 'ar';
