@@ -570,13 +570,13 @@
             align-items: center;
             gap: 0.3rem;
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
+            transition: transform 0.2s, background 0.2s, color 0.2s;
             user-select: none;
         }
         .repeat-badge:hover {
             transform: scale(1.05);
             background: var(--badge-color);
-            color: var(--badge-bg);
+            color: white !important;
         }
         .repeat-badge:active {
             transform: scale(0.95);
@@ -667,6 +667,24 @@
         }
         audio {
             display: none;
+        }
+        .download-audio-btn {
+            background: var(--player-btn-bg);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .download-audio-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
         }
         .footer {
             text-align: center;
@@ -771,13 +789,17 @@
         <div id="mainMenu" class="main-menu"><div class="menu-center"><div class="app-title" id="mainAppTitle">الأذكار</div><div class="menu-grid"><div class="menu-card" data-category="morning"><div class="menu-icon"><i class="fas fa-sun"></i></div><div class="menu-info"><h2 data-i18n="morningAdhkar">أذكار الصباح</h2></div></div><div class="menu-card" data-category="evening"><div class="menu-icon"><i class="fas fa-moon"></i></div><div class="menu-info"><h2 data-i18n="eveningAdhkar">أذكار المساء</h2></div></div><div class="menu-card" data-category="sleep"><div class="menu-icon"><i class="fas fa-bed"></i></div><div class="menu-info"><h2 data-i18n="sleepAdhkar">أذكار النوم</h2></div></div><div class="menu-card" data-category="audio"><div class="menu-icon"><i class="fas fa-headphones"></i></div><div class="menu-info"><h2 data-i18n="audioAdhkar">الأذكار الصوتية</h2></div></div></div></div><div class="footer" id="footer"><a href="https://t.me/YBAKHTIAR" target="_blank" class="telegram-link"><svg class="telegram-svg" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.87 4.326-2.96-.924c-.643-.2-.658-.643.135-.953l11.56-4.456c.537-.2 1.006.133.832.936z"/></svg><span data-i18n="feedback">آراء واقتراحات</span></a></div></div>
 
         <div id="detailView" class="detail-view" style="display: none; height: 100%; flex-direction: column;"><div id="detailList" class="dhikr-list"></div></div>
-        <div id="audioDetailView" class="detail-view" style="display: none; height: 100%; flex-direction: column;"><div class="audio-detail"><div class="audio-card"><div class="audio-title"><i class="fas fa-sun"></i> <span data-i18n="morningAudio">أذكار الصباح</span></div><div class="custom-audio-player" data-audio="morning"><button class="play-btn" data-id="morning"><i class="fas fa-play"></i></button><div class="progress-area"><span class="time" data-current="morning">00:00</span><div class="progress-bar" data-progress="morning"><div class="progress-fill" data-fill="morning"></div></div><span class="time" data-duration="morning">00:00</span></div></div></div><div class="audio-card"><div class="audio-title"><i class="fas fa-moon"></i> <span data-i18n="eveningAudio">أذكار المساء</span></div><div class="custom-audio-player" data-audio="evening"><button class="play-btn" data-id="evening"><i class="fas fa-play"></i></button><div class="progress-area"><span class="time" data-current="evening">00:00</span><div class="progress-bar" data-progress="evening"><div class="progress-fill" data-fill="evening"></div></div><span class="time" data-duration="evening">00:00</span></div></div></div></div><audio id="audioMorning" preload="none" src="https://raw.githubusercontent.com/ysrbkht/zikr/main/morning.mp3"></audio><audio id="audioEvening" preload="none" src="https://raw.githubusercontent.com/ysrbkht/zikr/main/evening.mp3"></audio></div>
+        <div id="audioDetailView" class="detail-view" style="display: none; height: 100%; flex-direction: column;"><div class="audio-detail"><div class="audio-card"><div class="audio-title"><i class="fas fa-sun"></i> <span data-i18n="morningAudio">أذكار الصباح</span></div><div class="custom-audio-player" data-audio="morning"><button class="play-btn" data-id="morning"><i class="fas fa-play"></i></button><div class="progress-area"><span class="time" data-current="morning">00:00</span><div class="progress-bar" data-progress="morning"><div class="progress-fill" data-fill="morning"></div></div><span class="time" data-duration="morning">00:00</span></div></div></div><div class="audio-card"><div class="audio-title"><i class="fas fa-moon"></i> <span data-i18n="eveningAudio">أذكار المساء</span></div><div class="custom-audio-player" data-audio="evening"><button class="play-btn" data-id="evening"><i class="fas fa-play"></i></button><div class="progress-area"><span class="time" data-current="evening">00:00</span><div class="progress-bar" data-progress="evening"><div class="progress-fill" data-fill="evening"></div></div><span class="time" data-duration="evening">00:00</span></div></div></div></div><button class="download-audio-btn" id="downloadAudioBtn"><i class="fas fa-download"></i> <span data-i18n="downloadAudio">تحميل الملفات الصوتية للاستخدام دون اتصال (20 MB)</span></button><audio id="audioMorning" preload="none" src="https://raw.githubusercontent.com/ysrbkht/zikr/main/morning.mp3"></audio><audio id="audioEvening" preload="none" src="https://raw.githubusercontent.com/ysrbkht/zikr/main/evening.mp3"></audio></div>
     </div>
     <div class="modal-overlay" id="customModal"><div class="modal-card"><div class="modal-icon" id="modalIcon"><i class="fas fa-cloud-download-alt"></i></div><div class="modal-title" id="modalTitle"></div><div class="modal-message" id="modalMessage"></div><div class="modal-actions" id="modalActions"></div></div></div>
 </div>
 
 <script>
     const JSON_URL = 'https://raw.githubusercontent.com/ysrbkht/zikr/main/azkar.json';
+    const AUDIO_URLS = [
+        'https://raw.githubusercontent.com/ysrbkht/zikr/main/morning.mp3',
+        'https://raw.githubusercontent.com/ysrbkht/zikr/main/evening.mp3'
+    ];
     const translations = {
         fa: {
             appName: 'اذکار', morningAdhkar: 'اذکار صبح', eveningAdhkar: 'اذکار شام', sleepAdhkar: 'اذکار خواب', audioAdhkar: 'اذکار صوتی',
@@ -790,7 +812,14 @@
             sleepSurah: 'سوره {الم سجده} و {ملک} را بخوانید',
             ok: 'باشه',
             remaining: 'باقی',
-            completed: 'انجام شد'
+            completed: 'انجام شد',
+            downloadAudio: 'دانلود فایل‌های صوتی برای استفاده آفلاین (۲۰ مگابایت)',
+            confirmDownloadTitle: 'تأیید دانلود',
+            confirmDownloadMsg: 'آیا می‌خواهید فایل‌های صوتی را برای استفاده آفلاین دانلود کنید؟ حجم تقریبی ۲۰ مگابایت.',
+            downloadSuccess: 'دانلود با موفقیت انجام شد',
+            downloadFailed: 'خطا در دانلود',
+            cancel: 'لغو',
+            confirm: 'تأیید'
         },
         ar: {
             appName: 'الأذكار', morningAdhkar: 'أذكار الصباح', eveningAdhkar: 'أذكار المساء', sleepAdhkar: 'أذكار النوم', audioAdhkar: 'الأذكار الصوتية',
@@ -803,7 +832,14 @@
             sleepSurah: 'اقرأ سورة {السجدة} و {الملك}',
             ok: 'حسناً',
             remaining: 'المتبقي',
-            completed: 'مكتمل'
+            completed: 'مكتمل',
+            downloadAudio: 'تحميل الملفات الصوتية للاستخدام دون اتصال (20 MB)',
+            confirmDownloadTitle: 'تأكيد التحميل',
+            confirmDownloadMsg: 'هل تريد تحميل الملفات الصوتية للاستخدام دون اتصال؟ الحجم التقريبي 20 ميغابايت.',
+            downloadSuccess: 'تم التحميل بنجاح',
+            downloadFailed: 'خطأ في التحميل',
+            cancel: 'إلغاء',
+            confirm: 'تأكيد'
         },
         en: {
             appName: 'Adhkar', morningAdhkar: 'Morning Adhkar', eveningAdhkar: 'Evening Adhkar', sleepAdhkar: 'Sleep Adhkar', audioAdhkar: 'Audio Adhkar',
@@ -816,7 +852,14 @@
             sleepSurah: 'Recite Surah {As-Sajdah} and {Al-Mulk}',
             ok: 'OK',
             remaining: 'remaining',
-            completed: 'Completed'
+            completed: 'Completed',
+            downloadAudio: 'Download audio files for offline use (20 MB)',
+            confirmDownloadTitle: 'Confirm Download',
+            confirmDownloadMsg: 'Do you want to download audio files for offline use? Approximate size 20 MB.',
+            downloadSuccess: 'Download Successful',
+            downloadFailed: 'Download Failed',
+            cancel: 'Cancel',
+            confirm: 'Confirm'
         }
     };
 
@@ -857,6 +900,7 @@
     const modalTitle = document.getElementById('modalTitle');
     const modalMessage = document.getElementById('modalMessage');
     const modalActions = document.getElementById('modalActions');
+    const downloadAudioBtn = document.getElementById('downloadAudioBtn');
 
     function formatTime(sec) { if (isNaN(sec)) return '00:00'; const m = Math.floor(sec/60), s = Math.floor(sec%60); return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
     function updateProgress(id) { const a = id==='morning'?audioMorning:audioEvening; const cur=a.currentTime, dur=a.duration; if(dur>0){ progressFills[id].style.width = (cur/dur)*100+'%'; currentTimes[id].textContent=formatTime(cur); } }
@@ -891,6 +935,7 @@
         const themeOpts = themeSelect.querySelectorAll('option');
         themeOpts[0].textContent = translations[lang].standardTheme;
         themeOpts[1].textContent = translations[lang].modernTheme;
+        if(downloadAudioBtn) downloadAudioBtn.innerHTML = `<i class="fas fa-download"></i> ${translations[lang].downloadAudio}`;
     }
 
     function showModal(title, msg, type='info', callback) {
@@ -904,8 +949,42 @@
         customModal.classList.add('show');
     }
 
-    // ذخیره‌سازی وضعیت شمارش برای هر کارت (در حافظه موقت)
-    let remainingCounts = [];
+    function showConfirmModal(title, msg, onConfirm) {
+        modalTitle.textContent = title;
+        modalMessage.textContent = msg;
+        document.getElementById('modalIcon').innerHTML = '<i class="fas fa-question-circle"></i>';
+        modalActions.innerHTML = '';
+        const cancelBtn = document.createElement('button');
+        cancelBtn.className = 'modal-btn';
+        cancelBtn.textContent = translations[currentLanguage].cancel;
+        cancelBtn.onclick = () => customModal.classList.remove('show');
+        const confirmBtn = document.createElement('button');
+        confirmBtn.className = 'modal-btn primary';
+        confirmBtn.textContent = translations[currentLanguage].confirm;
+        confirmBtn.onclick = () => {
+            customModal.classList.remove('show');
+            onConfirm();
+        };
+        modalActions.appendChild(cancelBtn);
+        modalActions.appendChild(confirmBtn);
+        customModal.classList.add('show');
+    }
+
+    // ذخیره‌سازی شمارش‌ها در sessionStorage (تا خروج برنامه ریست شوند)
+    function getCountsKey(category) { return `counts_${category}`; }
+    function loadCounts(category, defaultCounts) {
+        const stored = sessionStorage.getItem(getCountsKey(category));
+        if (stored) {
+            try {
+                const arr = JSON.parse(stored);
+                if (Array.isArray(arr) && arr.length === defaultCounts.length) return arr;
+            } catch(e) {}
+        }
+        return [...defaultCounts];
+    }
+    function saveCounts(category, counts) {
+        sessionStorage.setItem(getCountsKey(category), JSON.stringify(counts));
+    }
 
     function showCategory(cat, pushState=true) {
         if(cat === 'audio') {
@@ -924,8 +1003,9 @@
         detailHeader.classList.add('active');
 
         const items = azkarData[cat];
-        // مقداردهی اولیه باقی‌مانده‌ها
-        remainingCounts = items.map(item => item.repeat);
+        const defaultCounts = items.map(item => item.repeat);
+        let remainingCounts = loadCounts(cat, defaultCounts);
+
         let html = '';
         items.forEach((item, idx) => {
             let text = item.text;
@@ -956,15 +1036,14 @@
                 const idx = parseInt(badge.dataset.idx);
                 if (remainingCounts[idx] > 0) {
                     remainingCounts[idx]--;
+                    saveCounts(cat, remainingCounts);
                     const card = badge.closest('.dhikr-card');
                     const metaDiv = card.querySelector('.dhikr-meta');
                     const newRemaining = remainingCounts[idx];
                     if (newRemaining === 0) {
-                        // تبدیل به تیک
                         const completedHtml = `<span class="completed-badge"><i class="fas fa-check-circle"></i> ${translations[currentLanguage].completed}</span>`;
                         const referenceSpan = metaDiv.querySelector('.reference');
                         metaDiv.innerHTML = completedHtml + (referenceSpan ? referenceSpan.outerHTML : '');
-                        // اضافه کردن افکت انیمیشن
                         const completedBadge = metaDiv.querySelector('.completed-badge');
                         if (completedBadge) {
                             completedBadge.style.transform = 'scale(1.2)';
@@ -972,7 +1051,6 @@
                         }
                     } else {
                         badge.innerHTML = `<i class="fas fa-star"></i> ${newRemaining} ${translations[currentLanguage].remaining}`;
-                        // افکت کوچک
                         badge.style.transform = 'scale(1.1)';
                         setTimeout(() => { badge.style.transform = ''; }, 150);
                     }
@@ -990,13 +1068,33 @@
         mainMenu.style.display = 'flex'; detailView.style.display = 'none'; audioDetailView.style.display = 'none';
         footer.classList.remove('hidden'); detailHeader.classList.remove('active');
         history.pushState({ page: 'main' }, '', location.pathname);
-        // ریست شمارنده‌ها هنگام برگشت به منو (اختیاری)
-        remainingCounts = [];
     }
 
     async function loadAzkar() {
         try { const r = await fetch(JSON_URL); if(!r.ok) throw new Error(); azkarData = await r.json(); } 
         catch(e) { showModal('خطا', 'امکان بارگیری اذکار وجود ندارد.', 'error'); }
+    }
+
+    // دانلود فایل‌های صوتی و کش کردن آنها
+    async function downloadAudioFiles() {
+        const cache = await caches.open('azkar-audio-v1');
+        let successCount = 0;
+        for (const url of AUDIO_URLS) {
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    await cache.put(url, response);
+                    successCount++;
+                }
+            } catch (e) { console.warn('Failed to cache', url); }
+        }
+        if (successCount === AUDIO_URLS.length) {
+            localStorage.setItem('audioCached', 'true');
+            if (downloadAudioBtn) downloadAudioBtn.style.display = 'none';
+            showModal(translations[currentLanguage].downloadSuccess, translations[currentLanguage].downloadSuccess, 'success');
+        } else {
+            showModal(translations[currentLanguage].downloadFailed, translations[currentLanguage].downloadFailed, 'error');
+        }
     }
 
     function initSettings() {
@@ -1041,6 +1139,11 @@
             localStorage.setItem('language', 'ar');
         }
         setLanguage(savedLang);
+
+        // بررسی وضعیت کش صوتی
+        if (localStorage.getItem('audioCached') === 'true' && downloadAudioBtn) {
+            downloadAudioBtn.style.display = 'none';
+        }
     }
 
     // Event listeners
@@ -1074,13 +1177,20 @@
         const id = bar.dataset.progress; const audio = id==='morning'?audioMorning:audioEvening; if(audio.duration) { const rect=bar.getBoundingClientRect(); const percent=(e.clientX-rect.left)/rect.width; audio.currentTime=percent*audio.duration; updateProgress(id); }
     }));
 
+    // Download audio button
+    if (downloadAudioBtn) {
+        downloadAudioBtn.addEventListener('click', () => {
+            showConfirmModal(translations[currentLanguage].confirmDownloadTitle, translations[currentLanguage].confirmDownloadMsg, downloadAudioFiles);
+        });
+    }
+
     // PWA install
     window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt=e; if(!localStorage.getItem('appInstalled') && !window.matchMedia('(display-mode: standalone)').matches) installContainer.style.display='flex'; });
     installBtn.onclick = async () => { if(!deferredPrompt) return; deferredPrompt.prompt(); const {outcome}=await deferredPrompt.userChoice; if(outcome==='accepted') { localStorage.setItem('appInstalled','true'); installContainer.style.display='none'; } deferredPrompt=null; };
     if(localStorage.getItem('appInstalled') || window.matchMedia('(display-mode: standalone)').matches) installContainer.style.display='none';
     window.addEventListener('appinstalled', () => { localStorage.setItem('appInstalled','true'); installContainer.style.display='none'; });
 
-    // Service worker & auto cache static assets (no audio)
+    // Service worker
     if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(e=>console.log);
 
     // Load data and always show main menu
