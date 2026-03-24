@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>الأذكار</title>
-    <!-- PWA manifest -->
     <link rel="manifest" href="manifest.json">
-    <!-- آیکون‌ها -->
     <link rel="icon" type="image/png" sizes="512x512" href="/zikr/icon.png">
     <link rel="apple-touch-icon" href="/zikr/icon.png">
     <meta name="theme-color" content="#6366f1" id="themeColor">
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- فونت‌ها -->
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* ===== فونت‌های آپلود شده ===== */
@@ -761,19 +757,40 @@
 
 <script>
     const JSON_URL = 'https://raw.githubusercontent.com/ysrbkht/zikr/main/azkar.json';
-    const STATIC_ASSETS = [
-        JSON_URL,
-        '/zikr/fonts/UthmanTahaNaskhBold.ttf',
-        '/zikr/fonts/lotus-Bold.ttf',
-        '/zikr/fonts/Compset-Bold.ttf',
-        '/zikr/icon.png',
-        '/zikr/icon.ico',
-        'manifest.json'
-    ];
     const translations = {
-        fa: { appName: 'اذکار', morningAdhkar: 'اذکار صبح', eveningAdhkar: 'اذکار شام', sleepAdhkar: 'اذکار خواب', audioAdhkar: 'اذکار صوتی', language: 'زبان', darkMode: 'حالت شب', fontSize: 'اندازه متن', font: 'فونت', theme: 'تم', standardTheme: 'استاندارد', modernTheme: 'مدرن', installApp: 'نصب اپلیکیشن', install: 'نصب', feedback: 'نظرات و پیشنهادات', morningAudio: 'اذکار صبح', eveningAudio: 'اذکار شام', morning: 'اذکار صبح', evening: 'اذکار شام', sleep: 'اذکار خواب', audio: 'اذکار صوتی', source: 'منبع', fontUthman: 'عثمان طه', fontLotus: 'لوتوس', fontCompset: 'کامپوست', sleepStep1: 'دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:', sleepStep2: 'بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)', sleepSurah: 'سوره {الم سجده} و {ملک} را بخوانید', ok: 'باشه' },
-        ar: { appName: 'الأذكار', morningAdhkar: 'أذكار الصباح', eveningAdhkar: 'أذكار المساء', sleepAdhkar: 'أذكار النوم', audioAdhkar: 'الأذكار الصوتية', language: 'اللغة', darkMode: 'الوضع الليلي', fontSize: 'حجم الخط', font: 'الخط', theme: 'السمة', standardTheme: 'قياسي', modernTheme: 'حديث', installApp: 'تثبيت التطبيق', install: 'تثبيت', feedback: 'آراء واقتراحات', morningAudio: 'أذكار الصباح', eveningAudio: 'أذكار المساء', morning: 'أذكار الصباح', evening: 'أذكار المساء', sleep: 'أذكار النوم', audio: 'الأذكار الصوتية', source: 'المصدر', fontUthman: 'عثمان طه', fontLotus: 'لوتس', fontCompset: 'كومبست', sleepStep1: 'اجمع يديك وانفث فيهما واقرأ هذه السور:', sleepStep2: 'ثم امسح بهما جسدك مستطيعاً مبتدئاً برأسك ووجهك (كرر هذا ثلاث مرات)', sleepSurah: 'اقرأ سورة {السجدة} و {الملك}', ok: 'حسناً' },
-        en: { appName: 'Adhkar', morningAdhkar: 'Morning Adhkar', eveningAdhkar: 'Evening Adhkar', sleepAdhkar: 'Sleep Adhkar', audioAdhkar: 'Audio Adhkar', language: 'Language', darkMode: 'Dark Mode', fontSize: 'Font Size', font: 'Font', theme: 'Theme', standardTheme: 'Standard', modernTheme: 'Modern', installApp: 'Install App', install: 'Install', feedback: 'Feedback', morningAudio: 'Morning Adhkar', eveningAudio: 'Evening Adhkar', morning: 'Morning Adhkar', evening: 'Evening Adhkar', sleep: 'Sleep Adhkar', audio: 'Audio Adhkar', source: 'source', fontUthman: 'Uthman Taha', fontLotus: 'Lotus', fontCompset: 'Compset', sleepStep1: 'Cup your hands, blow into them, and recite these Surahs:', sleepStep2: 'Then wipe your body with them as far as you can, starting from your head and face. (Repeat this three times)', sleepSurah: 'Recite Surah {As-Sajdah} and {Al-Mulk}', ok: 'OK' }
+        fa: {
+            appName: 'اذکار', morningAdhkar: 'اذکار صبح', eveningAdhkar: 'اذکار شام', sleepAdhkar: 'اذکار خواب', audioAdhkar: 'اذکار صوتی',
+            language: 'زبان', darkMode: 'حالت شب', fontSize: 'اندازه متن', font: 'فونت', theme: 'تم', standardTheme: 'استاندارد', modernTheme: 'مدرن',
+            installApp: 'نصب اپلیکیشن', install: 'نصب', feedback: 'نظرات و پیشنهادات', morningAudio: 'اذکار صبح', eveningAudio: 'اذکار شام',
+            morning: 'اذکار صبح', evening: 'اذکار شام', sleep: 'اذکار خواب', audio: 'اذکار صوتی', source: 'منبع',
+            fontUthman: 'عثمان طه', fontLotus: 'لوتوس', fontCompset: 'کامپوست',
+            sleepStep1: 'دستان خود را جمع کنید و در آن بدمید و این سوره ها را بخوانید:',
+            sleepStep2: 'بعدا دستان خود را مسح کنید بر جسد خویش تا آنجاییکه توان دارید از سر و صورت خویش آغاز نمایید.(این کار را سه مرتبه تکرار نمایید)',
+            sleepSurah: 'سوره {الم سجده} و {ملک} را بخوانید',
+            ok: 'باشه'
+        },
+        ar: {
+            appName: 'الأذكار', morningAdhkar: 'أذكار الصباح', eveningAdhkar: 'أذكار المساء', sleepAdhkar: 'أذكار النوم', audioAdhkar: 'الأذكار الصوتية',
+            language: 'اللغة', darkMode: 'الوضع الليلي', fontSize: 'حجم الخط', font: 'الخط', theme: 'السمة', standardTheme: 'قياسي', modernTheme: 'حديث',
+            installApp: 'تثبيت التطبيق', install: 'تثبيت', feedback: 'آراء واقتراحات', morningAudio: 'أذكار الصباح', eveningAudio: 'أذكار المساء',
+            morning: 'أذكار الصباح', evening: 'أذكار المساء', sleep: 'أذكار النوم', audio: 'الأذكار الصوتية', source: 'المصدر',
+            fontUthman: 'عثمان طه', fontLotus: 'لوتس', fontCompset: 'كومبست',
+            sleepStep1: 'اجمع يديك وانفث فيهما واقرأ هذه السور:',
+            sleepStep2: 'ثم امسح بهما جسدك مستطيعاً مبتدئاً برأسك ووجهك (كرر هذا ثلاث مرات)',
+            sleepSurah: 'اقرأ سورة {السجدة} و {الملك}',
+            ok: 'حسناً'
+        },
+        en: {
+            appName: 'Adhkar', morningAdhkar: 'Morning Adhkar', eveningAdhkar: 'Evening Adhkar', sleepAdhkar: 'Sleep Adhkar', audioAdhkar: 'Audio Adhkar',
+            language: 'Language', darkMode: 'Dark Mode', fontSize: 'Font Size', font: 'Font', theme: 'Theme', standardTheme: 'Standard', modernTheme: 'Modern',
+            installApp: 'Install App', install: 'Install', feedback: 'Feedback', morningAudio: 'Morning Adhkar', eveningAudio: 'Evening Adhkar',
+            morning: 'Morning Adhkar', evening: 'Evening Adhkar', sleep: 'Sleep Adhkar', audio: 'Audio Adhkar', source: 'source',
+            fontUthman: 'Uthman Taha', fontLotus: 'Lotus', fontCompset: 'Compset',
+            sleepStep1: 'Cup your hands, blow into them, and recite these Surahs:',
+            sleepStep2: 'Then wipe your body with them as far as you can, starting from your head and face. (Repeat this three times)',
+            sleepSurah: 'Recite Surah {As-Sajdah} and {Al-Mulk}',
+            ok: 'OK'
+        }
     };
 
     let currentLanguage = localStorage.getItem('language') || 'ar';
@@ -781,21 +798,6 @@
     let deferredPrompt;
     let isPlaying = { morning: false, evening: false };
     let progressIntervals = { morning: null, evening: null };
-
-    // Auto-cache static assets (non-audio) on first visit
-    async function autoCacheStaticAssets() {
-        if (localStorage.getItem('staticAssetsCached') === 'true') return;
-        try {
-            const cache = await caches.open('azkar-static-v2');
-            await Promise.allSettled(STATIC_ASSETS.map(async url => {
-                try {
-                    const response = await fetch(url, { cache: 'no-cache' });
-                    if (response.ok) await cache.put(url, response);
-                } catch(e) { console.warn('cache fail', url); }
-            }));
-            localStorage.setItem('staticAssetsCached', 'true');
-        } catch(e) { console.warn('auto cache error', e); }
-    }
 
     // DOM elements
     const mainMenu = document.getElementById('mainMenu');
@@ -874,6 +876,7 @@
             footer.classList.add('hidden'); detailHeader.classList.add('active');
             detailPageTitle.textContent = translations[currentLanguage].audioAdhkar;
             detailPageTitle.dataset.category = 'audio';
+            localStorage.setItem('lastCategory', 'audio');
             if(pushState) history.pushState({ page: 'detail', category: 'audio' }, '', '#audio');
             return;
         }
@@ -896,6 +899,7 @@
         detailList.innerHTML = html;
         mainMenu.style.display = 'none'; detailView.style.display = 'flex'; audioDetailView.style.display = 'none';
         footer.classList.add('hidden');
+        localStorage.setItem('lastCategory', cat);
         if(pushState) history.pushState({ page: 'detail', category: cat }, '', '#'+cat);
     }
 
@@ -903,6 +907,8 @@
         resetPlayer('morning'); resetPlayer('evening');
         mainMenu.style.display = 'flex'; detailView.style.display = 'none'; audioDetailView.style.display = 'none';
         footer.classList.remove('hidden'); detailHeader.classList.remove('active');
+        localStorage.removeItem('lastCategory');
+        history.pushState({ page: 'main' }, '', location.pathname);
     }
 
     async function loadAzkar() {
@@ -911,17 +917,43 @@
     }
 
     function initSettings() {
-        const savedTheme = localStorage.getItem('theme') || 'modern'; setTheme(savedTheme);
-        const savedDark = localStorage.getItem('darkMode'); if(savedDark === 'dark') { document.body.classList.add('dark'); themeSwitchInner.classList.add('active'); }
-        const savedFontSize = localStorage.getItem('fontSize'); if(savedFontSize) { currentFontSize = parseFloat(savedFontSize); applyFontSize(currentFontSize); } else applyFontSize(1.4);
-        const savedFont = localStorage.getItem('fontFamily'); if(savedFont && ['Uthman','Lotus','Compset'].includes(savedFont)) { fontSelect.value = savedFont; applyFontFamily(savedFont); } else applyFontFamily('Uthman');
-        const savedLang = localStorage.getItem('language'); if(savedLang && ['fa','ar','en'].includes(savedLang)) setLanguage(savedLang); else setLanguage('ar');
+        // Dark mode: default dark if not set
+        if (localStorage.getItem('darkMode') === null) {
+            localStorage.setItem('darkMode', 'dark');
+            document.body.classList.add('dark');
+            themeSwitchInner.classList.add('active');
+        } else if (localStorage.getItem('darkMode') === 'dark') {
+            document.body.classList.add('dark');
+            themeSwitchInner.classList.add('active');
+        } else {
+            document.body.classList.remove('dark');
+            themeSwitchInner.classList.remove('active');
+        }
+
+        // Theme: default modern if not set
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === null) {
+            setTheme('modern');
+        } else {
+            setTheme(savedTheme);
+        }
+
+        const savedFontSize = localStorage.getItem('fontSize');
+        if(savedFontSize) { currentFontSize = parseFloat(savedFontSize); applyFontSize(currentFontSize); } else applyFontSize(1.4);
+        const savedFont = localStorage.getItem('fontFamily');
+        if(savedFont && ['Uthman','Lotus','Compset'].includes(savedFont)) { fontSelect.value = savedFont; applyFontFamily(savedFont); } else applyFontFamily('Uthman');
+        const savedLang = localStorage.getItem('language');
+        if(savedLang && ['fa','ar','en'].includes(savedLang)) setLanguage(savedLang); else setLanguage('ar');
     }
 
     // Event listeners
     settingsIcon.onclick = (e) => { e.stopPropagation(); settingsPanel.classList.toggle('show'); };
     document.addEventListener('click', (e) => { if(!settingsPanel.contains(e.target) && !settingsIcon.contains(e.target)) settingsPanel.classList.remove('show'); });
-    themeSwitchInner.onclick = () => { document.body.classList.toggle('dark'); themeSwitchInner.classList.toggle('active'); localStorage.setItem('darkMode', document.body.classList.contains('dark')?'dark':'light'); };
+    themeSwitchInner.onclick = () => { 
+        document.body.classList.toggle('dark'); 
+        themeSwitchInner.classList.toggle('active'); 
+        localStorage.setItem('darkMode', document.body.classList.contains('dark')?'dark':'light'); 
+    };
     decreaseFont.onclick = () => { let s = Math.max(1.0, (parseFloat(fontSizeValue.textContent)||1.4)-0.1); applyFontSize(s); localStorage.setItem('fontSize', s.toFixed(1)); };
     increaseFont.onclick = () => { let s = Math.min(2.2, (parseFloat(fontSizeValue.textContent)||1.4)+0.1); applyFontSize(s); localStorage.setItem('fontSize', s.toFixed(1)); };
     fontSelect.onchange = (e) => { applyFontFamily(e.target.value); localStorage.setItem('fontFamily', e.target.value); };
@@ -953,7 +985,16 @@
 
     // Service worker & auto cache
     if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(e=>console.log);
-    loadAzkar(); initSettings(); showMainMenu(); autoCacheStaticAssets();
+
+    // Load data and restore last page after settings are applied
+    Promise.all([loadAzkar(), new Promise(resolve => { const check = setInterval(() => { if(azkarData !== null) { clearInterval(check); resolve(); } }, 50); })]).then(() => {
+        const lastCat = localStorage.getItem('lastCategory');
+        if(lastCat && (lastCat === 'morning' || lastCat === 'evening' || lastCat === 'sleep' || lastCat === 'audio')) {
+            showCategory(lastCat, false);
+        } else {
+            showMainMenu();
+        }
+    });
 </script>
 </body>
 </html>
