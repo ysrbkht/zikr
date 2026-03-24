@@ -45,28 +45,36 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = event.request.url;
 
-  // اگر درخواست فایل صوتی باشد، ابتدا از کش صوتی بررسی کن
+  // Audio files: serve from cache if available (ignore headers like Range)
   if (url.includes('morning.mp3') || url.includes('evening.mp3')) {
     event.respondWith(
-      caches.open(AUDIO_CACHE_NAME).then(cache => 
-        cache.match(event.request).then(cachedResponse => {
+      caches.open(AUDIO_CACHE_NAME).then(cache => {
+        // Match by URL only (ignore headers) – create a new request without headers
+        const cacheRequest = new Request(url, { method: 'GET' });
+        return cache.match(cacheRequest).then(cachedResponse => {
           if (cachedResponse) {
+            console.log('Serving audio from cache:', url);
             return cachedResponse;
           }
+          console.log('Audio not in cache, fetching from network:', url);
           return fetch(event.request).then(networkResponse => {
-            // اما ما بعد از دانلود دستی آن را در کش قرار می‌دهیم، نه خودکار
+            // Optionally cache it now (but we prefer manual download)
+            // We'll not cache automatically to respect user's choice.
             return networkResponse;
           });
-        })
-      )
+        });
+      })
     );
+    return;
   }
-  // برای فایل‌های ایستا (فونت، آیکون، json، css، manifest، html)
-  else if (url.includes('fonts') || url.includes('icon') || url.includes('azkar.json') || url.includes('css') || url.includes('manifest.json') || url.endsWith('.html')) {
+
+  // Static assets (fonts, icons, json, css, manifest, html) – Cache First
+  if (url.includes('fonts') || url.includes('icon') || url.includes('azkar.json') || url.includes('css') || url.includes('manifest.json') || url.endsWith('.html')) {
     event.respondWith(
       caches.open(APP_CACHE_NAME).then(cache => 
         cache.match(event.request).then(cachedResponse => {
           if (cachedResponse) {
+            // Update in background
             fetch(event.request).then(networkResponse => {
               if (networkResponse && networkResponse.status === 200) {
                 cache.put(event.request, networkResponse.clone());
@@ -83,12 +91,16 @@ self.addEventListener('fetch', event => {
         })
       )
     );
-  } else {
-    event.respondWith(fetch(event.request).catch(() => {
+    return;
+  }
+
+  // Other requests: network first, fallback to offline page
+  event.respondWith(
+    fetch(event.request).catch(() => {
       if (event.request.mode === 'navigate') {
         return caches.match('./index.html');
       }
       return new Response('Network error', { status: 408 });
-    }));
-  }
+    })
+  );
 });
