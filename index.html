@@ -473,7 +473,6 @@
             color: var(--text-color);
             text-align: center;
         }
-        /* تغییر layout: دکمه شمارشگر در وسط و مرجع در خط بعدی */
         .dhikr-meta {
             display: flex;
             flex-direction: column;
@@ -525,7 +524,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
-            direction: ltr; /* برای نمایش متن منبع به صورت عادی */
+            direction: ltr;
         }
         [dir="rtl"] .reference {
             direction: rtl;
@@ -979,11 +978,12 @@
             const badgeHtml = completed
                 ? `<span class="completed-badge"><i class="fas fa-check-circle"></i> ${translations[currentLanguage].completed}</span>`
                 : `<span class="repeat-badge" data-idx="${idx}"><i class="fas fa-repeat"></i> ${remaining} ${translations[currentLanguage].remaining}</span>`;
+            // ترتیب: ابتدا مرجع، سپس دکمه
             html += `<div class="dhikr-card" data-idx="${idx}">
                         <div class="dhikr-text">${text}</div>
                         <div class="dhikr-meta">
-                            ${badgeHtml}
                             <span class="reference"><i class="fas fa-book-open"></i> ${item.reference || translations[currentLanguage].source}</span>
+                            ${badgeHtml}
                         </div>
                     </div>`;
         });
@@ -1002,7 +1002,8 @@
                     if (newRemaining === 0) {
                         const completedHtml = `<span class="completed-badge"><i class="fas fa-check-circle"></i> ${translations[currentLanguage].completed}</span>`;
                         const referenceSpan = metaDiv.querySelector('.reference');
-                        metaDiv.innerHTML = completedHtml + (referenceSpan ? referenceSpan.outerHTML : '');
+                        // حفظ مرجع در بالا و قرار دادن دکمه تکمیل‌شده در پایین
+                        metaDiv.innerHTML = (referenceSpan ? referenceSpan.outerHTML : '') + completedHtml;
                         const completedBadge = metaDiv.querySelector('.completed-badge');
                         if (completedBadge) {
                             completedBadge.style.transform = 'scale(1.2)';
