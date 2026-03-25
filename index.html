@@ -804,6 +804,10 @@ const AUDIO_URLS = [
 'https://raw.githubusercontent.com/ysrbkht/zikr/main/morning.mp3',
 'https://raw.githubusercontent.com/ysrbkht/zikr/main/evening.mp3'
 ];
+
+// ✅ ۶ ساعت به میلی‌ثانیه
+const RESET_INTERVAL = 6 * 60 * 60 * 1000; // 21600000ms
+
 const translations = {
 fa: {
 appName: 'اذکار', morningAdhkar: 'اذکار صبح', eveningAdhkar: 'اذکار شام', sleepAdhkar: 'اذکار خواب', audioAdhkar: 'اذکار صوتی',
@@ -869,11 +873,13 @@ confirm: 'Confirm',
 loading: 'Loading...'
 }
 };
+
 let currentLanguage = localStorage.getItem('language') || 'ar';
 let azkarData = null;
 let deferredPrompt;
 let isPlaying = { morning: false, evening: false };
 let progressIntervals = { morning: null, evening: null };
+
 // DOM elements
 const mainMenu = document.getElementById('mainMenu');
 const detailView = document.getElementById('detailView');
@@ -911,6 +917,7 @@ const progressPercent = document.getElementById('progressPercent');
 const progressDetail = document.getElementById('progressDetail');
 const progressTitle = document.getElementById('progressTitle');
 const cancelDownloadBtn = document.getElementById('cancelDownloadBtn');
+
 function formatTime(sec) { if (isNaN(sec)) return '00:00'; const m = Math.floor(sec/60), s = Math.floor(sec%60); return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
 function updateProgress(id) { const a = id==='morning'?audioMorning:audioEvening; const cur=a.currentTime, dur=a.duration; if(dur>0){ progressFills[id].style.width = (cur/dur)*100+'%'; currentTimes[id].textContent=formatTime(cur); } }
 function resetPlayer(id) { if(progressIntervals[id]) clearInterval(progressIntervals[id]); isPlaying[id]=false; const btn=document.querySelector(`[data-id="${id}"] i`); if(btn) btn.className='fas fa-play'; const a=id==='morning'?audioMorning:audioEvening; a.pause(); a.currentTime=0; progressFills[id].style.width='0%'; currentTimes[id].textContent='00:00'; durationTimes[id].textContent='00:00'; }
@@ -965,21 +972,49 @@ modalActions.appendChild(cancelBtn);
 modalActions.appendChild(confirmBtn);
 customModal.classList.add('show');
 }
-// ✅ بهبود: ذخیره‌سازی در localStorage به جای sessionStorage
+
+// ✅ بهبود: ذخیره‌سازی در localStorage با تایم‌استمپ برای ریست ۶ ساعته
 function getCountsKey(category) { return `adhkar_counts_${category}`; }
+function getTimestampKey(category) { return `adhkar_timestamp_${category}`; }
+
 function loadCounts(category, defaultCounts) {
 const stored = localStorage.getItem(getCountsKey(category));
+const timestamp = localStorage.getItem(getTimestampKey(category));
+const now = Date.now();
+
+// ✅ بررسی می‌کنیم آیا ۶ ساعت گذشته است یا نه
+if (timestamp) {
+const elapsed = now - parseInt(timestamp);
+if (elapsed >= RESET_INTERVAL) {
+// ۶ ساعت گذشته، ریست کن
+localStorage.setItem(getTimestampKey(category), now.toString());
+localStorage.setItem(getCountsKey(category), JSON.stringify(defaultCounts));
+return [...defaultCounts];
+}
+}
+
+// اگر داده ذخیره‌شده وجود دارد
 if (stored) {
 try {
 const arr = JSON.parse(stored);
 if (Array.isArray(arr) && arr.length === defaultCounts.length) return arr;
 } catch(e) {}
 }
+
+// ذخیره تایم‌استمپ جدید اگر وجود ندارد
+if (!timestamp) {
+localStorage.setItem(getTimestampKey(category), now.toString());
+}
+
 return [...defaultCounts];
 }
+
 function saveCounts(category, counts) {
 localStorage.setItem(getCountsKey(category), JSON.stringify(counts));
+// ✅ ذخیره تایم‌استمپ هنگام هر بار ذخیره شمارش‌ها
+localStorage.setItem(getTimestampKey(category), Date.now().toString());
 }
+
 function showCategory(cat, pushState=true) {
 if(cat === 'audio') {
 resetPlayer('morning'); resetPlayer('evening');
@@ -990,9 +1025,9 @@ detailPageTitle.dataset.category = 'audio';
 if(pushState) history.pushState({ page: 'detail', category: 'audio' }, '', '#audio');
 return;
 }
-if(!azkarData || !azkarData[cat]) { 
-detailList.innerHTML = '<div style="text-align:center;padding:2rem;"><div class="loading-spinner"></div><p>'+translations[currentLanguage].loading+'</p></div>'; 
-return; 
+if(!azkarData || !azkarData[cat]) {
+detailList.innerHTML = '<div style="text-align:center;padding:2rem;"><div class="loading-spinner"></div><p>'+translations[currentLanguage].loading+'</p></div>';
+return;
 }
 resetPlayer('morning'); resetPlayer('evening');
 detailPageTitle.textContent = translations[currentLanguage][cat] || cat;
@@ -1054,22 +1089,25 @@ mainMenu.style.display = 'none'; detailView.style.display = 'flex'; audioDetailV
 footer.classList.add('hidden');
 if(pushState) history.pushState({ page: 'detail', category: cat }, '', '#'+cat);
 }
+
 function showMainMenu() {
 resetPlayer('morning'); resetPlayer('evening');
 mainMenu.style.display = 'flex'; detailView.style.display = 'none'; audioDetailView.style.display = 'none';
 footer.classList.remove('hidden'); detailHeader.classList.remove('active');
 history.pushState({ page: 'main' }, '', location.pathname);
 }
+
 async function loadAzkar() {
-try { 
-const r = await fetch(JSON_URL); 
-if(!r.ok) throw new Error(); 
-azkarData = await r.json(); 
+try {
+const r = await fetch(JSON_URL);
+if(!r.ok) throw new Error();
+azkarData = await r.json();
 }
-catch(e) { 
-showModal('خطا', 'امکان بارگیری اذکار وجود ندارد. لطفا اتصال اینترنت را بررسی کنید.', 'error'); 
+catch(e) {
+showModal('خطا', 'امکان بارگیری اذکار وجود ندارد. لطفا اتصال اینترنت را بررسی کنید.', 'error');
 }
 }
+
 let downloadCanceled = false;
 async function downloadAudioFilesWithProgress() {
 downloadCanceled = false;
@@ -1105,6 +1143,7 @@ showModal(translations[currentLanguage].downloadSuccess, translations[currentLan
 showModal(translations[currentLanguage].downloadFailed, translations[currentLanguage].downloadFailed, 'error');
 }
 }
+
 function initSettings() {
 let darkMode = localStorage.getItem('darkMode');
 if (darkMode === null) {
@@ -1141,6 +1180,7 @@ if (localStorage.getItem('audioCached') === 'true' && downloadAudioBtn) {
 downloadAudioBtn.style.display = 'none';
 }
 }
+
 // Event listeners
 settingsIcon.onclick = (e) => { e.stopPropagation(); settingsPanel.classList.toggle('show'); };
 document.addEventListener('click', (e) => { if(!settingsPanel.contains(e.target) && !settingsIcon.contains(e.target)) settingsPanel.classList.remove('show'); });
@@ -1156,6 +1196,7 @@ languageSelect.onchange = (e) => setLanguage(e.target.value);
 backBtn.onclick = () => history.back();
 window.onpopstate = (e) => { if(e.state && e.state.page==='detail') showCategory(e.state.category, false); else showMainMenu(); };
 document.querySelectorAll('.menu-card').forEach(c => c.addEventListener('click', () => showCategory(c.dataset.category, true)));
+
 // Audio players
 playBtns.forEach(btn => btn.addEventListener('click', () => {
 const id = btn.dataset.id; const audio = id==='morning'?audioMorning:audioEvening; const icon = btn.querySelector('i');
@@ -1180,13 +1221,16 @@ downloadCanceled = true;
 progressModal.classList.remove('show');
 });
 }
+
 // PWA install
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt=e; if(!localStorage.getItem('appInstalled') && !window.matchMedia('(display-mode: standalone)').matches) installContainer.style.display='flex'; });
 installBtn.onclick = async () => { if(!deferredPrompt) return; deferredPrompt.prompt(); const {outcome}=await deferredPrompt.userChoice; if(outcome==='accepted') { localStorage.setItem('appInstalled','true'); installContainer.style.display='none'; } deferredPrompt=null; };
 if(localStorage.getItem('appInstalled') || window.matchMedia('(display-mode: standalone)').matches) installContainer.style.display='none';
 window.addEventListener('appinstalled', () => { localStorage.setItem('appInstalled','true'); installContainer.style.display='none'; });
+
 // Service worker
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(e=>console.log);
+
 loadAzkar().then(() => {
 initSettings();
 showMainMenu();
