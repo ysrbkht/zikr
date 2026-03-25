@@ -98,7 +98,7 @@
             --bg-color: #f3f4f6;
             --container-bg: transparent;
             --text-color: #1e293b;
-            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-bg: rgba(255, 245, 230, 0.9); /* کرم ملایم به جای سفید شیشه‌ای */
             --card-border: 1px solid rgba(255,255,255,0.3);
             --card-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --meta-bg: #f1f5f9;
@@ -584,7 +584,7 @@
         .repeat-badge:hover {
             transform: scale(1.05);
             background: var(--badge-color);
-            color: white !important;
+            color: var(--badge-bg) !important;
         }
         .repeat-badge:active {
             transform: scale(0.95);
@@ -1059,7 +1059,6 @@
             }
             const remaining = remainingCounts[idx];
             const completed = remaining === 0;
-            // تغییر آیکون به تکرار
             const badgeHtml = completed
                 ? `<span class="completed-badge"><i class="fas fa-check-circle"></i> ${translations[currentLanguage].completed}</span>`
                 : `<span class="repeat-badge" data-idx="${idx}"><i class="fas fa-repeat"></i> ${remaining} ${translations[currentLanguage].remaining}</span>`;
