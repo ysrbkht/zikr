@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
 <title>الأذكار</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="512x512" href="/zikr/icon.png">
@@ -47,7 +47,7 @@ font-display: swap;
 --scrollbar-thumb: #cbd5e1;
 --scrollbar-track: transparent;
 --selected-font: 'Uthman Taha', 'Lotus', 'Compset', 'Amiri', serif;
---selected-font-size: 1.4rem;
+--selected-font-size: 1.5rem;
 --player-bg: #f1f5f9;
 --player-btn-bg: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
 --player-btn-color: white;
@@ -778,7 +778,7 @@ to { transform: rotate(360deg); }
 </div>
 <div class="setting-item">
 <span class="setting-label"><i class="fas fa-text-height"></i> <span data-i18n="fontSize">حجم الخط</span></span>
-<div class="font-size-control"><span class="font-size-btn" id="decreaseFont">−</span><span class="font-size-value" id="fontSizeValue">1.4</span><span class="font-size-btn" id="increaseFont">+</span></div>
+<div class="font-size-control"><span class="font-size-btn" id="decreaseFont">−</span><span class="font-size-value" id="fontSizeValue">1.5</span><span class="font-size-btn" id="increaseFont">+</span></div>
 </div>
 <div class="setting-item">
 <span class="setting-label"><i class="fas fa-font"></i> <span data-i18n="font">الخط</span></span>
@@ -874,7 +874,7 @@ loading: 'Loading...'
 }
 };
 
-let currentLanguage = localStorage.getItem('language') || 'ar';
+let currentLanguage = localStorage.getItem('language') || null;
 let azkarData = null;
 let deferredPrompt;
 let isPlaying = { morning: false, evening: false };
@@ -973,7 +973,6 @@ modalActions.appendChild(confirmBtn);
 customModal.classList.add('show');
 }
 
-// ✅ بهبود: ذخیره‌سازی در localStorage با تایم‌استمپ برای ریست ۶ ساعته
 function getCountsKey(category) { return `adhkar_counts_${category}`; }
 function getTimestampKey(category) { return `adhkar_timestamp_${category}`; }
 
@@ -981,37 +980,28 @@ function loadCounts(category, defaultCounts) {
 const stored = localStorage.getItem(getCountsKey(category));
 const timestamp = localStorage.getItem(getTimestampKey(category));
 const now = Date.now();
-
-// ✅ بررسی می‌کنیم آیا ۶ ساعت گذشته است یا نه
 if (timestamp) {
 const elapsed = now - parseInt(timestamp);
 if (elapsed >= RESET_INTERVAL) {
-// ۶ ساعت گذشته، ریست کن
 localStorage.setItem(getTimestampKey(category), now.toString());
 localStorage.setItem(getCountsKey(category), JSON.stringify(defaultCounts));
 return [...defaultCounts];
 }
 }
-
-// اگر داده ذخیره‌شده وجود دارد
 if (stored) {
 try {
 const arr = JSON.parse(stored);
 if (Array.isArray(arr) && arr.length === defaultCounts.length) return arr;
 } catch(e) {}
 }
-
-// ذخیره تایم‌استمپ جدید اگر وجود ندارد
 if (!timestamp) {
 localStorage.setItem(getTimestampKey(category), now.toString());
 }
-
 return [...defaultCounts];
 }
 
 function saveCounts(category, counts) {
 localStorage.setItem(getCountsKey(category), JSON.stringify(counts));
-// ✅ ذخیره تایم‌استمپ هنگام هر بار ذخیره شمارش‌ها
 localStorage.setItem(getTimestampKey(category), Date.now().toString());
 }
 
@@ -1144,11 +1134,19 @@ showModal(translations[currentLanguage].downloadFailed, translations[currentLang
 }
 }
 
+function detectSystemLanguage() {
+const browserLang = navigator.language || navigator.userLanguage;
+if (browserLang.startsWith('fa')) return 'fa';
+if (browserLang.startsWith('ar')) return 'ar';
+return 'en';
+}
+
 function initSettings() {
 let darkMode = localStorage.getItem('darkMode');
 if (darkMode === null) {
-darkMode = 'dark';
-localStorage.setItem('darkMode', 'dark');
+const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+darkMode = systemDark ? 'dark' : 'light';
+localStorage.setItem('darkMode', darkMode);
 }
 if (darkMode === 'dark') {
 document.body.classList.add('dark');
@@ -1159,8 +1157,8 @@ themeSwitchInner.classList.remove('active');
 }
 let savedFontSize = localStorage.getItem('fontSize');
 if (savedFontSize === null) {
-savedFontSize = '1.4';
-localStorage.setItem('fontSize', '1.4');
+savedFontSize = '1.5';
+localStorage.setItem('fontSize', '1.5');
 }
 applyFontSize(parseFloat(savedFontSize));
 let savedFont = localStorage.getItem('fontFamily');
@@ -1172,8 +1170,8 @@ fontSelect.value = savedFont;
 applyFontFamily(savedFont);
 let savedLang = localStorage.getItem('language');
 if (savedLang === null) {
-savedLang = 'ar';
-localStorage.setItem('language', 'ar');
+savedLang = detectSystemLanguage();
+localStorage.setItem('language', savedLang);
 }
 setLanguage(savedLang);
 if (localStorage.getItem('audioCached') === 'true' && downloadAudioBtn) {
@@ -1181,7 +1179,6 @@ downloadAudioBtn.style.display = 'none';
 }
 }
 
-// Event listeners
 settingsIcon.onclick = (e) => { e.stopPropagation(); settingsPanel.classList.toggle('show'); };
 document.addEventListener('click', (e) => { if(!settingsPanel.contains(e.target) && !settingsIcon.contains(e.target)) settingsPanel.classList.remove('show'); });
 themeSwitchInner.onclick = () => {
@@ -1189,15 +1186,14 @@ document.body.classList.toggle('dark');
 themeSwitchInner.classList.toggle('active');
 localStorage.setItem('darkMode', document.body.classList.contains('dark')?'dark':'light');
 };
-decreaseFont.onclick = () => { let s = Math.max(1.0, (parseFloat(fontSizeValue.textContent)||1.4)-0.1); applyFontSize(s); localStorage.setItem('fontSize', s.toFixed(1)); };
-increaseFont.onclick = () => { let s = Math.min(2.2, (parseFloat(fontSizeValue.textContent)||1.4)+0.1); applyFontSize(s); localStorage.setItem('fontSize', s.toFixed(1)); };
+decreaseFont.onclick = () => { let s = Math.max(1.0, (parseFloat(fontSizeValue.textContent)||1.5)-0.1); applyFontSize(s); localStorage.setItem('fontSize', s.toFixed(1)); };
+increaseFont.onclick = () => { let s = Math.min(2.2, (parseFloat(fontSizeValue.textContent)||1.5)+0.1); applyFontSize(s); localStorage.setItem('fontSize', s.toFixed(1)); };
 fontSelect.onchange = (e) => { applyFontFamily(e.target.value); localStorage.setItem('fontFamily', e.target.value); };
 languageSelect.onchange = (e) => setLanguage(e.target.value);
 backBtn.onclick = () => history.back();
 window.onpopstate = (e) => { if(e.state && e.state.page==='detail') showCategory(e.state.category, false); else showMainMenu(); };
 document.querySelectorAll('.menu-card').forEach(c => c.addEventListener('click', () => showCategory(c.dataset.category, true)));
 
-// Audio players
 playBtns.forEach(btn => btn.addEventListener('click', () => {
 const id = btn.dataset.id; const audio = id==='morning'?audioMorning:audioEvening; const icon = btn.querySelector('i');
 if(isPlaying[id]) { audio.pause(); icon.className = 'fas fa-play'; clearInterval(progressIntervals[id]); isPlaying[id]=false; }
@@ -1222,13 +1218,11 @@ progressModal.classList.remove('show');
 });
 }
 
-// PWA install
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt=e; if(!localStorage.getItem('appInstalled') && !window.matchMedia('(display-mode: standalone)').matches) installContainer.style.display='flex'; });
 installBtn.onclick = async () => { if(!deferredPrompt) return; deferredPrompt.prompt(); const {outcome}=await deferredPrompt.userChoice; if(outcome==='accepted') { localStorage.setItem('appInstalled','true'); installContainer.style.display='none'; } deferredPrompt=null; };
 if(localStorage.getItem('appInstalled') || window.matchMedia('(display-mode: standalone)').matches) installContainer.style.display='none';
 window.addEventListener('appinstalled', () => { localStorage.setItem('appInstalled','true'); installContainer.style.display='none'; });
 
-// Service worker
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(e=>console.log);
 
 loadAzkar().then(() => {
