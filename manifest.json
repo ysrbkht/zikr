@@ -1,20 +1,24 @@
 {
   "name": "الأذكار",
   "short_name": "الأذكار",
-  "description": "برنامج أذكار الصباح والمساء والنوم",
-  "start_url": "/zikr/index.html",
+  "description": "أذكار الصباح والمساء والنوم وبعد الصلاة",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "lang": "ar",
+  "dir": "rtl",
   "display": "standalone",
-  "background_color": "#f0f7ff",
-  "theme_color": "#2c6b9e",
+  "background_color": "#eef3f2",
+  "theme_color": "#eef3f2",
   "icons": [
     {
-      "src": "/zikr/icon.png",
+      "src": "icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/zikr/icon.ico",
+      "src": "icon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }

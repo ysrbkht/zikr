@@ -1,106 +1,76 @@
-const APP_CACHE_NAME = 'azkar-static-v1';
+const APP_CACHE_NAME = 'azkar-static-v3';
 const AUDIO_CACHE_NAME = 'azkar-audio-v1';
 
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
-  'https://raw.githubusercontent.com/ysrbkht/zikr/main/azkar.json',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css',
-  'https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap',
-  '/zikr/icon.png',
-  '/zikr/icon.ico',
-  '/zikr/fonts/UthmanTahaNaskhBold.ttf',
-  '/zikr/fonts/lotus-Bold.ttf',
-  '/zikr/fonts/Compset-Bold.ttf'
+  './azkar.json',
+  './icon.png',
+  './icon.ico',
+  './fonts/UthmanTahaNaskhBold.ttf',
+  './fonts/lotus-Bold.ttf',
+  './fonts/Compset-Bold.ttf',
+  './fonts/Vazirmatn-Regular.ttf',
+  './fonts/Vazirmatn-Medium.ttf',
+  './fonts/Vazirmatn-Bold.ttf'
 ];
 
 self.addEventListener('install', event => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(APP_CACHE_NAME).then(cache => 
-      Promise.allSettled(
-        urlsToCache.map(url => 
-          cache.add(url).catch(err => console.log('Failed to cache', url, err))
-        )
-      )
+    caches.open(APP_CACHE_NAME).then(cache =>
+      Promise.allSettled(urlsToCache.map(url => cache.add(url)))
     )
   );
 });
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if ((cacheName.startsWith('azkar-') && cacheName !== APP_CACHE_NAME && cacheName !== AUDIO_CACHE_NAME)) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
+    caches.keys().then(names =>
+      Promise.all(names.map(name => {
+        if (name.startsWith('azkar-') && name !== APP_CACHE_NAME && name !== AUDIO_CACHE_NAME) {
+          return caches.delete(name);
+        }
+      }))
+    ).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', event => {
-  const url = event.request.url;
+  const req = event.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
 
-  // Audio files: serve from cache if available (ignore headers like Range)
-  if (url.includes('morning.mp3') || url.includes('evening.mp3')) {
+  // Audio: the app downloads these into the audio cache itself and plays them from there.
+  // Here we only answer a download request from the network (or from the cache if present).
+  if (/\/(morning|evening)\.mp3$/.test(url.pathname)) {
     event.respondWith(
-      caches.open(AUDIO_CACHE_NAME).then(cache => {
-        // Match by URL only (ignore headers) – create a new request without headers
-        const cacheRequest = new Request(url, { method: 'GET' });
-        return cache.match(cacheRequest).then(cachedResponse => {
-          if (cachedResponse) {
-            console.log('Serving audio from cache:', url);
-            return cachedResponse;
-          }
-          console.log('Audio not in cache, fetching from network:', url);
-          return fetch(event.request).then(networkResponse => {
-            // Optionally cache it now (but we prefer manual download)
-            // We'll not cache automatically to respect user's choice.
-            return networkResponse;
-          });
-        });
-      })
+      caches.open(AUDIO_CACHE_NAME).then(cache =>
+        cache.match(req.url).then(hit => hit || fetch(req))
+      )
     );
     return;
   }
 
-  // Static assets (fonts, icons, json, css, manifest, html) – Cache First
-  if (url.includes('fonts') || url.includes('icon') || url.includes('azkar.json') || url.includes('css') || url.includes('manifest.json') || url.endsWith('.html')) {
+  // App files (html, data, fonts, icons): cache first, refresh in the background
+  if (url.origin === location.origin) {
     event.respondWith(
-      caches.open(APP_CACHE_NAME).then(cache => 
-        cache.match(event.request).then(cachedResponse => {
-          if (cachedResponse) {
-            // Update in background
-            fetch(event.request).then(networkResponse => {
-              if (networkResponse && networkResponse.status === 200) {
-                cache.put(event.request, networkResponse.clone());
-              }
-            }).catch(() => {});
-            return cachedResponse;
-          }
-          return fetch(event.request).then(networkResponse => {
-            if (networkResponse && networkResponse.status === 200) {
-              cache.put(event.request, networkResponse.clone());
-            }
-            return networkResponse;
-          });
+      caches.open(APP_CACHE_NAME).then(cache =>
+        cache.match(req, { ignoreSearch: true }).then(hit => {
+          const network = fetch(req).then(res => {
+            if (res && res.status === 200) cache.put(req, res.clone());
+            return res;
+          }).catch(() => hit || (req.mode === 'navigate' ? cache.match('./index.html') : new Response('Offline', { status: 503 })));
+          return hit || network;
         })
       )
     );
     return;
   }
 
-  // Other requests: network first, fallback to offline page
+  // anything else: network, with an offline fallback for navigation
   event.respondWith(
-    fetch(event.request).catch(() => {
-      if (event.request.mode === 'navigate') {
-        return caches.match('./index.html');
-      }
-      return new Response('Network error', { status: 408 });
-    })
+    fetch(req).catch(() => req.mode === 'navigate' ? caches.match('./index.html') : new Response('Network error', { status: 408 }))
   );
 });
